@@ -1,0 +1,12 @@
+# Configuración para la CLI de Supabase (supabase link --project-ref ugwzbcrvamfpxpcfldag)
+project_id = "la-muralla-local"
+
+# Estas funciones hacen su propia comprobación de seguridad, así que no exigen sesión
+[functions.signup]
+verify_jwt = false
+
+[functions.notify]
+verify_jwt = false
+
+[functions.paypal-webhook]
+verify_jwt = false
