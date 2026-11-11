@@ -1,0 +1,16 @@
+{
+  "name": "La Muralla Local",
+  "short_name": "La Muralla",
+  "description": "Tu calendario de grabación, extras, pagos y chat con el equipo de La Muralla.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#111214",
+  "theme_color": "#111214",
+  "lang": "es",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}
