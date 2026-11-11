@@ -253,6 +253,7 @@ body{padding-top:env(safe-area-inset-top)}
 @keyframes sIn{to{opacity:1}}
 #splash.out{opacity:0;pointer-events:none}
 .stag>*{opacity:0;animation:fd .4s ease forwards}
+.nostag .stag>*{animation:none;opacity:1}
 .stag>*:nth-child(1){animation-delay:.02s}.stag>*:nth-child(2){animation-delay:.07s}.stag>*:nth-child(3){animation-delay:.12s}.stag>*:nth-child(4){animation-delay:.17s}.stag>*:nth-child(5){animation-delay:.22s}.stag>*:nth-child(6){animation-delay:.27s}.stag>*:nth-child(n+7){animation-delay:.3s}
 /* landing hero */
 .mega{font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--naranja)}
@@ -364,8 +365,12 @@ const S=()=>D.settings;
 const packOf=id=>S().packs.find(p=>p.id===id)||S().packs[0];
 const promoLeft=()=>Math.max(0,num(S().promoTotal)-num(S().promoTaken));
 const promoActive=()=>!!S().promoOn&&promoLeft()>0;
-const withIva=b=>num(b)*(1+num(S().iva)/100);
-const ivaOf=b=>num(b)*num(S().iva)/100;
+const ivaFor=c=>{c=c||(!isAdmin()?D.me:null);return c&&c.iva_pct!==null&&c.iva_pct!==undefined?num(c.iva_pct):num(S().iva)};
+const withIva=(b,c)=>num(b)*(1+ivaFor(c)/100);
+const ivaOf=(b,c)=>num(b)*ivaFor(c)/100;
+const ivaTxt=c=>ivaFor(c)===0?'sin IVA':'+ IVA';
+const packName=c=>c?.custom_pack?.name||packOf(c?.pack).name;
+const dayPrice=c=>c&&c.extra_day_price!==null&&c.extra_day_price!==undefined?num(c.extra_day_price):num(S().extraDay);
 const isAdmin=()=>D.me?.role==='admin';
 const testMode=()=>!!S().paypal?.testMode||!S().paypal?.clientId;
 const leadDays=()=>Math.ceil(num(S().changeHours||48)/24);
@@ -447,6 +452,7 @@ function render(keepScroll){
     if(ui.view==='landing')h=vLanding();else if(ui.view==='welcome')h=vWelcome();else if(ui.view==='login')h=vLogin();
     else if(ui.view==='signup')h=vSignup();else if(ui.view==='client')h=vClient();else if(ui.view==='admin')h=vAdmin();
   }catch(e){console.error(e);h=`<div class="wrap"><p class="mt48">Algo ha fallado. <button class="link" onclick="location.reload()">Recargar</button></p></div>`}
+  a.classList.toggle('nostag',!!keepScroll);
   a.innerHTML='<div class="grain"></div>'+h;
   Object.entries(keep).forEach(([k,v])=>{const el=document.getElementById(k);if(el)el.value=v});
   if(focus){const el=document.getElementById(focus);if(el){el.focus();if(el.setSelectionRange&&el.value)el.setSelectionRange(el.value.length,el.value.length)}}
@@ -664,13 +670,13 @@ function sheetPayTest(amount,label,onConfirm){
 /* ================= CLIENT ================= */
 const myB=m=>D.bookings.filter(b=>b.client_id===D.me.id&&(!m||b.date.startsWith(m))).sort((a,b)=>a.date.localeCompare(b.date));
 const nextB=()=>myB().filter(b=>parse(b.date)>=TODAY)[0];
-const extraOf=(m,cid=D.me.id)=>D.extras.find(e=>e.client_id===cid&&e.month===m)||{days:0,paid_days:0,day_price:S().extraDay};
+const extraOf=(m,cid=D.me.id)=>D.extras.find(e=>e.client_id===cid&&e.month===m)||{days:0,paid_days:0,day_price:dayPrice(cid===D.me.id?D.me:prof(cid))};
 const allowed=m=>1+num(extraOf(m).days);
 const freeSlots=k=>{const a=D.availability[k]||[];const t=D.taken.filter(x=>x.date===k).map(x=>x.slot);return a.filter(s=>!t.includes(s))};
 const needList=()=>S().need[D.me.sector]||S().need.otro;
 const unreadFor=cid=>D.messages.filter(m=>m.client_id===cid&&(isAdmin()?(!m.from_team&&!m.read_by_team):(m.from_team&&!m.read_by_client))).length;
 function pendingExtras(m,cid=D.me.id){const ex=extraOf(m,cid);let t=(num(ex.days)-num(ex.paid_days))*num(ex.day_price);D.events.filter(e=>e.client_id===cid&&e.status==='aceptado'&&e.month===m&&!e.paid).forEach(e=>t+=num(e.quote));return Math.max(0,t)}
-function monthLines(m,c){const ex=extraOf(m,c.id),L=[{label:packOf(c.pack).name,base:num(c.price)}];if(num(ex.days))L.push({label:`${ex.days} día${ex.days>1?'s':''} extra`,base:num(ex.days)*num(ex.day_price)});D.events.filter(e=>e.client_id===c.id&&e.status==='aceptado'&&e.month===m).forEach(e=>L.push({label:'Evento: '+e.title,base:num(e.quote)}));return L}
+function monthLines(m,c){const ex=extraOf(m,c.id),L=[{label:packName(c),base:num(c.price)}];if(num(ex.days))L.push({label:`${ex.days} día${ex.days>1?'s':''} extra`,base:num(ex.days)*num(ex.day_price)});D.events.filter(e=>e.client_id===c.id&&e.status==='aceptado'&&e.month===m).forEach(e=>L.push({label:'Evento: '+e.title,base:num(e.quote)}));return L}
 
 function vClient(){
   let body='';const c=D.me;
@@ -711,8 +717,8 @@ function cInicio(c){
   <div class="mt24" id="calendar">${calendar('client',ui.calM)}</div>${slotsH}
   <div class="mt32"><span class="label">Tu mes</span><h2 class="mt4">Lo que pagas en ${monthName(m)}.</h2></div>
   <div class="card mt16">
-    <div class="line"><span class="l"><b>${esc(packOf(c.pack).name)}</b><small>${c.promo?'Precio campaña '+esc(S().city)+' bloqueado':'Cuota mensual'} · ya incluida en tu cobro</small></span><span class="r">${eur(c.price)}</span></div>
-    <div class="line"><span class="l"><b>Día extra de grabación</b><small>Más contenido este mes · ${eur(ex.paid_days?ex.day_price:S().extraDay)} + IVA</small></span>
+    <div class="line"><span class="l"><b>${esc(packName(c))}</b><small>${c.custom_pack?'Tu paquete a medida':c.promo?'Precio campaña '+esc(S().city)+' bloqueado':'Cuota mensual'} · ya incluida en tu cobro</small></span><span class="r">${eur(c.price)}</span></div>
+    <div class="line"><span class="l"><b>Día extra de grabación</b><small>Más contenido este mes · ${eur(ex.paid_days?ex.day_price:dayPrice(c))} ${ivaTxt(c)}</small></span>
       <div class="stepper"><button data-act="extraDay" data-d="-1" aria-label="Quitar">${I('minus','s')}</button><b>${ex.days||0}</b><button data-act="extraDay" data-d="1" aria-label="Añadir">${I('plus','s')}</button></div></div>
     ${D.events.filter(e=>e.client_id===c.id&&e.status==='aceptado'&&e.month===m).map(e=>`<div class="line"><span class="l"><b>Evento: ${esc(e.title)}</b><small>${e.paid?'Pagado':'Presupuesto aceptado'}</small></span><span class="r">${eur(e.quote)}</span></div>`).join('')}
   </div>
@@ -720,9 +726,9 @@ function cInicio(c){
   ${pendEv.map(e=>`<div class="card mt12"><div class="row">${I('clock')}<div><b>${esc(e.title)}</b><div class="small muted">Te confirmamos fecha y presupuesto en menos de ${S().eventHours} h.</div></div></div></div>`).join('')}
   <button class="tile mt12" data-act="openEvent"><span class="ic">${I('party')}</span><span><b>¿Tienes un evento?</b><small>Cuéntanoslo y te pasamos presupuesto en ${S().eventHours} h</small></span><span class="chev">${I('chev')}</span></button>
   <div class="sum mt16">
-    <div class="eq">${lines.map(l=>eur(l.base)).join(' + ')}${lines.length>1?' = '+eur(sub):''} + IVA</div>
+    <div class="eq">${lines.map(l=>eur(l.base)).join(' + ')}${lines.length>1?' = '+eur(sub):''} ${ivaFor(c)===0?'· sin IVA':'+ IVA'}</div>
     <div class="tot" data-count="${withIva(sub)}">${eur(withIva(sub))}</div>
-    <div class="sub">Total de ${monthName(m)} con IVA (${eur(ivaOf(sub))}).</div>
+    <div class="sub">${ivaFor(c)===0?`Total de ${monthName(m)} (sin IVA).`:`Total de ${monthName(m)} con IVA (${eur(ivaOf(sub))}).`}</div>
     ${pend>0?(testMode()?`<button class="btn pp mt16" data-act="payExtrasTest">Pagar ${eur(withIva(pend))} con <b style="font-style:italic">PayPal</b></button><span class="testtag">Modo prueba · no se cobra nada</span>`:`<div class="sub" style="margin-top:14px;font-weight:700;color:#1b1c20">Extras pendientes: ${eur(withIva(pend))}</div><div id="ppExtras" class="pp-box"></div>`)+`<div class="sub" style="text-align:center">La cuota se cobra sola cada mes.</div>`
       :`<div class="row mt12" style="color:#2f6b5e;font-weight:700">${I('check')} Todo pagado. La cuota se cobra sola cada mes.</div>`}
   </div>
@@ -767,11 +773,11 @@ function cPagos(c){
   const st=S(),p=packOf(c.pack),start=parse(c.start_date),minEnd=addMonths(start,num(st.minMonths));minEnd.setDate(start.getDate());
   const pays=D.payments.filter(x=>x.client_id===c.id);
   return `<span class="label">Pagos</span><h2 class="mt4">Tu membresía.</h2>
-  <div class="card mt16"><div class="between"><div><h3>${esc(p.name)}</h3><span class="small muted">${eur(c.price)} + IVA / mes · ${eur(withIva(c.price))} con IVA</span></div><span class="pill ${c.status==='activa'?'v':'r'}">${{activa:'Activa',pausa:'En pausa',baja:'De baja'}[c.status]||c.status}</span></div>
+  <div class="card mt16"><div class="between"><div><h3>${esc(packName(c))}</h3><span class="small muted">${ivaFor(c)===0?`${eur(c.price)} / mes · sin IVA`:`${eur(c.price)} + IVA / mes · ${eur(withIva(c.price))} con IVA`}</span>${c.custom_pack?.features?.length?`<ul class="feat">${c.custom_pack.features.map(f=>`<li>${I('check','s')}${esc(f)}</li>`).join('')}</ul>`:''}</div><span class="pill ${c.status==='activa'?'v':'r'}">${{activa:'Activa',pausa:'En pausa',baja:'De baja'}[c.status]||c.status}</span></div>
     <hr class="sep"><dl class="kv"><dt>Cliente desde</dt><dd>${short(c.start_date)} ${start.getFullYear()}</dd><dt>Permanencia hasta</dt><dd>${short(iso(minEnd))} ${minEnd.getFullYear()}</dd><dt>Forma de pago</dt><dd>PayPal · cobro automático</dd></dl></div>
   <h3 class="mt32">Historial</h3>
-  <div class="card mt12" style="padding:6px 18px">${pays.length?pays.map(x=>`<div class="line"><span class="l"><b style="font-size:15px">${esc(x.concept)}</b><small>${short(x.date)} · ${x.method==='prueba'?'Pago de prueba':x.method==='manual'?'Alta manual':'PayPal'}</small></span><span class="r">${eur(withIva(x.base))}</span></div>`).join(''):'<p class="small muted" style="padding:12px 0">Aún no hay pagos.</p>'}</div>
-  <p class="xs muted mt12">Precios sin IVA. IVA ${st.iva} % aplicado en cada cobro. ¿Necesitas factura? Pídela por el chat y te la mandamos.</p><div style="height:20px"></div>`;
+  <div class="card mt12" style="padding:6px 18px">${pays.length?pays.map(x=>`<div class="line"><span class="l"><b style="font-size:15px">${esc(x.concept)}</b><small>${short(x.date)} · ${x.method==='prueba'?'Pago de prueba':x.method==='manual'?'Alta manual':'PayPal'}</small></span><span class="r">${eur(num(x.base)*(1+(x.iva!==null&&x.iva!==undefined?num(x.iva):ivaFor(c))/100))}</span></div>`).join(''):'<p class="small muted" style="padding:12px 0">Aún no hay pagos.</p>'}</div>
+  <p class="xs muted mt12">${ivaFor(c)===0?'Tus cuotas van sin IVA.':`Precios sin IVA. IVA ${ivaFor(c)} % aplicado en cada cobro.`} ¿Necesitas factura? Pídela por el chat y te la mandamos.</p><div style="height:20px"></div>`;
 }
 function chatList(cid,teamView){
   const ms=D.messages.filter(m=>m.client_id===cid);let out='',last='';
@@ -848,7 +854,7 @@ function aClientes(){
   <div class="search mt16">${I('search','s')}<input class="inp" id="cq" placeholder="Buscar local…" value="${esc(ui.q)}"></div>
   <button class="btn o sm mt12" data-act="manualSignup">${I('plus','s')} Dar de alta un local</button>
   ${list.map(c=>{const nb=D.bookings.filter(b=>b.client_id===c.id&&parse(b.date)>=TODAY)[0],pend=pendingExtras(workMonth(),c.id),un=unreadFor(c.id);
-   return `<button class="tile mt12" data-act="openClient" data-id="${c.id}"><span class="av">${esc((c.business||'?')[0])}</span><span style="min-width:0"><b>${esc(c.business)}${c.is_demo?' <span class="pill" style="font-size:10px;padding:2px 6px">demo</span>':''}</b><small>${esc(packOf(c.pack).name)} · ${eur(c.price)}${c.promo?' · campaña':''}${c.status!=='activa'?` · <span style="color:#ef7f7b">${c.status}</span>`:''}</small><br><small>${nb?short(nb.date)+' · '+esc(nb.slot):'<span style="color:var(--naranja2)">Sin día elegido</span>'}${pend?' · <span style="color:var(--naranja2)">Extras sin pagar</span>':''}</small></span>${un?`<span class="pill o" style="margin-left:auto">${un}</span>`:`<span class="chev">${I('chev')}</span>`}</button>`}).join('')}<div style="height:20px"></div>`;
+   return `<button class="tile mt12" data-act="openClient" data-id="${c.id}"><span class="av">${esc((c.business||'?')[0])}</span><span style="min-width:0"><b>${esc(c.business)}${c.is_demo?' <span class="pill" style="font-size:10px;padding:2px 6px">demo</span>':''}</b><small>${esc(packName(c))} · ${eur(c.price)}${c.custom_pack?' · a medida':c.promo?' · campaña':''}${ivaFor(c)===0?' · sin IVA':''}${c.status!=='activa'?` · <span style="color:#ef7f7b">${c.status}</span>`:''}</small><br><small>${nb?short(nb.date)+' · '+esc(nb.slot):'<span style="color:var(--naranja2)">Sin día elegido</span>'}${pend?' · <span style="color:var(--naranja2)">Extras sin pagar</span>':''}</small></span>${un?`<span class="pill o" style="margin-left:auto">${un}</span>`:`<span class="chev">${I('chev')}</span>`}</button>`}).join('')}<div style="height:20px"></div>`;
 }
 function aAvisos(){
   const pend=D.events.filter(e=>e.status==='pendiente'),rest=D.events.filter(e=>e.status!=='pendiente').slice(0,30);
@@ -954,17 +960,25 @@ function sheetAdmDay(k){const a=D.availability[k],bk=D.bookings.filter(b=>b.date
   ${bk.length?`<h3 class="mt24">Grabaciones</h3>${bk.map(b=>`<div class="line"><span class="l"><b>${esc(prof(b.client_id).business)}</b><small>${esc(b.slot)}</small></span><button class="pill" data-act="admCancelBk" data-id="${b.id}">${I('trash','s')} Anular</button></div>`).join('')}`:''}
   <button class="btn outline mt24" data-act="closeSheet">Hecho</button>`)}
 function sheetClient(id){const c=prof(id),o=c.onboarding||{},m=workMonth();
-  sheet(`<span class="label g">${esc(packOf(c.pack).name)}${c.promo?' · campaña':''}</span><h2 class="mt4">${esc(c.business)}</h2>
+  sheet(`<span class="label g">${esc(packName(c))}${c.custom_pack?' · a medida':c.promo?' · campaña':''}${ivaFor(c)===0?' · sin IVA':''}</span><h2 class="mt4">${esc(c.business)}</h2>
   <div class="card mt16"><dl class="kv"><dt>Contacto</dt><dd>${esc(c.contact||'—')}</dd><dt>Teléfono</dt><dd>${c.phone?`<a class="link" href="tel:${esc(c.phone)}">${esc(c.phone)}</a>`:'—'}</dd><dt>Email</dt><dd>${esc(c.email||'—')}</dd><dt>Sector</dt><dd>${esc(sectName(c.sector))}</dd><dt>Desde</dt><dd>${nice(c.start_date)}</dd><dt>Usuario</dt><dd>${esc(c.username)}</dd></dl></div>
   <div class="card mt12"><h3>Pack, precio y estado</h3><div class="seg mt12">${S().packs.map(x=>`<button class="${c.pack===x.id?'on':''}" data-act="cPack" data-c="${c.id}" data-v="${x.id}">${esc(x.name.replace('Pack ',''))}</button>`).join('')}</div>
     <div class="seg mt8">${['activa','pausa','baja'].map(x=>`<button class="${c.status===x?'on':''}" data-act="cStatus" data-c="${c.id}" data-v="${x}">${cap(x)}</button>`).join('')}</div>
-    <table class="tbl mt8"><tr><td>Cuota de este cliente / mes</td><td><input class="ninp" type="number" data-cprice="${c.id}" value="${num(c.price)}"></td></tr>${c.pack==='completo'?`<tr><td>Minutos del asistente</td><td><input class="ninp" type="number" data-cmins="${c.id}" value="${num(c.mins)}"></td></tr>`:''}</table></div>
+    <table class="tbl mt8"><tr><td>Cuota de este cliente / mes</td><td><input class="ninp" type="number" data-cprice="${c.id}" value="${num(c.price)}"></td></tr><tr><td>Día extra para este cliente</td><td><input class="ninp" type="number" data-cextra="${c.id}" value="${c.extra_day_price??''}" placeholder="${S().extraDay}"></td></tr>${c.pack==='completo'?`<tr><td>Minutos del asistente</td><td><input class="ninp" type="number" data-cmins="${c.id}" value="${num(c.mins)}"></td></tr>`:''}</table></div>
+  <div class="card mt12"><h3>IVA de este cliente</h3>
+    <div class="seg mt12">${[['','General ('+S().iva+' %)'],['0','Sin IVA'],['otro','Otro %']].map(([v,l])=>{const cur=c.iva_pct===null||c.iva_pct===undefined?'':num(c.iva_pct)===0?'0':'otro';return `<button class="${cur===v?'on':''}" data-act="cIva" data-c="${c.id}" data-v="${v}">${l}</button>`}).join('')}</div>
+    ${c.iva_pct!==null&&c.iva_pct!==undefined&&num(c.iva_pct)!==0?`<table class="tbl mt8"><tr><td>IVA %</td><td><input class="ninp" type="number" data-civa="${c.id}" value="${num(c.iva_pct)}"></td></tr></table>`:''}
+    <p class="xs muted mt8">Se aplica a sus cuotas y extras a partir de ahora. Los pagos ya hechos no cambian.</p></div>
+  <div class="card mt12"><div class="between"><h3>Paquete a medida</h3>${c.custom_pack?'<span class="pill o">Activo</span>':''}</div>
+    <p class="xs muted mt4">Déjalo vacío para usar el pack normal. Si le pones nombre, el cliente ve este paquete en vez del estándar.</p>
+    <div class="field"><label>Nombre del paquete</label><input class="inp" data-cpackname="${c.id}" value="${esc(c.custom_pack?.name||'')}" placeholder="Ej. Pack Especial Hotel"></div>
+    <div class="field"><label>Qué incluye (una línea por punto)</label><textarea class="inp" data-cpackfeat="${c.id}" placeholder="2 jornadas al mes&#10;20 publicaciones&#10;...">${esc((c.custom_pack?.features||[]).join('\n'))}</textarea></div></div>
   <div class="card mt12"><h3>Objetivos</h3><p class="small mt8">${esc((o.goals||[]).join(' · ')||'—')}</p><p class="small muted mt4">Estilo: ${esc((o.style||[]).join(', ')||'—')}</p>${o.best?`<p class="small muted mt4">Lo mejor: ${esc(o.best)}</p>`:''}${o.audience?`<p class="small muted mt4">Cliente ideal: ${esc(o.audience)}</p>`:''}${o.refs?`<p class="small muted mt4">Referencias: ${esc(o.refs)}</p>`:''}${o.avoid?`<p class="small muted mt4">Evitar: ${esc(o.avoid)}</p>`:''}</div>
   <div class="card mt12"><h3>Accesos</h3><dl class="kv mt8"><dt>Instagram</dt><dd>${esc(o.ig||'—')}</dd>${o.tiktok?`<dt>TikTok</dt><dd>${esc(o.tiktok)}</dd>`:''}${o.google?`<dt>Google</dt><dd>${esc(o.google)}</dd>`:''}<dt>Método</dt><dd>${o.access==='password'?'Usuario + contraseña':'Socio en Meta'}</dd>${o.access==='password'?`<dt>Usuario</dt><dd>${esc(o.igUser)}</dd><dt>Contraseña</dt><dd><span id="pw">${I('lock','s')} cifrada</span> <button class="xs link" data-act="showPw" data-id="${c.id}">Ver</button></dd>`:''}</dl></div>
   ${c.cancel_requested_at&&c.status!=='baja'?`<div class="card hl mt12"><b>Ha pedido la baja</b><p class="small muted mt4">${nice(String(c.cancel_requested_at).slice(0,10))}</p><button class="btn o sm mt12" data-act="cancelSheet" data-id="${c.id}">Tramitar baja</button></div>`:''}
   ${c.status==='baja'?`<div class="card mt12"><b>De baja</b><p class="small muted mt4">Último día: ${c.end_date?nice(c.end_date):'—'}</p></div>`:''}
   <div class="card mt12"><h3>Guiones de la próxima grabación</h3><p class="xs muted mt4">Separa cada guion con una línea en blanco. El cliente los ve en «Qué necesitamos de ti».</p><textarea class="inp mt8" data-cscripts="${c.id}" style="min-height:150px">${esc((c.scripts||[]).join('\n\n'))}</textarea></div>
-  <div class="card mt12"><h3>${cap(monthName(m))}</h3>${monthLines(m,c).map(l=>`<div class="line"><span class="l">${esc(l.label)}</span><span class="r">${eur(l.base)}</span></div>`).join('')}${pendingExtras(m,c.id)?`<p class="small mt8" style="color:var(--naranja2)">Extras sin pagar: ${eur(withIva(pendingExtras(m,c.id)))}</p>`:''}</div>
+  <div class="card mt12"><h3>${cap(monthName(m))}</h3>${monthLines(m,c).map(l=>`<div class="line"><span class="l">${esc(l.label)}</span><span class="r">${eur(l.base)}</span></div>`).join('')}${pendingExtras(m,c.id)?`<p class="small mt8" style="color:var(--naranja2)">Extras sin pagar: ${eur(withIva(pendingExtras(m,c.id),c))}</p>`:''}</div>
   <div class="row mt16"><button class="btn ghost sm" data-act="resetPw" data-id="${c.id}">${I('key','s')} Contraseña</button><button class="btn o sm" data-act="chatClient" data-id="${c.id}">${I('chat','s')} Escribir</button></div>
   ${c.status!=='baja'&&!c.cancel_requested_at?`<button class="btn outline sm mt12" data-act="cancelSheet" data-id="${c.id}">Dar de baja</button>`:''}
   ${c.username==='lamuralla1'?'':`<button class="btn outline sm mt12" data-act="delClient" data-id="${c.id}" style="color:#ef7f7b">${I('trash','s')} Borrar cliente</button>`}`)}
@@ -974,6 +988,14 @@ function sheetManual(){ui.signup=newSignup('imagen');const d=ui.signup.data;
   <div class="field"><label>Pack</label><div class="seg" id="mPack">${S().packs.map(p=>`<button class="${p.id==='imagen'?'on':''}" data-act="mPack" data-v="${p.id}">${esc(p.name)}</button>`).join('')}</div></div>
   <div class="field"><label>Sector</label><select class="inp" data-s="sector">${SECT.map(x=>`<option value="${x[0]}">${x[1]}</option>`).join('')}</select></div>
   ${fld('ig','Instagram','@')}${fld('user','Usuario para la app','')}${fld('pass','Contraseña (mínimo 6)','')}
+  <hr class="sep"><div class="between"><div><h3>Cliente especial</h3><p class="xs muted">Precio, IVA o paquete distintos</p></div><button class="sw" id="mSpecial" data-act="mSpecial"></button></div>
+  <div id="mSpecialBox" style="display:none">
+    <div class="field"><label>Cuota al mes (€ sin IVA)</label><input class="inp" type="number" id="mPrice" placeholder="${S().packs[0].promo}"></div>
+    <div class="field"><label>IVA</label><div class="seg" id="mIva">${[['','General ('+S().iva+' %)'],['0','Sin IVA'],['otro','Otro %']].map(([v,l])=>`<button class="${v===''?'on':''}" data-act="mIvaSel" data-v="${v}">${l}</button>`).join('')}</div><input class="inp mt8" type="number" id="mIvaPct" placeholder="IVA %" style="display:none"></div>
+    <div class="field"><label>Día extra (€ sin IVA)</label><input class="inp" type="number" id="mExtra" placeholder="${S().extraDay}"></div>
+    <div class="field"><label>Nombre del paquete (opcional)</label><input class="inp" id="mPackName" placeholder="Ej. Pack Especial Hotel"></div>
+    <div class="field"><label>Qué incluye (una línea por punto)</label><textarea class="inp" id="mPackFeat"></textarea></div>
+  </div>
   <div class="err" id="merr"></div><button class="btn o mt16" data-act="doManual">Crear cuenta</button><p class="xs muted mt8">Pásale al cliente su usuario y contraseña por WhatsApp.</p>`)}
 
 /* ================= ACTIONS ================= */
@@ -1033,6 +1055,7 @@ const A={
   async closeMonth(el){if(!confirmTwice(el,'¿Cerrar todo el mes? Toca otra vez'))return;const ks=Object.keys(D.availability).filter(k=>k.startsWith(ui.acalM)&&!D.bookings.some(b=>b.date===k));if(ks.length){const{error}=await sb.from('availability').delete().in('date',ks);if(error)return toast(error.message)}await loadAll();render(true);toast('Mes cerrado (se mantienen los días con grabación)')},
   openClient(el){sheetClient(el.dataset.id)},
   async cPack(el){const c=prof(el.dataset.c),p=packOf(el.dataset.v);await upd('profiles',{pack:p.id,price:c.promo?p.promo:p.price},{id:c.id});Object.assign(c,{pack:p.id,price:c.promo?p.promo:p.price});sheetClient(c.id)},
+  async cIva(el){const c=prof(el.dataset.c),v=el.dataset.v,val=v===''?null:v==='0'?0:(num(c.iva_pct)||10);await upd('profiles',{iva_pct:val},{id:c.id});c.iva_pct=val;sheetClient(c.id);toast(val===null?'IVA general':val===0?'Sin IVA para este cliente':'IVA personalizado')},
   async cStatus(el){const c=prof(el.dataset.c);await upd('profiles',{status:el.dataset.v},{id:c.id});c.status=el.dataset.v;sheetClient(c.id)},
   async showPw(el){try{const v=await rpc('get_ig_password',{p_user:el.dataset.id});$('#pw').textContent=v||'— (no la ha guardado)'}catch(e){}},
   cancelSheet(el){const c=prof(el.dataset.id),st=S(),start=parse(c.start_date),minEnd=addMonths(start,num(st.minMonths));minEnd.setDate(start.getDate());const req=c.cancel_requested_at?parse(String(c.cancel_requested_at).slice(0,10)):TODAY;let end=addDays(req,num(st.noticeDays));if(end<minEnd)end=minEnd;
@@ -1052,8 +1075,11 @@ const A={
   async ppEnv(el){D.settings.paypal.env=el.dataset.v;await saveSettings();render(true)},
   manualSignup(){sheetManual()},
   mPack(el){ui.signup.pack=el.dataset.v;el.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===el))},
+  mSpecial(el){el.classList.toggle('on');$('#mSpecialBox').style.display=el.classList.contains('on')?'block':'none'},
+  mIvaSel(el){el.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===el));$('#mIvaPct').style.display=el.dataset.v==='otro'?'block':'none';$('#mIva').dataset.v=el.dataset.v},
   async doManual(el){const d=ui.signup.data;d.sector=$('#scrim select').value;if(!d.business||!d.contact||!d.user||d.pass.length<6){$('#merr').textContent='Rellena negocio, contacto, usuario y contraseña (mínimo 6).';return}
-    el.classList.add('loading');const{data,error}=await sb.functions.invoke('signup',{body:{form:{...d,accept:true},pack:ui.signup.pack,byTeam:true}});const err=error?await errMsg(error):data?.error;el.classList.remove('loading');
+    el.classList.add('loading');let custom=null;if($('#mSpecial').classList.contains('on')){const iv=$('#mIva').dataset.v||'';custom={price:$('#mPrice').value,iva:iv===''?null:iv==='0'?0:$('#mIvaPct').value,extraDay:$('#mExtra').value||null,pack:{name:$('#mPackName').value.trim(),features:$('#mPackFeat').value.split('\n').map(x=>x.trim()).filter(Boolean)}}}
+    const{data,error}=await sb.functions.invoke('signup',{body:{form:{...d,accept:true},pack:ui.signup.pack,byTeam:true,custom}});const err=error?await errMsg(error):data?.error;el.classList.remove('loading');
     if(err){$('#merr').textContent=err;return}closeSheet(true);ui.signup=null;await loadAll();const{data:pr}=await sb.from('profiles').select('*').order('created_at');D.profiles=pr||[];render(true);toast(`Cuenta creada: ${data.username}`)},
   resetPw(el){sheet(`<span class="label g">Contraseña</span><h2 class="mt4">${esc(prof(el.dataset.id).business)}</h2><div class="field"><label>Nueva contraseña (mínimo 6)</label><input class="inp" id="npw" autocapitalize="none"></div><div class="err" id="perr"></div><button class="btn o mt16" id="pOk">Cambiar</button>`,d=>{d.querySelector('#pOk').onclick=async()=>{const pw=$('#npw').value;const{data,error}=await sb.functions.invoke('team',{body:{action:'reset_password',userId:el.dataset.id,password:pw}});const err=error?await errMsg(error):data?.error;if(err){$('#perr').textContent=err;return}closeSheet();toast('Contraseña cambiada. Pásasela al cliente.')}})},
   async delClient(el){if(!confirmTwice(el,'Se borra todo. Toca otra vez'))return;const{data,error}=await sb.functions.invoke('team',{body:{action:'delete_client',userId:el.dataset.id}});const err=error?await errMsg(error):data?.error;if(err)return toast(err);closeSheet(true);const{data:pr}=await sb.from('profiles').select('*').order('created_at');D.profiles=pr||[];await loadAll();render(true);toast('Cliente borrado')},
@@ -1077,6 +1103,9 @@ document.addEventListener('change',async e=>{const t=e.target;
   if(t.dataset.sett){setPath(D.settings,t.dataset.sett,t.value.trim());await saveSettings()}
   if(t.dataset.setlines){setPath(D.settings,t.dataset.setlines,t.value.split('\n').map(x=>x.trim()).filter(Boolean));await saveSettings()}
   if(t.dataset.cprice){await upd('profiles',{price:parseFloat(t.value)||0},{id:t.dataset.cprice});prof(t.dataset.cprice).price=parseFloat(t.value)||0;toast('Precio del cliente actualizado')}
+  if(t.dataset.cextra!==undefined){const v=t.value===''?null:parseFloat(t.value);await upd('profiles',{extra_day_price:v},{id:t.dataset.cextra});prof(t.dataset.cextra).extra_day_price=v;toast('Precio del día extra guardado')}
+  if(t.dataset.civa){const v=parseFloat(t.value)||0;await upd('profiles',{iva_pct:v},{id:t.dataset.civa});prof(t.dataset.civa).iva_pct=v;toast('IVA guardado')}
+  if(t.dataset.cpackname!==undefined||t.dataset.cpackfeat!==undefined){const id=t.dataset.cpackname||t.dataset.cpackfeat,sc=$('#scrim');const name=sc.querySelector('[data-cpackname]').value.trim(),feats=sc.querySelector('[data-cpackfeat]').value.split('\n').map(x=>x.trim()).filter(Boolean);const cp=name?{name,features:feats}:null;await upd('profiles',{custom_pack:cp},{id});prof(id).custom_pack=cp;toast(cp?'Paquete a medida guardado':'Vuelve al pack normal')}
   if(t.dataset.cmins){await upd('profiles',{mins:parseInt(t.value)||0},{id:t.dataset.cmins});toast('Guardado')}
   if(t.dataset.cscripts){const sc=t.value.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean);await upd('profiles',{scripts:sc},{id:t.dataset.cscripts});prof(t.dataset.cscripts).scripts=sc;toast('Guiones guardados')}
 });
