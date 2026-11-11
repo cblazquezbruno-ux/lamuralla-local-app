@@ -33,7 +33,7 @@ Deno.serve(async (req) => {
     const lead = Math.ceil(Number(s.changeHours || 48) / 24);
     const leadIso = iso(new Date(today.getFullYear(), today.getMonth(), today.getDate() + lead));
     const [{ data: bks }, { data: ex }, { data: evs }, { data: pays }, { data: av }, { data: taken }, { data: hist }] = await Promise.all([
-      admin.from('bookings').select('date,slot').eq('client_id', uid).gte('date', tIso).order('date'),
+      admin.from('bookings').select('date,slot,needs,needs_sent,checks').eq('client_id', uid).gte('date', tIso).order('date'),
       admin.from('extras').select('*').eq('client_id', uid).eq('month', wm).maybeSingle(),
       admin.from('events').select('title,status,quote,date,paid').eq('client_id', uid).order('created_at', { ascending: false }).limit(5),
       admin.from('payments').select('date,concept,base,iva').eq('client_id', uid).order('date', { ascending: false }).limit(5),
@@ -48,7 +48,9 @@ Deno.serve(async (req) => {
     const iva = p?.iva_pct !== null && p?.iva_pct !== undefined ? Number(p.iva_pct) : Number(s.iva);
     const dayP = p?.extra_day_price ?? s.extraDay;
     const free = (av || []).map((a: any) => ({ date: a.date, slots: a.slots.filter((sl: string) => !(taken || []).some((t: any) => t.date === a.date && t.slot === sl)) })).filter((a: any) => a.slots.length).slice(0, 6);
-    const need: string[] = s.need[p?.sector] || s.need.otro;
+    const nb: any = (bks || [])[0];
+    const need: string[] = nb?.needs_sent ? (nb.needs || []) : [];
+    const MEET: Record<string, string> = { pendiente: 'aún no ha pedido la reunión de arranque (se pide en Inicio → «Pedir mi reunión»)', solicitada: 'ha pedido la reunión de arranque y el equipo le confirmará día y hora por el chat', confirmada: `reunión de arranque confirmada para ${p?.meeting_at ? new Date(p.meeting_at).toLocaleString('es-ES', { timeZone: 'Europe/Madrid', weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) : '—'}`, hecha: 'reunión de arranque hecha: ya puede elegir día de rodaje en Inicio' };
     const pend = ex ? Math.max(0, ex.days - ex.paid_days) * Number(ex.day_price) : 0;
     const start = p?.start_date ? new Date(p.start_date) : today;
     const minEnd = new Date(start); minEnd.setMonth(minEnd.getMonth() + Number(s.minMonths || 3));
@@ -58,13 +60,14 @@ Deno.serve(async (req) => {
       `Negocio: ${p.business}. Contacto: ${p.contact}. Sector: ${p.sector}.`,
       `Paquete: ${packName}, ${eur(Number(p.price))} al mes ${ivaTxt}. Incluye: ${feats.join('; ')}.`,
       `Estado: ${p.status}${p.cancel_requested_at ? ' (ha pedido la baja)' : ''}. Cliente desde ${p.start_date}. Permanencia mínima hasta ${iso(minEnd)}. Baja con ${s.noticeDays} días de aviso.`,
+      `Proceso: 1) reunión de arranque, 2) elegir día de rodaje (solo cuando la reunión está hecha), 3) el equipo le envía qué necesita preparar, 4) contenido en la pestaña Contenido (calendario, guiones y «Envíanos archivos»). Situación: ${MEET[p.meeting_status] || ''}.`,
       `Próximas grabaciones: ${(bks || []).length ? bks!.map((b: any) => fd(b.date) + ' ' + b.slot).join('; ') : 'ninguna reservada'}.`,
       `Días libres para reservar: ${free.length ? free.map((f: any) => fd(f.date) + ' (' + f.slots.join(', ') + ')').join('; ') : 'ninguno ahora mismo'}.`,
       `Días extra este mes: ${ex?.days || 0} (precio ${eur(Number(dayP))} ${ivaTxt}). Extras pendientes de pago: ${eur(pend)}.`,
       `Eventos: ${(evs || []).map((e: any) => e.title + ' (' + e.status + (e.quote ? ', ' + eur(Number(e.quote)) : '') + ')').join('; ') || 'ninguno'}.`,
       `Últimos pagos: ${(pays || []).map((x: any) => x.date + ' ' + x.concept + ' ' + eur(Number(x.base))).join('; ') || 'ninguno'}.`,
-      `Qué necesitamos el día de grabación: ${need.join('; ')}. Guiones preparados: ${(p.scripts || []).length}.`,
-      `Normas: cambio de día hasta ${s.changeHours} h antes desde el calendario de Inicio; eventos con presupuesto en ${s.eventHours} h; el calendario de publicaciones llega el día 25 y hay 48 h para revisarlo; la cuota se cobra sola cada mes por PayPal; los extras se pagan desde Inicio.`,
+      `Qué necesitamos para su próximo rodaje: ${need.length ? need.join('; ') : 'el equipo aún no lo ha enviado (lo enviará tras confirmar el rodaje)'}.`,
+      `Normas: cambio de día hasta ${s.changeHours} h antes desde el calendario de Inicio; eventos con presupuesto en ${s.eventHours} h; el calendario de publicaciones está en la pestaña Contenido; la cuota se cobra sola cada mes por PayPal; también puede pagar por transferencia o Bizum desde Pagos → «Pagar por transferencia, Bizum u otra forma»; las facturas llegan solas a Pagos y a su email; los extras se pagan desde Pagos.`,
     ].join('\n');
 
     let reply = '';
@@ -84,19 +87,21 @@ Deno.serve(async (req) => {
     if (!reply) {
       const n = norm(q);
       const has = (...w: string[]) => w.some((x) => n.includes(x));
-      if (isAdmin) reply = 'Soy el asistente de los clientes. Desde el panel del equipo puedes ver todo en Agenda, Clientes y Avisos.';
+      if (isAdmin) reply = 'Soy el asistente de los clientes. Desde el panel del equipo tienes Hoy (tus tareas y la bandeja), Agenda, Clientes y Ajustes.';
       else if (has('hola', 'buenas', 'hey', 'ey')) reply = `¡Hola, ${String(p.contact || '').split(' ')[0]}! Pregúntame lo que quieras: cuándo grabamos, qué preparar, cuánto pagas este mes, cómo añadir un día extra…`;
       else if (has('gracias', 'genial', 'perfecto', 'ok')) reply = '¡A ti! Si necesitas algo más, aquí estoy. Y si prefieres hablar con una persona, ve a la pestaña "Equipo".';
+      else if (has('reunion', 'reunirnos', 'arranque')) reply = 'Tu situación: ' + (MEET[p.meeting_status] || '') + '.';
+      else if (has('archivo', 'enviar foto', 'mandar foto', 'pdf', 'subir')) reply = 'Puedes mandarnos fotos, PDF o lo que quieras en Contenido → «Envíanos archivos». Solo lo ve el equipo.';
       else if (has('cambiar', 'mover', 'otro dia', 'otra fecha')) reply = `Puedes cambiar tu día hasta ${s.changeHours} h antes: en Inicio toca un día libre del calendario, elige la franja y pulsa "Cambiar mi grabación".` + (free.length ? ` Ahora mismo hay libre: ${free.slice(0, 3).map((f: any) => fd(f.date)).join(', ')}.` : '');
-      else if (has('prepar', 'necesit', 'llevar', 'tener listo', 'guion', 'guiones')) reply = `Para el día de grabación necesitamos:\n• ${need.join('\n• ')}` + ((p.scripts || []).length ? `\nTienes ${(p.scripts || []).length} guiones en "Qué necesitamos de ti" (Inicio).` : '');
-      else if (has('dia extra', 'mas contenido', 'otro dia de grab', 'extra')) reply = `Un día extra de grabación cuesta ${eur(Number(dayP))} ${ivaTxt}. En Inicio, en "Tu mes", pulsa + en "Día extra" y luego elige el día en el calendario. Este mes llevas ${ex?.days || 0}.`;
+      else if (has('prepar', 'necesit', 'llevar', 'tener listo', 'guion', 'guiones')) reply = need.length ? `Para tu rodaje necesitamos:\n• ${need.join('\n• ')}\nLo tienes en Inicio para ir marcándolo. Los guiones están en Contenido → Guiones.` : 'Todavía no tienes que preparar nada: cuando confirmemos tu rodaje te enviaremos aquí la lista. Los guiones aparecerán en Contenido → Guiones.';
+      else if (has('dia extra', 'mas contenido', 'otro dia de grab', 'extra')) reply = `Un día extra de grabación cuesta ${eur(Number(dayP))} ${ivaTxt}. En Pagos pulsa + en "Día extra de rodaje" y luego elige el día en el calendario de Inicio. Este mes llevas ${ex?.days || 0}.`;
       else if (has('evento', 'fiesta', 'inauguracion', 'cata')) reply = `En Inicio pulsa "¿Tienes un evento?", cuéntanos qué es y la fecha. En menos de ${s.eventHours} h te confirmamos si podemos ir y el presupuesto, que aceptas desde la app.`;
       else if (has('baja', 'cancelar', 'darme de baja', 'permanencia', 'contrato')) reply = `Tu permanencia mínima termina el ${fd(iso(minEnd))}. La baja se pide con ${s.noticeDays} días de antelación desde Perfil → "Contrato y baja".` + (p.cancel_requested_at ? ' Ya nos la pediste: el equipo te escribirá para confirmarla.' : '');
-      else if (has('pago', 'pagar', 'cobr', 'cuota', 'cuanto', 'precio', 'factura', 'iva', 'debo')) reply = `Tu ${packName} cuesta ${eur(Number(p.price))} al mes ${ivaTxt} y se cobra solo cada mes por PayPal.` + (pend > 0 ? ` Tienes ${eur(pend)} de extras pendientes; puedes pagarlos en Inicio.` : ' No tienes nada pendiente.') + ' Si necesitas factura, pídela al equipo por el chat.';
-      else if (has('cuando', 'proxim', 'grabacion', 'grabar', 'rodaje', 'venis', 'vienen', 'fecha', 'dia')) reply = (bks || []).length ? `Tu próxima grabación es el ${fd(bks![0].date)}, de ${bks![0].slot}.` + ((bks || []).length > 1 ? ` Después: ${bks!.slice(1).map((b: any) => fd(b.date)).join(', ')}.` : '') : `Aún no tienes día reservado.` + (free.length ? ` Hay libre: ${free.slice(0, 3).map((f: any) => fd(f.date) + ' (' + f.slots[0] + ')').join(', ')}. Resérvalo en el calendario de Inicio.` : ' En cuanto abramos días te aparecerán en el calendario.');
+      else if (has('pago', 'pagar', 'cobr', 'cuota', 'cuanto', 'precio', 'factura', 'iva', 'debo')) reply = `Tu ${packName} cuesta ${eur(Number(p.price))} al mes ${ivaTxt} y se cobra solo cada mes por PayPal.` + (pend > 0 ? ` Tienes ${eur(pend)} de extras pendientes; puedes pagarlos en Pagos.` : ' No tienes nada pendiente.') + ' Tus facturas llegan solas a Pagos y a tu email. También puedes pagar por transferencia o Bizum desde Pagos.';
+      else if (has('cuando', 'proxim', 'grabacion', 'grabar', 'rodaje', 'venis', 'vienen', 'fecha', 'dia')) reply = (bks || []).length ? `Tu próxima grabación es el ${fd(bks![0].date)}, de ${bks![0].slot}.` + ((bks || []).length > 1 ? ` Después: ${bks!.slice(1).map((b: any) => fd(b.date)).join(', ')}.` : '') : `Aún no tienes día reservado.` + (p.meeting_status !== 'hecha' ? ' Primero hacemos la reunión de arranque: ' + (MEET[p.meeting_status] || '') + '.' : '') + (p.meeting_status === 'hecha' && free.length ? ` Hay libre: ${free.slice(0, 3).map((f: any) => fd(f.date) + ' (' + f.slots[0] + ')').join(', ')}. Resérvalo en el calendario de Inicio.` : ' En cuanto abramos días te aparecerán en el calendario.');
       else if (has('pack', 'incluye', 'servicio', 'completo', 'asistente ia', 'telefono')) reply = `Tu ${packName} incluye:\n• ${feats.join('\n• ')}` + (p.pack !== 'completo' && !p.custom_pack ? `\nSi quieres que tu teléfono conteste solo, mira el Pack Completo en Inicio.` : '');
       else if (has('contrasena', 'instagram', 'acceso', 'tiktok', 'meta')) reply = 'Tus accesos a redes están en Perfil → "Acceso a tus redes". Lo más cómodo es invitarnos como socios en Meta Business, sin compartir contraseña. Si la cambias, actualízala ahí.';
-      else if (has('publica', 'contenido', 'calendario', 'aprobar', 'post', 'reel')) reply = 'El día 25 te mandamos el calendario de publicaciones del mes siguiente. Tienes 48 h para revisarlo en Inicio → "Calendario de publicaciones"; si no nos dices nada, lo damos por aprobado.';
+      else if (has('publica', 'contenido', 'calendario', 'aprobar', 'post', 'reel')) reply = 'Tu calendario de publicaciones está en la pestaña Contenido: cada día verás qué se publica (reel, carrusel…) y cuál en concreto. Puedes aprobarlo o pedir cambios ahí mismo.';
       else reply = 'No tengo esa respuesta, pero te puedo ayudar con: cuándo grabamos, cambiar el día, qué preparar, pagos, días extra, eventos o la baja. Para cualquier otra cosa, escribe al equipo en la pestaña "Equipo".';
     }
 

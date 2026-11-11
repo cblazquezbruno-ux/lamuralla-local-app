@@ -8,9 +8,23 @@ App web instalable en el móvil (PWA) para los locales de **La Muralla Local** y
 
 ## Qué hace
 
-**Local (cliente):** portada con la campaña de Talavera · alta en 5 pasos con pago del primer mes · calendario para reservar el día de rodaje (ticket con cuenta atrás y añadir al calendario) · "Qué necesitamos de ti" con checklist y guiones · lo que paga este mes, días extra y presupuestos de eventos · historial de pagos · chat privado con el equipo · asistente privado · perfil, accesos a redes, contrato y baja · avisos al móvil.
+**Local (cliente)** — 5 pestañas: Inicio · Contenido · Pagos · Chat · Perfil.
+- Camino en 4 pasos: **Reunión → Rodaje → Preparación → Contenido**.
+- Paso 1: pide la reunión de arranque (día, franja y dónde). El equipo la confirma y la marca como hecha.
+- Paso 2: solo entonces puede reservar rodaje. Solo ve días y horas libres; la primera reserva se queda la hora y desaparece para los demás (lo garantiza la base de datos).
+- Paso 3: el equipo le envía «qué necesitamos» para ese rodaje y él lo va marcando.
+- Contenido: calendario de publicaciones (qué día, tipo y cuál en concreto, con archivos), guiones (texto o archivos) y «Envíanos archivos» (fotos, PDF…).
+- Pagos: mes en curso, días extra, eventos, PayPal/tarjeta o **transferencia/Bizum** (avisa con un botón) y sus **facturas** en PDF.
+- Perfil con su **logo**, datos de facturación, objetivos, accesos, contrato y baja. Chat privado y asistente.
 
-**Equipo (admin):** panel con locales activos, cuotas y plazas · agenda para abrir días y franjas · avisos de eventos y bajas · fichas de cliente (precio, IVA y paquete a medida, guiones, contraseña de Instagram cifrada) · chat con cada local · ajustes de precios, campaña, condiciones y PayPal · copias de seguridad · cuentas de equipo.
+**Equipo** — Hoy · Agenda · Clientes · Chat · Ajustes. Cada miembro entra con su cuenta.
+- Hoy: tus tareas del día (con tiempos, se tachan al hacerlas), las de cada compañero o de todos, y la bandeja (reuniones pedidas, rodajes sin lista, pagos por confirmar, eventos, bajas, archivos nuevos).
+- Agenda: abrir días y franjas, reuniones y rodajes próximos.
+- Ficha de cada cliente: Resumen (reunión y listas de rodaje) · Contenido (calendario, guiones, archivos del cliente) · Tareas · Pagos (confirmar pagos, facturas, registrar pagos).
+- Ajustes: **factura tipo** (datos, logo, color, serie, notas) con vista previa, datos de pago para transferencia/Bizum, precios, campaña, condiciones, PayPal, cuentas del equipo, copias.
+
+**Facturas automáticas:** cuando un pago queda como «pagado» (PayPal, alta, o el equipo confirma una transferencia) la base de datos llama a la función `invoice`, que numera (`LM-2026-0001`…), genera el PDF con la plantilla, lo guarda en la app del cliente y, si está configurado `RESEND_API_KEY`, se lo envía por email.
+> Verifactu: la obligación del software de facturación verificable empieza en 2027 (sociedades el 1 de enero, autónomos el 1 de julio, según el RDL 15/2025). Antes de esa fecha habrá que conectar la facturación a un sistema certificado o adaptarla.
 
 ## Estructura del repositorio
 
@@ -34,6 +48,7 @@ supabase/
     team/               ← acciones del equipo: crear cuentas, contraseñas, bajas, borrar
     assistant/          ← asistente privado de cada cliente
     notify/             ← avisos push al móvil
+    invoice/            ← genera la factura en PDF, la guarda y la envía por email
   manual/               ← pasos que se hacen a mano una vez (avisos push, primer admin)
   config.toml
 .github/workflows/mantener-activa.yml  ← consulta cada 2 días para que Supabase gratis no se pause
@@ -60,6 +75,7 @@ supabase link --project-ref ugwzbcrvamfpxpcfldag
 supabase functions deploy signup --no-verify-jwt
 supabase functions deploy notify --no-verify-jwt
 supabase functions deploy paypal-webhook --no-verify-jwt
+supabase functions deploy invoice --no-verify-jwt
 supabase functions deploy pay-extras
 supabase functions deploy team
 supabase functions deploy assistant
@@ -76,6 +92,8 @@ Para montar un proyecto **nuevo** desde cero: aplica `supabase/migrations/` en o
 | `PAYPAL_WEBHOOK_ID` | ID del webhook de PayPal (verifica que los avisos vienen de PayPal) |
 | `ANTHROPIC_API_KEY` | (opcional) para que el asistente entienda cualquier pregunta con Claude |
 | `ASSISTANT_MODEL` | (opcional) modelo de Claude; por defecto `claude-haiku-5-5` |
+| `RESEND_API_KEY` | (opcional) para mandar las facturas por email con [Resend](https://resend.com) |
+| `INVOICE_FROM` | (opcional) remitente, p. ej. `La Muralla <facturas@lamurallaproject.es>` (el dominio debe estar verificado en Resend) |
 
 Los secretos **nunca** van en este repositorio.
 
@@ -96,9 +114,6 @@ Los secretos **nunca** van en este repositorio.
 - Las altas solo se pueden hacer desde la app (registro externo bloqueado).
 - Copia de seguridad automática cada noche (14 días) + descarga manual desde Ajustes.
 
-## Cuentas de prueba
+## Cuentas
 
-- Cliente demo: `La muralla1`
-- Equipo demo: `La muralla2`
-
-(Contraseñas aparte. Para el equipo real, crea cuentas propias en Ajustes › Equipo.)
+Equipo: `JoseP`, `BrunoB` y `JesusP` (contraseñas aparte; cambiadlas en Ajustes › Equipo). Los clientes se crean desde la portada (alta con pago) o desde Clientes › «Dar de alta un local».

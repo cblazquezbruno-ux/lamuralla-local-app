@@ -66,6 +66,11 @@ Deno.serve(async (req) => {
       const { error } = await admin.auth.admin.deleteUser(b.userId);
       return error ? json({ error: error.message }, 400) : json({ ok: true });
     }
+    if (b.action === 'delete_member') {
+      if (b.userId === u.user.id) return json({ error: 'No puedes borrar tu propia cuenta' }, 400);
+      const { error } = await admin.auth.admin.deleteUser(b.userId);
+      return error ? json({ error: error.message }, 400) : json({ ok: true });
+    }
     return json({ error: 'Acción desconocida' }, 400);
   } catch (e) {
     return json({ error: String((e as Error).message || e) }, 500);

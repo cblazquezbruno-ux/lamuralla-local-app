@@ -4,7 +4,7 @@ import webpush from 'npm:web-push@3.6.7';
 const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 const fdate = (s: string) => { const [y, m, d] = s.split('-').map(Number); return `${d} ${MES[m - 1]}`; };
 
-// Lo llama la base de datos cuando entra un mensaje, un evento o una reserva, y manda el aviso al móvil.
+// Lo llama la base de datos cuando entra un mensaje, un evento, una reserva, un archivo o una tarea, y manda el aviso al móvil.
 Deno.serve(async (req) => {
   const admin = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, { auth: { persistSession: false } });
   const { data: cfg } = await admin.rpc('push_config');
@@ -24,6 +24,11 @@ Deno.serve(async (req) => {
     to = await admins(); title = `🎉 Nuevo evento · ${await biz(r.client_id)}`; body = `${r.title}${r.date ? ' · ' + fdate(r.date) : ''}. Responde con presupuesto.`;
   } else if (table === 'bookings') {
     to = await admins(); title = `🎬 Nueva grabación · ${await biz(r.client_id)}`; body = `${fdate(r.date)} · ${r.slot}`;
+  } else if (table === 'files') {
+    if (r.kind === 'cliente') { to = await admins(); title = `📎 ${await biz(r.client_id)}`; body = `Te ha enviado: ${r.title || 'un archivo'}`; }
+    else if (r.kind !== 'factura') { to = [r.client_id]; title = r.kind === 'guion' ? '📝 Nuevo guion · La Muralla' : '🎬 Nuevo contenido · La Muralla'; body = r.title || 'Ábrelo en la app'; }
+  } else if (table === 'tasks') {
+    if (r.assignee && r.assignee !== r.created_by) { to = [r.assignee]; title = '✅ Nueva tarea'; body = `${r.title}${r.client_id ? ' · ' + await biz(r.client_id) : ''}${r.due ? ' · ' + fdate(r.due) : ''}`; }
   }
   if (!to.length) return new Response('ok');
 
