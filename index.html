@@ -482,6 +482,43 @@ body{padding-top:env(safe-area-inset-top)}
 .holo.flipped .holo-front{visibility:hidden}
 .ticket{transform-style:flat!important}
 a.btn{text-decoration:none;color:inherit}
+/* ticket: botón calendario */
+.tk-cal{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;padding:8px 11px;border-radius:11px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);font-size:13px;font-weight:700;color:var(--blanco);text-decoration:none}
+/* ===== cromos ===== */
+.holo.cromo{width:226px;aspect-ratio:63/88}
+.cromo .holo-face{border-radius:18px;border:0;box-shadow:0 26px 50px rgba(0,0,0,.55)}
+.cr-frame{position:absolute;inset:0;border-radius:18px;padding:9px;background:
+  linear-gradient(135deg,#f7c48b 0%,#da7f2c 22%,#8a4510 45%,#e8954a 62%,#fbe0bf 78%,#b9601b 100%)}
+.cr-frame:before{content:'';position:absolute;inset:4px;border-radius:14px;border:1.5px solid rgba(255,255,255,.55);pointer-events:none;z-index:5}
+.cr-inner{position:relative;width:100%;height:100%;border-radius:11px;overflow:hidden;background:#111214}
+.cr-bg{position:absolute;inset:0;background:radial-gradient(120% 80% at 70% 20%,#e8954a 0%,#da7f2c 30%,#5a2c0a 70%,#111214 100%)}
+.cr-bg:after{content:'';position:absolute;inset:0;opacity:.18;background:repeating-linear-gradient(135deg,#fff 0 2px,transparent 2px 14px)}
+.cromo .holo-front .cr-inner>img{position:absolute;left:-12%;right:auto;bottom:22%;width:124%;height:80%;object-fit:cover;object-position:center 20%;filter:grayscale(1) contrast(1.15);mix-blend-mode:multiply;transform:translate(calc(var(--mx,0)*-5px),calc(var(--my,0)*-5px)) scale(1.04)}
+.cr-shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 48%,rgba(17,18,20,.85) 70%,#111214 82%)}
+.cr-ovr{position:absolute;top:10px;left:10px;z-index:3;display:flex;flex-direction:column;align-items:center;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.4)}
+.cr-ovr b{font-size:34px;line-height:.95;letter-spacing:-.04em}
+.cr-ovr span{font-size:12px;font-weight:700;letter-spacing:.1em}
+.cr-ovr img{width:22px;margin-top:6px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
+.cr-no{position:absolute;top:12px;right:10px;z-index:3;font-size:10.5px;font-weight:700;letter-spacing:.08em;color:#fff;background:rgba(17,18,20,.55);padding:3px 7px;border-radius:6px}
+.cr-name{position:absolute;left:0;right:0;bottom:46px;z-index:3;text-align:center;padding:0 8px}
+.cr-name b{display:block;font-size:22px;letter-spacing:-.01em;text-transform:uppercase;color:#fff;line-height:1}
+.cr-name span{display:inline-block;margin-top:5px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#111214;background:linear-gradient(90deg,#fbe0bf,#e8954a);padding:3px 9px;clip-path:polygon(6% 0,100% 0,94% 100%,0 100%)}
+.cr-stats{position:absolute;left:8px;right:8px;bottom:8px;z-index:3;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(232,149,74,.45);padding-top:6px}
+.cr-stats div{text-align:center}
+.cr-stats b{display:block;font-size:15px;color:#fff;line-height:1}
+.cr-stats span{font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:#c9a283;font-weight:700}
+.cromo .foil{z-index:4;border-radius:18px;opacity:.55;mix-blend-mode:color-dodge;background:linear-gradient(115deg,transparent 15%,rgba(255,170,90,.8) 30%,rgba(128,168,168,.75) 45%,rgba(255,255,255,.75) 55%,rgba(232,149,74,.6) 68%,transparent 85%);background-size:280% 280%;background-position:var(--px,50%) var(--py,50%)}
+.sparkle{position:absolute;inset:0;z-index:4;border-radius:18px;pointer-events:none;opacity:.35;mix-blend-mode:color-dodge;
+  background-image:radial-gradient(circle,rgba(255,255,255,.9) 0 1px,transparent 1.6px),radial-gradient(circle,rgba(255,220,180,.8) 0 1px,transparent 1.5px);
+  background-size:13px 13px,19px 19px;background-position:calc(var(--px,50%)*.3) calc(var(--py,50%)*.3),calc(var(--px,50%)*-.2) 7px;
+  -webkit-mask:radial-gradient(circle at var(--px,50%) var(--py,50%),#000 0,transparent 60%);mask:radial-gradient(circle at var(--px,50%) var(--py,50%),#000 0,transparent 60%)}
+.cromo .glare{z-index:6;border-radius:18px}
+.cr-backframe{background:linear-gradient(135deg,#3a3b41,#1d1e22 50%,#3a3b41)}
+.cr-backin{padding:16px;display:flex;flex-direction:column;background:radial-gradient(120% 70% at 80% 100%,rgba(218,127,44,.35),#16171a 60%)}
+.cr-backin .sym{width:30px}
+.cr-season{margin-top:auto;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris2);font-weight:700;border-top:1px solid #2e2f35;padding-top:8px}
+.cromo .holo-back{transform:rotateY(180deg);background:none;padding:0}
+
 .kpi b .odo,.kpi b .odo span{font-size:30px;color:var(--blanco);font-weight:700;letter-spacing:-.03em}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -864,20 +901,13 @@ function cInicio(c){
   let hero;
   if(nb){const d=parse(nb.date);const startH=nb.slot.slice(0,5);const t=new Date(d);t.setHours(+startH.slice(0,2),+startH.slice(3,5));
     const idx=myB().findIndex(b=>b.id===nb.id)+1;
-    const pct=Math.round(done/need.length*100);
     hero=`<div class="tk-flip" id="tkf"><div class="tk-face tk-front"><div class="ticket" data-tilt><div class="foil"></div><div class="glare"></div><div class="glow o drift"></div><div class="glow v drift2"></div>
       <div class="tk-top"><div class="between"><span class="label">Día de rodaje · Nº ${pad(idx)}</span><div class="count" id="cd" data-t="${t.toISOString()}"></div></div>
         <div class="row mt12" style="align-items:flex-end;gap:14px"><div class="tk-day">${d.getDate()}</div><div><h3>${cap(DIA[d.getDay()])}</h3><div class="muted small">${cap(MES[d.getMonth()])} ${d.getFullYear()}</div></div></div>
         <div class="tk-meta"><div>Hora<b>${esc(nb.slot)}</b></div><div>Lugar<b>${esc(c.business||'Tu local')}</b></div></div>
         ${left>0?`<p class="small mt12" style="color:var(--naranja2)">${I('plus','s')} Te queda${left>1?'n':''} ${left} día${left>1?'s':''} por elegir este mes</p>`:''}</div>
       <div class="tk-cut"></div>
-      <div class="tk-bot"><div class="row"><div class="barcode"></div><button class="tk-flipbtn" data-act="flipTicket" aria-label="Girar el ticket">${I('flip','s')}</button></div>${prepBtn}</div></div></div>
-      <div class="tk-face tk-back"><div class="ticket" data-tilt><div class="foil"></div><div class="glare"></div><div class="glow o drift"></div>
-        <div class="tk-top" style="height:100%;display:flex;flex-direction:column"><div class="between"><span class="label">Pase de rodaje</span><button class="tk-flipbtn" data-act="flipTicket" aria-label="Volver">${I('flip','s')}</button></div>
-          <div class="row mt16" style="gap:14px;align-items:center">${qrHTML(nb.id||nb.date)}<div style="min-width:0"><h3>${esc(c.business||'')}</h3><div class="small muted mt4">${nice(nb.date)}<br>${esc(nb.slot)}</div></div></div>
-          <div class="mt16"><div class="between small"><span class="muted">Tu preparación</span><b>${done}/${need.length}</b></div><div class="bar mt8"><i style="width:${pct}%;background:${pct===100?'var(--verde)':'var(--naranja)'}"></i></div></div>
-          <div class="tk-actions"><a class="btn ghost sm" href="${icsFor(nb)}" download="rodaje-la-muralla.ics">${I('cal','s')} Al calendario</a><button class="btn ghost sm" data-act="openPrep">${I('list','s')} Checklist</button></div>
-          <p class="xs muted mt12">Para cambiar el día, elige otro en el calendario (hasta ${S().changeHours} h antes).</p></div></div></div></div>`;
+      <div class="tk-bot"><div class="row"><div class="barcode"></div><a class="tk-cal" href="${icsFor(nb)}" download="rodaje-la-muralla.ics">${I('cal','s')} Al calendario</a></div>${prepBtn}</div></div></div></div>`;
   }else hero=`<div class="hero"><div class="glow o drift"></div><div class="glow v drift2"></div><div style="position:relative;z-index:2">
       <span class="label">Grabación de ${monthName(m)}</span><h2 class="mt8">Elige el día que quieres que vayamos a grabar.</h2>
       <p class="small muted mt8">Toca un día con punto naranja en el calendario.</p></div>${prepBtn}</div>`;
@@ -1362,19 +1392,28 @@ function vt(fn){if(document.startViewTransition&&!matchMedia('(prefers-reduced-m
 
 /* --- holo cards (equipo) --- */
 const TEAMCARDS=[
-  {k:'jp',name:'José Pedro',role:'Estrategia',tag:'Tu responsable de cuenta',no:'01',txt:'Diseña tu estrategia, tu calendario de contenido y es tu contacto directo para todo.'},
-  {k:'bruno',name:'Bruno',role:'Creatividad',tag:'Grabación y edición',no:'02',txt:'Va a tu local a grabar y edita cada pieza con el estilo de tu marca.'},
-  {k:'jesus',name:'Jesús',role:'Tecnología e IA',tag:'Automatización',no:'03',txt:'Monta el asistente con IA, las automatizaciones y esta app.'},
+  {k:'jp',name:'José Pedro',pos:'EST',role:'Estrategia',ovr:98,no:'01',tag:'Tu responsable de cuenta',stats:[['Estrategia',98],['Clientes',96],['Calma',94]],txt:'Diseña tu estrategia y tu calendario de contenido. Es tu contacto directo para todo.'},
+  {k:'bruno',name:'Bruno',pos:'CRE',role:'Creatividad',ovr:97,no:'02',tag:'Grabación y edición',stats:[['Rodaje',97],['Edición',98],['Ideas',96]],txt:'Va a tu local a grabar y edita cada pieza con el estilo de tu marca.'},
+  {k:'jesus',name:'Jesús',pos:'TEC',role:'Tecnología e IA',ovr:97,no:'03',tag:'Automatización',stats:[['IA',98],['Sistemas',97],['Datos',95]],txt:'Monta el asistente con IA, las automatizaciones y esta app.'},
 ];
 function holoCards(withChat){
-  return `<div class="holo-row">${TEAMCARDS.map(t=>`<div class="holo" data-holo><div class="holo-in">
-    <div class="holo-face holo-front"><img src="${IMG[t.k]}" alt="${t.name}" draggable="false"><div class="foil"></div><div class="foil2"></div><div class="glare"></div>
-      <span class="holo-chip"><i class="dot local"></i>La Muralla</span><span class="holo-no">${t.no}</span>
-      <div class="holo-cap"><span>${t.role}</span><b>${t.name}</b></div></div>
-    <div class="holo-face holo-back"><div class="glow o"></div><div style="position:relative;z-index:2;display:flex;flex-direction:column;height:100%">
-      <img class="sym" src="${IMG.icon}" alt=""><span class="label mt16">${t.role}</span><h3 class="mt4">${t.name}</h3><p class="small muted mt8">${t.tag}</p><p class="small mt12" style="color:#dcdde0">${t.txt}</p>
-      ${withChat?`<button class="btn o sm" style="margin-top:auto" data-act="chatWithTeam">${I('chat','s')} Escribir</button>`:'<span class="xs muted" style="margin-top:auto">Toca para girar</span>'}</div></div>
-  </div></div>`).join('')}</div><p class="flip-hint">Muévelo o toca una tarjeta para girarla</p>`;
+  return `<div class="holo-row">${TEAMCARDS.map(t=>`<div class="holo cromo" data-holo><div class="holo-in">
+    <div class="holo-face holo-front"><div class="cr-frame">
+      <div class="cr-inner"><div class="cr-bg"></div><img src="${IMG[t.k]}" alt="${t.name}" draggable="false"><div class="cr-shade"></div>
+        <div class="cr-ovr"><b>${t.ovr}</b><span>${t.pos}</span><img src="${IMG.icon}" alt=""></div>
+        <div class="cr-no">Nº ${t.no}</div>
+        <div class="cr-name"><b>${t.name}</b><span>${t.role}</span></div>
+        <div class="cr-stats">${t.stats.map(s=>`<div><b>${s[1]}</b><span>${s[0]}</span></div>`).join('')}</div>
+      </div>
+      <div class="foil"></div><div class="sparkle"></div><div class="glare"></div></div></div>
+    <div class="holo-face holo-back"><div class="cr-frame cr-backframe"><div class="cr-inner cr-backin">
+      <div class="between"><img class="sym" src="${IMG.icon}" alt=""><span class="cr-no" style="position:static">Nº ${t.no}/03</span></div>
+      <span class="label mt16">${t.role}</span><h3 class="mt4">${t.name}</h3><p class="small muted mt4">${t.tag}</p>
+      <p class="small mt12" style="color:#dcdde0">${t.txt}</p>
+      <div class="cr-season">Temporada 2026 · La Muralla Local</div>
+      ${withChat?`<button class="btn o sm" style="margin-top:12px" data-act="chatWithTeam">${I('chat','s')} Escribir</button>`:''}
+    </div><div class="foil" style="opacity:.25"></div></div></div>
+  </div></div>`).join('')}</div><p class="flip-hint">Mueve el móvil o toca un cromo para darle la vuelta</p>`;
 }
 /* motor de inclinación: dedo + giroscopio, para .holo y .ticket */
 let _gyroAsked=false,_gyro=null,_tiltRAF=null;
