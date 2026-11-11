@@ -768,7 +768,7 @@ function cPagos(c){
     <hr class="sep"><dl class="kv"><dt>Cliente desde</dt><dd>${short(c.start_date)} ${start.getFullYear()}</dd><dt>Permanencia hasta</dt><dd>${short(iso(minEnd))} ${minEnd.getFullYear()}</dd><dt>Forma de pago</dt><dd>PayPal · cobro automático</dd></dl></div>
   <h3 class="mt32">Historial</h3>
   <div class="card mt12" style="padding:6px 18px">${pays.length?pays.map(x=>`<div class="line"><span class="l"><b style="font-size:15px">${esc(x.concept)}</b><small>${short(x.date)} · ${x.method==='prueba'?'Pago de prueba':x.method==='manual'?'Alta manual':'PayPal'}</small></span><span class="r">${eur(withIva(x.base))}</span></div>`).join(''):'<p class="small muted" style="padding:12px 0">Aún no hay pagos.</p>'}</div>
-  <p class="xs muted mt12">Precios sin IVA. IVA ${st.iva} % aplicado en cada cobro. Las facturas te llegan por email.</p><div style="height:20px"></div>`;
+  <p class="xs muted mt12">Precios sin IVA. IVA ${st.iva} % aplicado en cada cobro. ¿Necesitas factura? Pídela por el chat y te la mandamos.</p><div style="height:20px"></div>`;
 }
 function chatList(cid,teamView){
   const ms=D.messages.filter(m=>m.client_id===cid);let out='',last='';
