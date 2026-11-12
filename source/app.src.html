@@ -443,6 +443,10 @@ h2{letter-spacing:-.035em}
 .inbox .li .ic{width:36px;height:36px;border-radius:10px;border:1px solid var(--line2);display:grid;place-items:center;flex:none;color:var(--naranja2)}
 .dot-n{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--naranja);color:#0a0a0b;font-size:11.5px;font-weight:700}
 a.pill{color:inherit;text-decoration:none}
+.more2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mcard{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:14px;border-radius:18px;border:1px solid var(--line2);background:var(--card);min-height:150px}
+.mcard .ic{width:36px;height:36px;border-radius:10px;border:1px solid var(--line2);display:grid;place-items:center;color:var(--naranja2);margin-bottom:8px}
+.mcard b{font-size:15px;line-height:1.15}.mcard small{font-size:12px;color:var(--gris);line-height:1.3}.mcard .pr{margin-top:auto;padding-top:8px;font-size:12.5px;font-weight:700;color:var(--naranja2)}
 .copy{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:12px;border:1px solid var(--line2);font-family:ui-monospace,Menlo,monospace;font-size:14px;width:100%;text-align:left}
 .empty{padding:22px 16px;text-align:center;color:var(--gris2);font-size:13.5px}
 /* tarjetas del equipo: fotos nítidas, sin niebla */
@@ -883,7 +887,7 @@ function cInicio(c){
   ${quoteEv.length?`<button class="tile mt16" data-act="tab" data-t="pagos"><span class="ic">${I('party')}</span><span><b>Tienes ${quoteEv.length} presupuesto${quoteEv.length>1?'s':''} para revisar</b><small>Míralo en Pagos</small></span><span class="chev">${I('chev')}</span></button>`:''}
   <div class="mt32 between"><span class="label">Próximas publicaciones</span><button class="xs link" data-act="tab" data-t="contenido">Ver calendario</button></div>
   <div class="lst mt12">${ups.length?ups.map(postRow).join(''):`<div class="empty">Cuando preparemos tu calendario, lo verás aquí.</div>`}</div>
-  <button class="tile mt12" data-act="openEvent"><span class="ic">${I('party')}</span><span><b>¿Tienes un evento?</b><small>Te pasamos presupuesto en ${S().eventHours} h</small></span><span class="chev">${I('chev')}</span></button>
+  <button class="tile mt12" data-act="moreContent"><span class="ic">${I('plus')}</span><span><b>¿Quieres más contenido?</b><small>Día extra, evento o Pack Completo</small></span><span class="chev">${I('chev')}</span></button>
   ${installCard()}<div style="height:20px"></div>`;
 }
 function needsBlock(b){
@@ -939,8 +943,13 @@ function cContenido(c){
     b=`<p class="small muted">Fotos, PDF, cartas, logos, vídeos… Lo que nos quieras pasar para tu contenido. Solo lo ve el equipo.</p>
     <label class="upl big mt16"><input type="file" multiple id="upC">${I('upload','l')}<b>Subir archivos</b><small>Toca para elegir del móvil</small></label><div class="xs muted mt8" id="upCs"></div>
     ${fs.length?`<div class="fgrid mt16">${fs.map(f=>fileTile(f.path,f.title,f.mime,{act:'delMyFile',id:f.id})).join('')}</div>`:''}`}
+  const up=c.upgrade&&c.upgrade.status!=='activado'?c.upgrade:null;
+  const more=`<div class="more2 mt16"><button class="mcard" data-act="openExtraDay"><span class="ic">${I('cam')}</span><b>Día extra de contenido</b><small>1–2 h en tu local</small><span class="pr">${eur(dayPrice(c))} ${ivaFor(c)===0?'':'+ IVA'}</span></button>
+    <button class="mcard" data-act="openEvent"><span class="ic">${I('party')}</span><b>Evento</b><small>De noche, fuera del local o festivo</small><span class="pr">Te lo presupuestamos</span></button></div>
+    ${c.pack!=='completo'?`<button class="tile mt8" data-act="openUpgrade"><span class="ic">${I('bot')}</span><span><b>${up?(up.status==='confirmada'?'Reunión para el Pack Completo':'Cambio a Pack Completo solicitado'):'Pasar al Pack Completo'}</b><small>${up?(up.status==='confirmada'&&up.at?esc(meetTxt(up.at)):'Te confirmamos la reunión por el chat'):`${eur(c.promo?packOf('completo').promo:packOf('completo').price)} + IVA/mes · con asistente IA`}</small></span><span class="chev">${I('chev')}</span></button>`:''}`;
   return `<span class="label">Contenido</span><h2 class="mt4">Lo que vamos a publicar.</h2>
-  <div class="segs mt16">${tabs.map(t=>`<button class="${ui.ctab===t[0]?'on':''}" data-act="ctab" data-v="${t[0]}">${t[1]}</button>`).join('')}</div>
+  <div class="mt16 label n">¿Quieres más?</div>${more}
+  <div class="segs mt24">${tabs.map(t=>`<button class="${ui.ctab===t[0]?'on':''}" data-act="ctab" data-v="${t[0]}">${t[1]}</button>`).join('')}</div>
   <div class="mt16">${b}</div><div style="height:20px"></div>`;
 }
 function guionCard(g){return `<div class="card mt12"><div class="between"><span class="label n">${short(g.created_at.slice(0,10))}</span>${isAdmin()?`<button class="pill" data-act="delFile" data-id="${g.id}">${I('trash','s')}</button>`:''}</div><h3 class="mt4">${esc(g.title||'Guion')}</h3>${g.body?`<p class="guion mt8">${esc(g.body)}</p>`:''}${g.path?`<div class="fgrid mt12">${fileTile(g.path,g.title,g.mime)}</div>`:''}</div>`}
@@ -1049,6 +1058,7 @@ const prof=id=>D.profiles.find(p=>p.id===id)||{};
 function inboxItems(){
   const it=[];
   clients().filter(c=>c.cancel_requested_at&&c.status!=='baja').forEach(c=>it.push({ic:'doc',t:`${c.business} pide la baja`,s:'Tramitar',act:'cancelSheet',id:c.id}));
+  clients().filter(c=>c.upgrade&&c.upgrade.status==='solicitada').forEach(c=>{const p=c.upgrade.pref||{};it.push({ic:'bot',t:`${c.business} quiere el Pack Completo`,s:'Reunión: '+[p.fecha?short(p.fecha):'',p.franja,p.modo].filter(Boolean).join(' · '),act:'openCP',id:c.id,sec:'resumen'})});
   clients().filter(c=>c.meeting_status==='solicitada').forEach(c=>{const p=c.meeting_pref||{};it.push({ic:'users',t:`${c.business} pide reunión`,s:[p.fecha?short(p.fecha):'',p.franja,p.modo].filter(Boolean).join(' · '),act:'openCP',id:c.id,sec:'resumen'})});
   D.bookings.filter(b=>!b.needs_sent&&parse(b.date)>=TODAY).forEach(b=>it.push({ic:'list',t:`Enviar qué necesitamos · ${prof(b.client_id).business||''}`,s:`Rodaje ${short(b.date)} · ${b.slot}`,act:'openCP',id:b.client_id,sec:'resumen'}));
   D.payments.filter(p=>p.status==='pendiente').forEach(p=>it.push({ic:'euro',t:`Confirmar pago · ${prof(p.client_id).business||''}`,s:`${p.concept} · ${p.method} · ${eur(p.base)} + IVA`,act:'openCP',id:p.client_id,sec:'pagos'}));
@@ -1126,7 +1136,13 @@ function cpResumen(c){
     ${c.meeting_status!=='hecha'?`<div class="row mt12" style="gap:8px"><input class="inp" style="flex:1;min-width:0;padding:0 10px" type="date" id="cmD" value="${mt?iso(mt):(p.fecha||'')}"><input class="inp" style="width:110px;padding:0 10px" type="time" id="cmT" value="${mt?hhmm(c.meeting_at):'10:00'}"></div>
       <div class="row mt8"><button class="btn ghost sm" data-act="meetConfirm" data-id="${c.id}">${c.meeting_status==='confirmada'?'Cambiar hora':'Confirmar'}</button><button class="btn o sm" data-act="meetDone" data-id="${c.id}">${I('check','s')} Ya la hicimos</button></div>
       <p class="xs muted mt8">Al marcarla como hecha, el cliente ya puede elegir su día de rodaje.</p>`:`<p class="small muted mt8">El cliente ya puede reservar su rodaje.</p>`}</div>`;
-  return `${meet}
+  const ug=c.upgrade&&c.upgrade.status!=='activado'?c.upgrade:null,upa=ug&&ug.at?new Date(ug.at):null;
+  const upCard=ug?`<div class="card hl mb12" style="margin-bottom:12px"><div class="between"><span class="label">Quiere el Pack Completo</span><span class="pill o">${ug.status==='confirmada'?'Reunión confirmada':'Pide reunión'}</span></div>
+    ${ug.pref?`<p class="small mt8">${I('clock','s')} Prefiere: <b>${ug.pref.fecha?nice(ug.pref.fecha):'—'}</b> ${esc([ug.pref.franja,ug.pref.modo].filter(Boolean).join(' · '))}</p>`:''}${upa?`<h3 class="mt8">${meetTxt(ug.at)}</h3>`:''}
+    <div class="row mt12" style="gap:8px"><input class="inp" style="flex:1;min-width:0;padding:0 10px" type="date" id="upCD" value="${upa?iso(upa):(ug.pref?.fecha||'')}"><input class="inp" style="width:110px;padding:0 10px" type="time" id="upCT" value="${upa?hhmm(ug.at):'10:00'}"></div>
+    <div class="row mt8"><button class="btn ghost sm" data-act="upMeetConfirm" data-id="${c.id}">${ug.status==='confirmada'?'Cambiar hora':'Confirmar reunión'}</button><button class="btn o sm" data-act="upActivate" data-id="${c.id}">Activar Pack Completo</button></div>
+    <button class="xs link mt8" data-act="upCancel" data-id="${c.id}">Descartar petición</button></div>`:'';
+  return `${upCard}${meet}
   <div class="mt24 between"><span class="label">Rodajes</span>${up.length?'':'<span class="xs muted">Aún no ha elegido día</span>'}</div>
   ${up.map(b=>needsEditor(b,c)).join('')}
   ${past.length?`<div class="lst mt12">${past.map(b=>`<div class="li">${I('cam','s')}<div class="grow"><b>${nice(b.date)}</b><small>${esc(b.slot)} · grabado</small></div></div>`).join('')}</div>`:''}
@@ -1220,15 +1236,35 @@ function sheet(html,onMount){const had=!!$('#scrim');closeSheet(true);const d=do
 function sheetClose(){if(history.state&&history.state.lml==='sheet'){history.back()}else closeSheet()}
 function closeSheet(now){const d=$('#scrim');if(!d)return;document.body.style.overflow='';if(now){d.remove();return}const sh=d.querySelector('.sheet');if(sh&&sh.style.transform)sh.style.transform='translateY(100%)';d.classList.remove('on');setTimeout(()=>{d.remove();softRender()},250)}
 function toast(t){let x=$('#toast');if(!x){x=document.createElement('div');x.id='toast';x.className='toast';document.body.appendChild(x)}x.textContent=t;x.classList.add('on');clearTimeout(x._t);x._t=setTimeout(()=>x.classList.remove('on'),2600)}
-function sheetEvent(){sheet(`<span class="label">Contenido extra</span><h2 class="mt4">Cuéntanos tu evento.</h2><p class="small muted mt8">En menos de ${S().eventHours} h te confirmamos si podemos ir y cuánto cuesta.</p>
+function sheetEvent(){sheet(`<span class="label">Evento</span><h2 class="mt4">Cuéntanos tu evento.</h2><p class="small muted mt8">Para grabaciones <b>de noche, fuera de tu local o en festivo</b>. Te lo presupuestamos en menos de ${S().eventHours} h y lo aceptas desde la app.</p>
   <div class="field"><label>Nombre del evento</label><input class="inp" id="evT" placeholder="Ej. Cata de vinos"></div>
   <div class="field"><label>¿Qué es y qué te gustaría grabar?</label><textarea class="inp" id="evX" placeholder="Ej. Cata el viernes por la noche con 30 personas. Nos gustaría un reel del ambiente y fotos."></textarea></div>
   <div class="field"><label>Fecha (si la tienes)</label><input class="inp" id="evD" type="date" min="${iso(addDays(TODAY,1))}"></div>
   <button class="btn o mt24" data-act="sendEvent">Enviar</button>`)}
-function sheetUpgrade(){const p=packOf('completo'),c=D.me;sheet(`<span class="label">Pack Completo</span><h2 class="mt4">Ninguna llamada sin respuesta.</h2>
+function sheetUpgrade(step){const p=packOf('completo'),c=D.me,up=c.upgrade;
+  const fee=c.promo?p.promo:p.price,setup=c.promo?p.promoSetup:p.setup;
+  if(up&&up.status&&up.status!=='activado'){sheet(`<span class="label">Pack Completo</span><h2 class="mt4">${up.status==='confirmada'?'Reunión confirmada.':'Reunión solicitada.'}</h2>
+    <p class="small muted mt8">${up.status==='confirmada'&&up.at?`Nos vemos el ${esc(meetTxt(up.at))}. Ahí te lo explicamos todo y lo activamos.`:'Te confirmamos día y hora por el chat en menos de 24 h.'}</p>
+    ${up.pref?`<div class="lst mt16"><div class="li">${I('clock','s')}<div class="grow"><b>${up.pref.fecha?nice(up.pref.fecha):'Cuando digáis'}</b><small>${esc([up.pref.franja,up.pref.modo].filter(Boolean).join(' · '))}</small></div></div></div>`:''}`);return}
+  if(step==='confirm'){const seg=(id,opts)=>`<div class="seg" id="${id}" data-v="${opts[0]}">${opts.map((x,i)=>`<button class="${i===0?'on':''}" data-act="segPick" data-v="${x}">${x}</button>`).join('')}</div>`;
+    sheet(`<span class="label">Cambio de plan</span><h2 class="mt4">¿Estás seguro?</h2>
+    <p class="small muted mt8">Pasarías de <b>${esc(packName(c))}</b> (${eur(c.price)} + IVA/mes) al <b>Pack Completo</b> (${eur(fee)} + IVA/mes${setup?` y ${eur(setup)} de alta del asistente, una sola vez`:''}).</p>
+    <p class="small muted mt8">No se cambia nada todavía: primero nos reunimos contigo, te lo explicamos y lo activamos juntos.</p>
+    <div class="field"><label>¿Qué día te viene bien la reunión?</label><input class="inp" type="date" id="upD" min="${iso(addDays(TODAY,1))}"></div>
+    <div class="field"><label>¿A qué hora?</label>${seg('upF',['Mañana','Mediodía','Tarde'])}</div>
+    <div class="field"><label>¿Dónde?</label>${seg('upM',['En mi local','Videollamada','En el estudio'])}</div>
+    <button class="btn o mt24" data-act="sendUpgrade">Sí, quiero cambiarme: agendar reunión</button><button class="btn outline sm mt8" data-act="sheetClose">No, me quedo como estoy</button>`);return}
+  sheet(`<span class="label">Pack Completo</span><h2 class="mt4">Ninguna llamada sin respuesta.</h2>
   <ul class="feat">${p.features.map(f=>`<li>${I('check','s')}${esc(f)}</li>`).join('')}</ul>
-  <div class="card mt16"><div class="line"><span class="l">Nueva cuota</span><span class="r">${eur(c.promo?p.promo:p.price)} + IVA</span></div><div class="line"><span class="l">Alta del asistente<small>Una sola vez</small></span><span class="r">${eur(c.promo?p.promoSetup:p.setup)}</span></div></div>
-  <button class="btn o mt16" data-act="reqUpgrade">Quiero el Pack Completo</button><p class="xs muted mt8" style="text-align:center">Te escribimos por el chat para activarlo.</p>`)}
+  <div class="card mt16"><div class="line"><span class="l">Tu cuota ahora</span><span class="r">${eur(c.price)} + IVA</span></div><div class="line"><span class="l"><b>Nueva cuota</b></span><span class="r"><b>${eur(fee)} + IVA</b></span></div>${setup?`<div class="line"><span class="l">Alta del asistente<small>Una sola vez</small></span><span class="r">${eur(setup)}</span></div>`:''}</div>
+  <button class="btn o mt16" data-act="upStep">Quiero cambiarme al Pack Completo</button>`)}
+function sheetExtraDay(){const c=D.me,price=dayPrice(c),m=workMonth(),ex=extraOf(m);
+  sheet(`<span class="label">Más contenido</span><h2 class="mt4">Día extra de contenido.</h2>
+  <p class="small muted mt8">Volvemos a tu local <b>1–2 horas</b> y grabamos más contenido para tus redes.</p>
+  <div class="card mt16"><div class="line"><span class="l">Precio</span><span class="r">${eur(price)} ${ivaTxt(c)}</span></div><div class="line"><span class="l">Se suma a</span><span class="r">tu pago de ${monthName(m)}</span></div>${ex.days?`<div class="line"><span class="l">Días extra este mes</span><span class="r">${ex.days}</span></div>`:''}</div>
+  <p class="xs muted mt12">¿Es de noche, fuera de tu local o en festivo? Eso es un <a class="link" href="#" data-act="openEvent">evento</a> y te lo presupuestamos.</p>
+  <h3 class="mt24">¿Estás seguro?</h3>
+  <button class="btn o mt12" data-act="addExtraDay">Sí, añadir un día extra · ${eur(withIva(price))}</button>${c.meeting_status!=='hecha'?'<p class="xs muted mt8" style="text-align:center">Elegirás el día después de la reunión de arranque.</p>':'<p class="xs muted mt8" style="text-align:center">Después eliges el día en el calendario de Inicio.</p>'}`)}
 function sheetGoals(){const o=D.me.onboarding||{};sheet(`<span class="label">Tus objetivos</span><h2 class="mt4">Qué quieres conseguir.</h2>
   <div class="chips mt16">${GOALS.map(g=>`<button class="chip ${(o.goals||[]).includes(g)?'on':''}" data-act="pTog" data-k="goals" data-v="${esc(g)}">${esc(g)}</button>`).join('')}</div>
   <div class="field mt16"><label>Estilo de marca</label><div class="chips">${STYLES.map(g=>`<button class="chip ${(o.style||[]).includes(g)?'on':''}" data-act="pTog" data-k="style" data-v="${g}">${g}</button>`).join('')}</div></div>
@@ -1304,7 +1340,18 @@ const A={
   async approve(){await upd('profiles',{approved:true},{id:D.me.id});D.me.approved=true;closeSheet();toast('Calendario aprobado')},
   askChanges(){closeSheet(true);ui.tab='chat';render();setTimeout(()=>{const i=$('#chatI');if(i){i.value='Hola, me gustaría cambiar: ';i.focus()}},80)},
   openUpgrade(){sheetUpgrade()},
-  async reqUpgrade(){await sendMsg('Quiero pasarme al Pack Completo con el asistente IA.');closeSheet();toast('¡Hecho! Te escribimos por el chat')},
+  async reqUpgrade(){sheetUpgrade('confirm')},
+  upStep(){sheetUpgrade('confirm')},
+  async sendUpgrade(el){el.classList.add('loading');try{await rpc('request_upgrade',{p_pref:{fecha:$('#upD').value||null,franja:pickV('upF'),modo:pickV('upM')}});await loadMe();closeSheet(true);render(true);toast('Reunión solicitada. Te confirmamos por el chat')}catch(e){el.classList.remove('loading')}},
+  openExtraDay(){sheetExtraDay()},
+  moreContent(){ui.tab='contenido';ui.ctab='cal';vt(()=>render());window.scrollTo(0,0)},
+  async addExtraDay(el){el.classList.add('loading');try{await rpc('set_extra_days',{p_month:workMonth(),p_delta:1});await loadAll();closeSheet(true);
+    if(D.me.meeting_status==='hecha'){ui.tab='inicio';render();setTimeout(()=>$('#calendar')?.scrollIntoView({behavior:'smooth',block:'center'}),120);toast('Día extra añadido. Elige el día en el calendario')}else{render(true);toast('Día extra añadido. Lo elegirás tras la reunión de arranque')}}catch(e){el.classList.remove('loading')}},
+  async upMeetConfirm(el){const c=prof(el.dataset.id),d=$('#upCD').value,t=$('#upCT').value;if(!d||!t){toast('Pon día y hora');return}const at=new Date(`${d}T${t}`).toISOString();const up={...(c.upgrade||{}),status:'confirmada',at};
+    await upd('profiles',{upgrade:up},{id:c.id});c.upgrade=up;await teamMsg(c.id,`Reunión para pasar al Pack Completo confirmada: ${meetTxt(at)}. ¡Hablamos!`);render(true);toast('Confirmada y avisado')},
+  async upActivate(el){if(!confirmTwice(el,'¿Activar Pack Completo? Toca otra vez'))return;const c=prof(el.dataset.id),p=packOf('completo'),price=c.promo?p.promo:p.price;const up={...(c.upgrade||{}),status:'activado',done_at:new Date().toISOString()};
+    await upd('profiles',{pack:'completo',price,upgrade:up},{id:c.id});Object.assign(c,{pack:'completo',price,upgrade:up});await teamMsg(c.id,`¡Ya tienes el Pack Completo! Tu nueva cuota es ${eur(price)} + IVA al mes. Te iremos contando los pasos del asistente.`);render(true);toast('Pack Completo activado')},
+  async upCancel(el){if(!confirmTwice(el,'¿Descartar la petición? Toca otra vez'))return;const c=prof(el.dataset.id);await upd('profiles',{upgrade:null},{id:c.id});c.upgrade=null;render(true)},
   openGoals(){sheetGoals()},openAccess(){sheetAccess()},openCancel(){sheetCancel()},
   pTog(el){const d=$('#scrim');const o=d._o,a=o[el.dataset.k]||(o[el.dataset.k]=[]),v=el.dataset.v,i=a.indexOf(v);i<0?a.push(v):a.splice(i,1);el.classList.toggle('on')},
   async saveProfile(){const d=$('#scrim'),o=d._o||{...(D.me.onboarding||{})};let pw='';d.querySelectorAll('[data-p]').forEach(i=>{if(i.dataset.p==='igPass'){pw=i.value;return}o[i.dataset.p]=i.value});

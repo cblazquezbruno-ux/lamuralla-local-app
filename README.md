@@ -13,6 +13,7 @@ App web instalable en el móvil (PWA) para los locales de **La Muralla Local** y
 - Paso 1: pide la reunión de arranque (día, franja y dónde). El equipo la confirma y la marca como hecha.
 - Paso 2: solo entonces puede reservar rodaje. Solo ve días y horas libres; la primera reserva se queda la hora y desaparece para los demás (lo garantiza la base de datos).
 - Paso 3: el equipo le envía «qué necesitamos» para ese rodaje y él lo va marcando.
+- «¿Quieres más?» en Contenido: **día extra de contenido** (1–2 h en el local, se confirma con «¿estás seguro?» y se elige el día en el calendario), **evento** (de noche, fuera del local o festivo: se presupuesta) y **pasar al Pack Completo** (confirma y pide reunión; el equipo la confirma y activa el pack desde la ficha).
 - Contenido: calendario de publicaciones (qué día, tipo y cuál en concreto, con archivos), guiones (texto o archivos) y «Envíanos archivos» (fotos, PDF…).
 - Pagos: mes en curso, días extra, eventos, PayPal/tarjeta o **transferencia/Bizum** (avisa con un botón) y sus **facturas** en PDF.
 - Perfil con su **logo**, datos de facturación, objetivos, accesos, contrato y baja. Chat privado y asistente.
