@@ -17,10 +17,11 @@ App web instalable en el móvil (PWA) para los locales de **La Muralla Local** y
 - Pagos: mes en curso, días extra, eventos, PayPal/tarjeta o **transferencia/Bizum** (avisa con un botón) y sus **facturas** en PDF.
 - Perfil con su **logo**, datos de facturación, objetivos, accesos, contrato y baja. Chat privado y asistente.
 
-**Equipo** — Hoy · Agenda · Clientes · Chat · Ajustes. Cada miembro entra con su cuenta.
+**Equipo** — Hoy · Agenda · Clientes · Contabilidad · Chat · Ajustes. Cada miembro entra con su cuenta.
 - Hoy: tus tareas del día (con tiempos, se tachan al hacerlas), las de cada compañero o de todos, y la bandeja (reuniones pedidas, rodajes sin lista, pagos por confirmar, eventos, bajas, archivos nuevos).
 - Agenda: abrir días y franjas, reuniones y rodajes próximos.
 - Ficha de cada cliente: Resumen (reunión y listas de rodaje) · Contenido (calendario, guiones, archivos del cliente) · Tareas · Pagos (confirmar pagos, facturas, registrar pagos).
+- **Contabilidad La Muralla**: ingresos y gastos de Labs, Local, Studio y General (cualquiera del equipo apunta, todos lo ven), con ticket adjunto, beneficio por mes/año y por área, IVA cobrado/pagado y descarga en CSV para la gestoría. Los pagos cobrados desde la app entran solos como ingresos de Local.
 - Ajustes: **factura tipo** (datos, logo, color, serie, notas) con vista previa, datos de pago para transferencia/Bizum, precios, campaña, condiciones, PayPal, cuentas del equipo, copias.
 
 **Facturas automáticas:** cuando un pago queda como «pagado» (PayPal, alta, o el equipo confirma una transferencia) la base de datos llama a la función `invoice`, que numera (`LM-2026-0001`…), genera el PDF con la plantilla, lo guarda en la app del cliente y, si está configurado `RESEND_API_KEY`, se lo envía por email.
