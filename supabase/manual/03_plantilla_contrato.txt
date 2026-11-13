@@ -1,0 +1,39 @@
+CONTRATO DE PRESTACIÓN DE SERVICIOS DE CONTENIDO · LA MURALLA LOCAL
+
+En Talavera de la Reina, a {fecha}.
+
+DE UNA PARTE, {empresa}, con NIF {nif_empresa} y domicilio en {direccion_empresa} (en adelante, «La Muralla»).
+DE OTRA PARTE, {firmante}, con NIF {nif_cliente}, en nombre propio o en representación de {negocio} (en adelante, «el Cliente»).
+
+Ambas partes se reconocen capacidad para contratar y acuerdan lo siguiente:
+
+1. OBJETO
+La Muralla prestará al Cliente el servicio «{pack}»: creación y gestión de contenido para redes sociales de su negocio, según lo descrito en la app de La Muralla Local en el momento de la contratación.
+
+2. PRECIO Y PAGO
+El precio es de {precio} al mes {iva}. El primer mes se paga por adelantado al contratar; los siguientes se cobran mensualmente por PayPal, tarjeta, transferencia u otro medio acordado. Cada pago genera su factura, disponible en la app.
+Los días extra de grabación (1–2 horas en el local) cuestan {dia_extra} {iva} cada uno. Los eventos (de noche, fuera del local o en festivo) se presupuestan aparte en un plazo de {horas_eventos} h y solo se realizan si el Cliente acepta el presupuesto.
+
+3. DURACIÓN, PERMANENCIA Y BAJA
+El contrato tiene una permanencia mínima de {permanencia} meses desde el alta. Después se renueva mes a mes. El Cliente puede darse de baja avisando con {aviso} días de antelación desde la app (Perfil › Contrato y baja) o por escrito. La baja no da derecho a devolver cuotas ya pagadas.
+
+4. FUNCIONAMIENTO
+El servicio empieza con una reunión de arranque. Después el Cliente reserva su día de rodaje en la app entre los días disponibles y La Muralla le indica qué debe tener preparado. Los cambios de día se pueden hacer desde la app hasta 48 h antes. Si el día del rodaje el negocio no está preparado según lo acordado, se grabará lo posible y no se recupera la jornada salvo acuerdo.
+
+5. OBLIGACIONES DEL CLIENTE
+Facilitar los accesos necesarios a sus redes (preferiblemente como socio en Meta Business), la información de su negocio y las autorizaciones de las personas que aparezcan en el contenido (empleados y clientes). Revisar el calendario de publicaciones en la app y responder en un plazo razonable.
+
+6. PROPIEDAD Y USO DEL CONTENIDO
+Una vez pagado, el Cliente puede usar el contenido entregado para promocionar su negocio en cualquier canal. La Muralla conserva los derechos de autor y podrá mostrar el trabajo en su portfolio y redes, salvo que el Cliente se oponga por escrito. Los archivos en bruto no se entregan salvo acuerdo.
+
+7. CONFIDENCIALIDAD Y PROTECCIÓN DE DATOS
+La Muralla tratará los datos del Cliente para prestar el servicio, facturar y comunicarse con él, conforme al Reglamento (UE) 2016/679 y la LOPDGDD. Las contraseñas de redes que el Cliente facilite se guardan cifradas y solo se usan para el servicio. Cuando La Muralla gestione datos de los clientes del Cliente (por ejemplo, mensajes o reservas), lo hará como encargada del tratamiento, solo siguiendo sus instrucciones, con confidencialidad y medidas de seguridad, y los devolverá o borrará al terminar el contrato. El Cliente puede ejercer sus derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a {email_empresa}.
+
+8. RESPONSABILIDAD
+La Muralla no garantiza resultados concretos de seguidores, ventas o alcance, que dependen de factores externos. No responde de cambios o caídas de las plataformas de terceros (Instagram, TikTok, Google, etc.).
+
+9. FIRMA ELECTRÓNICA
+El Cliente firma este contrato desde la app mediante firma electrónica (nombre, NIF y firma manuscrita digital), que ambas partes aceptan como válida. Se guarda una copia en PDF accesible para las dos partes.
+
+10. LEY Y JURISDICCIÓN
+Este contrato se rige por la ley española. Para cualquier conflicto, las partes se someten a los juzgados de Talavera de la Reina, salvo que la ley disponga otra cosa.

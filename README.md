@@ -25,6 +25,12 @@ App web instalable en el móvil (PWA) para los locales de **La Muralla Local** y
 - **Contabilidad La Muralla**: ingresos y gastos de Labs, Local, Studio y General (cualquiera del equipo apunta, todos lo ven), con ticket adjunto, beneficio por mes/año y por área, IVA cobrado/pagado y descarga en CSV para la gestoría. Los pagos cobrados desde la app entran solos como ingresos de Local.
 - Ajustes: **factura tipo** (datos, logo, color, serie, notas) con vista previa, datos de pago para transferencia/Bizum, precios, campaña, condiciones, PayPal, cuentas del equipo, copias.
 
+**Contrato con firma:** el cliente lo firma desde la app (nombre, NIF y firma con el dedo). Se guarda en la base de datos (texto, huella SHA-256, fecha, dispositivo) y se genera un PDF para las dos partes. La plantilla se edita en Ajustes › Contrato y ruleta. Revisadla con vuestra gestoría o abogado.
+
+**Invita a otro local + Ruleta de La Muralla:** cada cliente tiene su QR y código. Si otro negocio se da de alta con él y paga su primer mes, el que invitó gira la ruleta (premios y probabilidades en Ajustes). El equipo ve en la bandeja el premio a entregar.
+
+**Más:** resultados del mes para el cliente (seguidores, alcance…), «Haz tu propio podcast» (formulario para La Muralla Studio), recuperar contraseña por email (necesita `RESEND_API_KEY`), privacidad y aviso legal, y recordatorios automáticos 24 h antes de reuniones y rodajes.
+
 **Facturas automáticas:** cuando un pago queda como «pagado» (PayPal, alta, o el equipo confirma una transferencia) la base de datos llama a la función `invoice`, que numera (`LM-2026-0001`…), genera el PDF con la plantilla, lo guarda en la app del cliente y, si está configurado `RESEND_API_KEY`, se lo envía por email.
 > Verifactu: la obligación del software de facturación verificable empieza en 2027 (sociedades el 1 de enero, autónomos el 1 de julio, según el RDL 15/2025). Antes de esa fecha habrá que conectar la facturación a un sistema certificado o adaptarla.
 
@@ -51,6 +57,8 @@ supabase/
     assistant/          ← asistente privado de cada cliente
     notify/             ← avisos push al móvil
     invoice/            ← genera la factura en PDF, la guarda y la envía por email
+    contract/           ← PDF del contrato firmado
+    recover/            ← recuperar contraseña con código por email
   manual/               ← pasos que se hacen a mano una vez (avisos push, primer admin)
   config.toml
 .github/workflows/mantener-activa.yml  ← consulta cada 2 días para que Supabase gratis no se pause
@@ -78,6 +86,8 @@ supabase functions deploy signup --no-verify-jwt
 supabase functions deploy notify --no-verify-jwt
 supabase functions deploy paypal-webhook --no-verify-jwt
 supabase functions deploy invoice --no-verify-jwt
+supabase functions deploy contract --no-verify-jwt
+supabase functions deploy recover --no-verify-jwt
 supabase functions deploy pay-extras
 supabase functions deploy team
 supabase functions deploy assistant
