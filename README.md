@@ -6,6 +6,17 @@ App web instalable en el móvil (PWA) para los locales de **La Muralla Local** y
 - **Base de datos y servidor:** Supabase, proyecto `la-muralla-local` (ref. `ugwzbcrvamfpxpcfldag`, servidores en París)
 - **Pagos:** PayPal (suscripción mensual + pagos sueltos de extras). Ahora mismo en **modo prueba**.
 
+## Landing de la campaña (`/campana/`)
+
+Página pública y ligera para captar negocios de Talavera (los que entran sin sesión en la app van aquí):
+- Contador de plazas **en directo** («X de Y plazas cubiertas», Supabase Realtime sobre `campaign_public`) y cuenta atrás hasta el cierre.
+- Formulario de solicitud (función `lead`, con antispam y RGPD) → confirmación «te damos acceso en 24-48 h».
+- El equipo revisa en la app › Clientes › **Solicitudes**: aprobar (genera un enlace privado y abre WhatsApp o el correo con el mensaje escrito), rechazar, marcar plaza cubierta, nota interna, quién le invitó y su premio de la ruleta.
+- El negocio aprobado abre su enlace (`/campana/?k=…`), ve los paquetes con su precio y se da de alta. **Sin enlace aprobado no se puede dar de alta** (lo comprueba la función `signup`).
+- Plazas totales, cubiertas, fecha de cierre y «enseñar precio desde» se cambian en el mismo panel. Los precios salen de Ajustes.
+- Ruleta: solo como premio por invitar (gira quien invita cuando el invitado paga su primer mes). Si alguien entra con `?ref=CÓDIGO`, el código viaja con su solicitud.
+- Los precios ya no son públicos: la web lee `public_settings()`, que solo los devuelve con un enlace aprobado.
+
 ## Qué hace
 
 **Local (cliente)** — 5 pestañas: Inicio · Contenido · Pagos · Chat · Perfil.
@@ -59,6 +70,7 @@ supabase/
     invoice/            ← genera la factura en PDF, la guarda y la envía por email
     contract/           ← PDF del contrato firmado
     recover/            ← recuperar contraseña con código por email
+    lead/               ← recibe las solicitudes de la landing (público, antispam)
   manual/               ← pasos que se hacen a mano una vez (avisos push, primer admin)
   config.toml
 .github/workflows/mantener-activa.yml  ← consulta cada 2 días para que Supabase gratis no se pause
@@ -88,6 +100,7 @@ supabase functions deploy paypal-webhook --no-verify-jwt
 supabase functions deploy invoice --no-verify-jwt
 supabase functions deploy contract --no-verify-jwt
 supabase functions deploy recover --no-verify-jwt
+supabase functions deploy lead --no-verify-jwt
 supabase functions deploy pay-extras
 supabase functions deploy team
 supabase functions deploy assistant

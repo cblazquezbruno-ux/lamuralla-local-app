@@ -34,6 +34,13 @@ Deno.serve(async (req) => {
       if (!byTeam) return json({ error: 'Solo el equipo puede dar altas manuales' }, 403);
     }
 
+    // fuera del equipo, solo se puede dar de alta un negocio aprobado (enlace privado de la campaña)
+    let lead: any = null;
+    if (!byTeam) {
+      const tok = String(body.lead || '');
+      if (tok.length >= 20) { const { data: l } = await admin.from('leads').select('*').eq('token', tok).eq('status', 'aprobada').maybeSingle(); lead = l; }
+      if (!lead) return json({ error: 'Para darte de alta necesitas tu enlace de acceso. Solicita tu plaza en la página de la campaña.' }, 403);
+    }
     const username = norm(f.user);
     if (!/^[a-z0-9._-]{3,30}$/.test(username)) return json({ error: 'El usuario solo puede tener letras, números, puntos o guiones (3-30)' }, 400);
     if (!f.pass || String(f.pass).length < 6) return json({ error: 'La contraseña debe tener al menos 6 caracteres' }, 400);
@@ -44,7 +51,8 @@ Deno.serve(async (req) => {
     const { data: st } = await admin.from('settings').select('data').eq('id', 1).single();
     const s = st!.data;
     const pack = s.packs.find((p: any) => p.id === packId);
-    const promo = !!(s.promoOn && s.promoTaken < s.promoTotal);
+    const open = !!(s.promoOn && s.promoTaken < s.promoTotal && (!s.promoEnds || Date.now() < new Date(s.promoEnds).getTime()));
+    const promo = open || !!lead?.slot_taken;
     const cu = byTeam && body.custom ? body.custom : null; // cliente especial creado por el equipo
     let base = promo ? pack.promo : pack.price;
     const setup = pack.setup ? (promo ? pack.promoSetup : pack.setup) : 0;
@@ -76,7 +84,9 @@ Deno.serve(async (req) => {
     const onboarding = { goals: f.goals || [], style: f.style || [], best: f.best || '', audience: f.audience || '', refs: f.refs || '', avoid: f.avoid || '', ig: f.ig || '', tiktok: f.tiktok || '', google: f.google || '', access: f.access || 'partner', igUser: f.igUser || '', igPass: '' };
     const isTest = method === 'prueba'; // las altas de prueba no gastan plaza de campaña
     let referrer: string | null = null;
-    if (body.ref) { const { data: rf } = await admin.from('profiles').select('id').eq('referral_code', String(body.ref).toUpperCase().trim()).eq('role', 'client').maybeSingle(); referrer = rf?.id || null; }
+    const refCode = body.ref || lead?.ref_code;
+    if (lead?.referrer) referrer = lead.referrer;
+    else if (refCode) { const { data: rf } = await admin.from('profiles').select('id').eq('referral_code', String(refCode).toUpperCase().trim()).eq('role', 'client').maybeSingle(); referrer = rf?.id || null; }
     const { error: e2 } = await admin.from('profiles').insert({ referred_by: referrer, id: uid, role: 'client', username, business: f.business, contact: f.contact, phone: f.phone || null, email: f.email || null, sector: f.sector || 'otro', pack: packId, price: base, onboarding, paypal_subscription_id: subId, is_demo: isTest, iva_pct: ivaPct, custom_pack: cu?.pack?.name ? { name: String(cu.pack.name), features: (cu.pack.features || []).map(String) } : null, extra_day_price: cu && cu.extraDay ? Number(cu.extraDay) : null, promo: cu ? false : promo });
     if (e2) { await admin.auth.admin.deleteUser(uid); return json({ error: e2.message }, 400); }
     if (f.access === 'password' && f.igPass) await admin.rpc('set_ig_password', { p_user: uid, p_secret: String(f.igPass) });
@@ -85,7 +95,11 @@ Deno.serve(async (req) => {
     if (!byTeam) await admin.from('payments').insert({ client_id: uid, concept: `Primer mes · ${pack.name} (adelantado)` + (setup ? ' + alta asistente' : ''), base: base + setup, method, paypal_id: paypalId, iva: Number(s.iva ?? 21) });
     const { data: team } = await admin.from('profiles').select('id').eq('role', 'admin').limit(1).maybeSingle();
     await admin.from('messages').insert({ client_id: uid, sender_id: team?.id ?? null, from_team: true, who: 'José Pedro', text: `¡Bienvenido/a, ${String(f.contact).split(' ')[0]}! Soy José Pedro, tu responsable de cuenta. Primero firma tu contrato desde Inicio (es un minuto) y pide la reunión de arranque: ahí vemos tus objetivos, accesos y qué vamos a grabar. Después eliges tu día de rodaje.` });
-    if (promo && !isTest && !cu) { s.promoTaken = (s.promoTaken || 0) + 1; await admin.from('settings').update({ data: s, updated_at: new Date().toISOString() }).eq('id', 1); }
+    if (lead) {
+      const countSlot = promo && !isTest && !lead.slot_taken;
+      await admin.from('leads').update({ status: 'convertida', profile_id: uid, slot_taken: lead.slot_taken || countSlot }).eq('id', lead.id);
+      if (countSlot) { s.promoTaken = (s.promoTaken || 0) + 1; await admin.from('settings').update({ data: s, updated_at: new Date().toISOString() }).eq('id', 1); }
+    } else if (promo && !isTest && !cu) { s.promoTaken = (s.promoTaken || 0) + 1; await admin.from('settings').update({ data: s, updated_at: new Date().toISOString() }).eq('id', 1); }
 
     return json({ ok: true, username, email });
   } catch (e) {

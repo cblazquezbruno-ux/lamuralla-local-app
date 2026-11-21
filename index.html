@@ -738,7 +738,7 @@ const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
 
 /* ================= STATE ================= */
 /* ================= STATE ================= */
-const D={contracts:[],referrals:[],reports:[],studio_requests:[],finance:[],settings:null,me:null,profiles:[],bookings:[],extras:[],events:[],payments:[],messages:[],availability:{},taken:[],posts:[],files:[],tasks:[],invoices:[]};
+const D={leads:[],contracts:[],referrals:[],reports:[],studio_requests:[],finance:[],settings:null,me:null,profiles:[],bookings:[],extras:[],events:[],payments:[],messages:[],availability:{},taken:[],posts:[],files:[],tasks:[],invoices:[]};
 const ui={view:'boot',tab:'inicio',atab:'hoy',calM:null,acalM:null,selDay:null,selSlot:null,signup:null,chatWith:null,typing:null,q:'',busy:false,ctab:'cal',postM:null,cid:null,csec:'resumen',ccon:'cal',who:null};
 const S=()=>D.settings;
 const packOf=id=>S().packs.find(p=>p.id===id)||S().packs[0];
@@ -755,7 +755,10 @@ const testMode=()=>!!S().paypal?.testMode||!S().paypal?.clientId;
 const leadDays=()=>Math.ceil(num(S().changeHours||48)/24);
 
 /* ================= DATA ================= */
-async function loadSettings(){const{data,error}=await sb.from('settings').select('data').eq('id',1).single();if(error)throw error;D.settings=data.data}
+const QS=new URLSearchParams(location.search);const LEAD=(QS.get('lead')||'').slice(0,80);
+async function loadSettings(){const{data:{session}}=await sb.auth.getSession();
+  if(session){const{data,error}=await sb.from('settings').select('data').eq('id',1).single();if(error)throw error;D.settings=data.data;return}
+  const{data,error}=await sb.rpc('public_settings',{p_token:LEAD||null});if(error)throw error;D.settings=data}
 async function loadMe(){const{data:{user}}=await sb.auth.getUser();if(!user){D.me=null;return}const{data}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();D.me=data}
 async function loadAll(){
   const today=iso(TODAY);
@@ -764,17 +767,17 @@ async function loadAll(){
     sb.from('events').select('*').order('created_at',{ascending:false}),sb.from('payments').select('*').order('date',{ascending:false}),
     sb.from('messages').select('*').order('created_at').limit(2000),sb.rpc('taken_slots'),sb.from('posts').select('*').order('date'),
     sb.from('files').select('*').order('created_at',{ascending:false}),sb.from('invoices').select('*').order('created_at',{ascending:false}),sb.from('contracts').select('*').order('signed_at',{ascending:false}),sb.from('referrals').select('*'),sb.from('reports').select('*'),sb.from('studio_requests').select('*').order('created_at',{ascending:false})];
-  if(isAdmin()){keys.push('profiles','tasks','finance');q.push(sb.from('profiles').select('*').order('created_at'),sb.from('tasks').select('*').order('created_at'),sb.from('finance').select('*').order('date',{ascending:false}))}
+  if(isAdmin()){keys.push('leads','profiles','tasks','finance');q.push(sb.from('leads').select('*').order('created_at',{ascending:false}),sb.from('profiles').select('*').order('created_at'),sb.from('tasks').select('*').order('created_at'),sb.from('finance').select('*').order('date',{ascending:false}))}
   const r=await Promise.all(q);const R={};keys.forEach((k,i)=>{if(r[i].error)console.warn(k,r[i].error);R[k]=r[i].data||[]});
   D.availability={};R.av.forEach(a=>D.availability[a.date]=a.slots);
   D.bookings=R.bk;D.extras=R.ex;D.events=R.ev;D.payments=R.pay;D.messages=R.msg;D.taken=R.taken;D.posts=R.posts;D.files=R.files;D.invoices=R.inv;D.contracts=R.contracts;D.referrals=R.referrals;D.reports=R.reports;D.studio_requests=R.studio;
-  if(isAdmin()){D.profiles=R.profiles;D.tasks=R.tasks;D.finance=R.finance}
+  if(isAdmin()){D.profiles=R.profiles;D.tasks=R.tasks;D.finance=R.finance;D.leads=R.leads}
 }
 let rtChan=null,typeChan=null,reloadT=null;
 function subscribeRealtime(){
   if(rtChan)sb.removeChannel(rtChan);
   rtChan=sb.channel('db-'+D.me.id);
-  ['messages','events','bookings','availability','extras','payments','profiles','settings','posts','files','tasks','invoices','finance','contracts','referrals','reports','studio_requests'].forEach(t=>{
+  ['messages','events','bookings','availability','extras','payments','profiles','settings','posts','files','tasks','invoices','finance','contracts','referrals','reports','studio_requests','leads'].forEach(t=>{
     rtChan.on('postgres_changes',{event:'*',schema:'public',table:t},p=>onChange(t,p));
   });
   rtChan.subscribe();
@@ -833,7 +836,7 @@ function render(keepScroll){
   afterRender();
 }
 function softRender(){if(document.querySelector('#scrim'))return;const ae=document.activeElement;if(ae&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)&&!['chatI','achatI','cq','botI'].includes(ae.id))return;render(true)}
-function go(v){ui.view=v;render()}
+function go(v){if(v==='landing'&&!D.me){location.href='campana/';return}ui.view=v;render()}
 function afterRender(){
   if(isChatOpen()){scrollChat();showTyping();const cid=isAdmin()?ui.chatWith:D.me?.id;if(cid&&unreadFor(cid)>0)sb.rpc('mark_read',{p_client:cid}).then(()=>{D.messages.forEach(m=>{if(m.client_id===cid){if(isAdmin()&&!m.from_team)m.read_by_team=true;if(!isAdmin()&&m.from_team)m.read_by_client=true}})})}
   document.querySelectorAll('[data-count]').forEach(countUp);
@@ -932,10 +935,10 @@ async function doLogin(u,p){
   if(error){btn.classList.remove('loading');$('#lerr').textContent='Usuario o contraseña incorrectos.';return}
   await enterApp();
 }
-async function enterApp(){skeleton();await loadMe();if(!D.me){await sb.auth.signOut();toast('Esta cuenta no tiene acceso');go('landing');return}
+async function enterApp(){skeleton();try{await loadSettings()}catch(e){}await loadMe();if(!D.me){await sb.auth.signOut();toast('Esta cuenta no tiene acceso');go('landing');return}
   await loadAll();subscribeRealtime();refreshPush();ui.calM=null;ui.selDay=null;
   const wantChat=location.hash==='#chat';if(wantChat)history.replaceState(null,'',location.pathname);
-  if(isAdmin()){ui.atab=wantChat?'chat':'hoy';go('admin')}else{ui.tab=wantChat?'chat':'inicio';go('client')}}
+  if(isAdmin()){ui.atab=wantChat?'chat':'hoy';if(location.hash==='#solicitudes'){ui.atab='clientes';ui.ctabA='solicitudes'}go('admin')}else{ui.tab=wantChat?'chat':'inicio';go('client')}}
 
 /* ================= SIGNUP ================= */
 const GOALS=['Más clientes en el local','Mejor imagen de marca','Más reservas','Dar a conocer novedades','Profesionalizar mis redes','Atraer público joven','Vender más un producto','Contratar personal'];
@@ -998,7 +1001,7 @@ function vSignup(){
 }
 async function finishSignup(payment){
   const s=ui.signup;s.err='';
-  const{data,error}=await sb.functions.invoke('signup',{body:{form:s.data,pack:s.pack,payment,ref:refCode()||undefined}});
+  const{data,error}=await sb.functions.invoke('signup',{body:{form:s.data,pack:s.pack,payment,ref:refCode()||undefined,lead:s.lead||undefined}});
   const err=error?(await errMsg(error)):data?.error;
   if(err){s.err=err;closeSheet(true);render(true);toast(err);return false}
   const{error:e2}=await sb.auth.signInWithPassword({email:data.email,password:s.data.pass.trim()});
@@ -1305,6 +1308,7 @@ const prof=id=>D.profiles.find(p=>p.id===id)||{};
 function inboxItems(){
   const it=[];
   clients().filter(c=>c.cancel_requested_at&&c.status!=='baja').forEach(c=>it.push({ic:'doc',t:`${c.business} pide la baja`,s:'Tramitar',act:'cancelSheet',id:c.id}));
+  (D.leads||[]).filter(l=>l.status==='pendiente').forEach(l=>it.push({ic:'users',t:`Nueva solicitud · ${l.business}`,s:`${sectName(l.sector)} · ${l.contact} · ${ago(l.created_at)}`,act:'leadSheet',id:l.id}));
   D.referrals.filter(r=>r.status==='girada').forEach(r=>it.push({ic:'star',t:`Entregar premio de la Ruleta · ${prof(r.referrer).business||''}`,s:r.prize,act:'refSheet',id:r.id}));
   D.studio_requests.filter(r=>r.status==='nueva').forEach(r=>it.push({ic:'users',t:`Podcast · ${prof(r.client_id).business||''}`,s:(r.data||{}).nombre||'Nueva solicitud',act:'podSheet',id:r.id}));
   clients().filter(c=>c.upgrade&&c.upgrade.status==='solicitada').forEach(c=>{const p=c.upgrade.pref||{};it.push({ic:'bot',t:`${c.business} quiere el Pack Completo`,s:'Reunión: '+[p.fecha?short(p.fecha):'',p.franja,p.modo].filter(Boolean).join(' · '),act:'openCP',id:c.id,sec:'resumen'})});
@@ -1318,12 +1322,12 @@ function inboxItems(){
 }
 function vAdmin(){
   let body='';const inb=inboxItems().length,un=D.messages.filter(m=>!m.from_team&&!m.read_by_team).length;
-  if(ui.atab==='hoy')body=aHoy();if(ui.atab==='agenda')body=aAgenda();if(ui.atab==='clientes')body=ui.cid?aClientPage():aClientes();if(ui.atab==='chat')body=aChat();if(ui.atab==='ajustes')body=aAjustes();if(ui.atab==='conta')body=aConta();
+  if(ui.atab==='hoy')body=aHoy();if(ui.atab==='agenda')body=aAgenda();if(ui.atab==='clientes'){const pl=(D.leads||[]).filter(l=>l.status==='pendiente').length;body=ui.cid?aClientPage():`<div class="segs" style="margin-bottom:16px"><button class="${ui.ctabA!=='solicitudes'?'on':''}" data-act="ctabA" data-v="clientes">Clientes</button><button class="${ui.ctabA==='solicitudes'?'on':''}" data-act="ctabA" data-v="solicitudes">Solicitudes${pl?` <span class="dot-n" style="margin-left:4px">${pl}</span>`:''}</button></div>`+(ui.ctabA==='solicitudes'?aLeads():aClientes())}if(ui.atab==='chat')body=aChat();if(ui.atab==='ajustes')body=aAjustes();if(ui.atab==='conta')body=aConta();
   const tabs=[['hoy','task','Hoy'],['agenda','cal','Agenda'],['clientes','users','Clientes'],['conta','euro','Contabilidad'],['chat','chat','Chat'],['ajustes','gear','Ajustes']];
   return `<div class="top"><div class="topbar-l">${backBtn()}<img class="logo" src="${IMG.logo}" alt=""></div>${tav(D.me,34)}</div>
   <div class="wrap ${ui.atab==='chat'?'':'stag'}">${body}</div>
   ${ui.atab==='chat'&&ui.chatWith?`<form class="chatbar" id="achatF"><input class="inp" id="achatI" placeholder="Responder como ${esc(myTeamName())}…" autocomplete="off" enterkeyhint="send"><button type="submit" aria-label="Enviar">${I('send')}</button></form>`:''}
-  <nav class="nav n6"><div class="nav-in">${tabs.map(t=>`<button class="${ui.atab===t[0]?'on':''}" data-act="atab" data-t="${t[0]}">${I(t[1])}${t[2]}${t[0]==='hoy'&&inb?`<span class="badge">${inb}</span>`:''}${t[0]==='chat'&&un?`<span class="badge">${un}</span>`:''}</button>`).join('')}</div></nav>`;
+  <nav class="nav n6"><div class="nav-in">${tabs.map(t=>`<button class="${ui.atab===t[0]?'on':''}" data-act="atab" data-t="${t[0]}">${I(t[1])}${t[2]}${t[0]==='hoy'&&inb?`<span class="badge">${inb}</span>`:''}${t[0]==='clientes'&&(D.leads||[]).some(l=>l.status==='pendiente')?`<span class="badge">${D.leads.filter(l=>l.status==='pendiente').length}</span>`:''}${t[0]==='chat'&&un?`<span class="badge">${un}</span>`:''}</button>`).join('')}</div></nav>`;
 }
 function taskRow(t,showWho){const c=t.client_id?prof(t.client_id):null,who=prof(t.assignee),late=t.due&&!t.done&&parse(t.due)<TODAY;
   return `<div class="task ${t.done?'done':''}" data-tid="${t.id}"><button class="tk-check" data-act="taskToggle" data-id="${t.id}" aria-label="Marcar hecha">${I('check','s')}</button><div class="tk-main" data-act="taskEdit" data-id="${t.id}"><b>${esc(t.title)}</b><small>${c&&c.id?`<span class="cl">${esc(c.business)}</span> · `:''}<span class="${late?'late':''}">${dueLabel(t.due)}</span>${t.minutes?` · ${fmtMin(t.minutes)}`:''}</small></div>${showWho&&who.id?tav(who,28):''}</div>`}
@@ -2103,6 +2107,55 @@ Object.assign(A,{
 });
 function confettiBurst(){const cols=['#DA7F2C','#80A8A8','#F4F4F4','#e8954a'];const el=document.createElement('div');el.className='conflayer';let b='';for(let i=0;i<60;i++)b+=`<i class="bit" style="left:${Math.random()*100}%;background:${cols[i%4]};--dx:${(Math.random()*160-80).toFixed(0)}px;--rot:${(Math.random()*720-360).toFixed(0)}deg;animation-delay:${(Math.random()*.4).toFixed(2)}s"></i>`;el.innerHTML=b;document.body.appendChild(el);setTimeout(()=>el.remove(),3200)}
 
+/* ================= SOLICITUDES DE LA CAMPAÑA (equipo) ================= */
+const LST={pendiente:['Pendiente','o'],aprobada:['Aprobada','v'],rechazada:['Rechazada','r'],convertida:['Ya es cliente','v']};
+const ago=ts=>{const m=Math.round((Date.now()-new Date(ts))/6e4);return m<60?`hace ${Math.max(1,m)} min`:m<1440?`hace ${Math.round(m/60)} h`:`hace ${Math.round(m/1440)} d`};
+const campBase=()=>location.origin+location.pathname.replace(/[^/]*$/,'')+'campana/';
+const leadLink=l=>`${campBase()}?k=${l.token}`;
+const waNum=p=>{let d=String(p||'').replace(/\D/g,'');if(d.length===9)d='34'+d;return d};
+function leadMsg(l){return `¡Hola ${String(l.contact||'').split(' ')[0]}! Somos La Muralla. Hemos revisado la solicitud de ${l.business} y ya tienes acceso a tu plaza de la campaña local 🎉\n\nAquí ves los paquetes con tu precio y puedes darte de alta:\n${leadLink(l)}\n\nCualquier duda, contéstanos por aquí.`}
+function aLeads(){const f=ui.lf||'pendiente',all=D.leads||[],cnt=k=>all.filter(l=>k==='todas'||l.status===k).length,list=all.filter(l=>f==='todas'||l.status===f);
+  const s=S(),ends=s.promoEnds?new Date(s.promoEnds):null,endsLocal=ends?new Date(ends.getTime()-ends.getTimezoneOffset()*6e4).toISOString().slice(0,16):'';
+  return `<div class="card hl"><div class="between"><span class="label">Plazas de la campaña</span><span class="pill ${s.promoOn?'v':''}">${s.promoOn?'Abierta':'Cerrada'}</span></div>
+    <div class="row mt12" style="align-items:flex-end;gap:12px"><div class="when" style="font-size:52px">${num(s.promoTaken)}<span class="muted" style="font-size:24px"> / ${num(s.promoTotal)}</span></div><span class="small muted" style="padding-bottom:8px">cubiertas · se ve en directo en la web</span></div>
+    <div class="row mt12" style="gap:8px"><button class="btn ghost sm" data-act="slotAdj" data-d="-1">${I('minus','s')} Liberar</button><button class="btn o sm" data-act="slotAdj" data-d="1">${I('plus','s')} Cubrir plaza</button></div>
+    <table class="tbl mt12"><tr><td>Plazas totales</td><td><input class="ninp" type="number" data-set="promoTotal" value="${num(s.promoTotal)}"></td></tr></table>
+    <div class="field"><label>Cierre de la campaña</label><input class="inp" type="datetime-local" id="pEnds" value="${endsLocal}"></div>
+    <div class="between mt12"><span class="small">Campaña abierta</span><button class="sw ${s.promoOn?'on':''}" data-act="togglePromo"></button></div>
+    <div class="between mt12"><span class="small">Enseñar «desde ${eur(Math.min(...s.packs.map(p=>num(p.promo))))}» en la web</span><button class="sw ${s.promoShowPrice?'on':''}" data-act="toggleShowPrice"></button></div>
+    <div class="row mt12" style="gap:8px"><a class="btn ghost sm" href="${campBase()}" target="_blank" rel="noopener">${I('search','s')} Ver la web</a><button class="btn ghost sm" data-act="copy" data-v="${campBase()}">${I('copy','s')} Copiar enlace</button></div></div>
+  <div class="segs mt16">${[['pendiente','Pendientes'],['aprobada','Aprobadas'],['convertida','Clientes'],['rechazada','Rechazadas'],['todas','Todas']].map(([k,l])=>`<button class="${f===k?'on':''}" data-act="lf" data-v="${k}">${l} ${cnt(k)?`<b style="opacity:.6">${cnt(k)}</b>`:''}</button>`).join('')}</div>
+  <div class="lst mt12">${list.length?list.map(l=>`<button class="li" data-act="leadSheet" data-id="${l.id}"><span class="lg sm">${esc((l.business||'?')[0])}</span><div class="grow"><b>${esc(l.business)}</b><small>${esc(sectName(l.sector))} · ${esc(l.contact)} · ${ago(l.created_at)}${l.referrer?' · 🎡 invitado':''}${l.slot_taken?' · plaza':''}</small></div><span class="pill ${LST[l.status][1]}">${LST[l.status][0]}</span></button>`).join(''):'<div class="empty">Nada por aquí.</div>'}</div><div style="height:20px"></div>`}
+function sheetLead(id){const l=(D.leads||[]).find(x=>x.id===id);if(!l)return;const by=l.referrer?prof(l.referrer):null,ref=l.profile_id?D.referrals.find(r=>r.referred===l.profile_id):null,n=l.notified||{};
+  sheet(`<span class="label g">Solicitud · ${ago(l.created_at)}</span><div class="between mt4"><h2>${esc(l.business)}</h2><span class="pill ${LST[l.status][1]}">${LST[l.status][0]}</span></div>
+  <div class="card mt16"><dl class="kv"><dt>Sector</dt><dd>${esc(sectName(l.sector))}</dd><dt>Contacto</dt><dd>${esc(l.contact)}</dd><dt>Teléfono</dt><dd><a class="link" href="tel:${esc(l.phone)}">${esc(l.phone)}</a></dd><dt>Email</dt><dd><a class="link" href="mailto:${esc(l.email||'')}">${esc(l.email||'—')}</a></dd><dt>Zona</dt><dd>${esc(l.zone||'—')}</dd><dt>Redes / web</dt><dd style="word-break:break-all">${esc(l.social||'—')}</dd></dl>
+    ${l.need?`<p class="small mt12"><b>Qué necesita:</b> ${esc(l.need)}</p>`:''}</div>
+  ${by&&by.id?`<div class="card mt12"><div class="row">🎡<div><b>Invitado por ${esc(by.business)}</b><div class="small muted">${ref?(ref.prize?`Ruleta de ${esc(by.business)}: ${esc(ref.prize)} (${ref.status})`:'Ruleta: le toca girar cuando este pague su primer mes'):'Cuando se dé de alta y pague, '+esc(by.business)+' gira la ruleta'}</div></div></div></div>`:''}
+  ${l.status==='pendiente'||l.status==='rechazada'?`<button class="btn o mt16" data-act="leadApprove" data-id="${l.id}">${I('check','s')} Aprobar y darle acceso</button>`:''}
+  ${l.status==='aprobada'||l.status==='convertida'?`<div class="card mt16"><span class="label n">Su enlace privado</span><p class="xs muted mt4" style="word-break:break-all">${esc(leadLink(l))}</p>
+    <div class="row mt12" style="gap:8px"><a class="btn o sm" href="https://wa.me/${waNum(l.phone)}?text=${encodeURIComponent(leadMsg(l))}" target="_blank" rel="noopener" data-act="leadSent" data-id="${l.id}" data-ch="whatsapp">WhatsApp${n.whatsapp?' ✓':''}</a>${l.email?`<a class="btn ghost sm" href="mailto:${esc(l.email)}?subject=${encodeURIComponent('Tu plaza en La Muralla Local')}&body=${encodeURIComponent(leadMsg(l))}" data-act="leadSent" data-id="${l.id}" data-ch="email">Email${n.email?' ✓':''}</a>`:''}<button class="btn ghost sm" data-act="copy" data-v="${esc(leadLink(l))}">${I('copy','s')}</button></div>
+    <p class="xs muted mt8">Se abre WhatsApp o tu correo con el mensaje y el enlace ya escritos: solo tienes que enviarlo.</p></div>`:''}
+  <div class="between mt16"><div><b>Plaza cubierta</b><div class="xs muted">Cuenta en el contador público. Al pagar el alta se marca sola.</div></div><button class="sw ${l.slot_taken?'on':''}" data-act="leadSlot" data-id="${l.id}"></button></div>
+  <div class="field"><label>Nota interna</label><input class="inp" id="lNote" value="${esc(l.note||'')}" placeholder="Solo la veis vosotros"></div>
+  <div class="row mt12" style="gap:8px"><button class="btn ghost sm" data-act="leadNote" data-id="${l.id}">Guardar nota</button>${l.status!=='rechazada'&&l.status!=='convertida'?`<button class="btn outline sm" data-act="leadReject" data-id="${l.id}">Rechazar</button>`:''}</div>
+  ${l.status==='rechazada'&&l.rejected_reason?`<p class="xs muted mt8">Motivo: ${esc(l.rejected_reason)}</p>`:''}
+  ${l.profile_id?`<button class="btn ghost sm mt12" data-act="openCP" data-id="${l.profile_id}" data-sec="resumen">Ver su ficha de cliente</button>`:''}`)}
+async function reloadLeads(){const{data}=await sb.from('leads').select('*').order('created_at',{ascending:false});D.leads=data||[]}
+Object.assign(A,{
+  lf(el){ui.lf=el.dataset.v;render(true)},
+  ctabA(el){ui.ctabA=el.dataset.v;ui.cid=null;render(true)},
+  openLeads(){ui.atab='clientes';ui.ctabA='solicitudes';ui.lf='pendiente';ui.cid=null;vt(()=>render())},
+  leadSheet(el){sheetLead(el.dataset.id)},
+  async leadApprove(el){el.classList.add('loading');try{await rpc('lead_approve',{p_id:el.dataset.id});await reloadLeads();sheetLead(el.dataset.id);toast('Aprobada. Envíale el acceso');haptic('ok')}catch(e){el.classList.remove('loading')}},
+  async leadReject(el){const why=prompt('Motivo (opcional, solo lo veis vosotros):','');if(why===null)return;await rpc('lead_reject',{p_id:el.dataset.id,p_reason:why});await reloadLeads();closeSheet(true);render(true);toast('Rechazada')},
+  async leadSlot(el){const l=D.leads.find(x=>x.id===el.dataset.id),on=!l.slot_taken;try{await rpc('lead_set_slot',{p_id:l.id,p_on:on});l.slot_taken=on;el.classList.toggle('on',on);await loadSettings();toast(on?'Plaza cubierta':'Plaza liberada')}catch(e){}},
+  async leadNote(el){const v=$('#lNote').value.trim();await sb.from('leads').update({note:v||null}).eq('id',el.dataset.id);D.leads.find(x=>x.id===el.dataset.id).note=v;toast('Nota guardada')},
+  async leadSent(el){const href=el.getAttribute('href');if(el.dataset.ch==='whatsapp')window.open(href,'_blank');else location.href=href;const l=D.leads.find(x=>x.id===el.dataset.id);const n={...(l.notified||{}),[el.dataset.ch]:new Date().toISOString()};l.notified=n;await sb.from('leads').update({notified:n}).eq('id',l.id);setTimeout(()=>sheetLead(l.id),600)},
+  async slotAdj(el){const d=+el.dataset.d,v=Math.max(0,num(S().promoTaken)+d);D.settings.promoTaken=v;await saveSettings();render(true)},
+  async toggleShowPrice(){D.settings.promoShowPrice=!S().promoShowPrice;await saveSettings();render(true)},
+});
+document.addEventListener('change',async e=>{if(e.target.id==='pEnds'&&e.target.value){D.settings.promoEnds=new Date(e.target.value).toISOString();await saveSettings()}});
+
 /* subida de archivos */
 document.addEventListener('change',async e=>{const t=e.target;if(t.type!=='file'||!t.files||!t.files.length)return;
   try{
@@ -2327,7 +2380,13 @@ async function botAsk(q){
 /* ================= BOOT ================= */
 (async()=>{
   const t0=Date.now();
-  try{await loadSettings();const{data:{session}}=await sb.auth.getSession();if(session){await loadMe();if(D.me){ui.view='welcome'}else{await sb.auth.signOut();ui.view='landing'}}else ui.view='landing'}
+  try{await loadSettings();const{data:{session}}=await sb.auth.getSession();
+    if(session){await loadMe();if(D.me){ui.view='welcome'}else{await sb.auth.signOut();ui.view='login'}}
+    else if(LEAD){const{data:o}=await sb.rpc('lead_offer',{p_token:LEAD});
+      if(o&&o.status==='aprobada'){const pk=['imagen','completo'].includes(QS.get('pack'))?QS.get('pack'):'imagen';ui.signup=newSignup(pk);ui.signup.lead=LEAD;Object.assign(ui.signup.data,{business:o.business||'',contact:o.contact||'',phone:o.phone||'',email:o.email||'',sector:o.sector||'hosteleria'});if(o.ref)try{localStorage.setItem('lml-ref',JSON.stringify(o.ref))}catch(e){}ui.view='signup'}
+      else ui.view='login'}
+    else if(QS.has('login'))ui.view='login';
+    else{location.replace('campana/'+(QS.get('ref')?'?ref='+encodeURIComponent(QS.get('ref')):''));return}}
   catch(e){console.error(e);document.getElementById('app').innerHTML='<div class="wrap"><h2 class="mt48">Sin conexión</h2><p class="muted mt8">Revisa tu internet y vuelve a abrir la app.</p><button class="btn o mt24" onclick="location.reload()">Reintentar</button></div>'}
   const wait=Math.max(0,900-(Date.now()-t0));
   setTimeout(()=>{if(ui.view!=='boot')render();const s=$('#splash');s.classList.add('out');setTimeout(()=>s.remove(),500)},wait);

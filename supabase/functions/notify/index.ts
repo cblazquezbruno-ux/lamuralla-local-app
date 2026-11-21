@@ -27,6 +27,8 @@ Deno.serve(async (req) => {
   } else if (table === 'files') {
     if (r.kind === 'cliente') { to = await admins(); title = `📎 ${await biz(r.client_id)}`; body = `Te ha enviado: ${r.title || 'un archivo'}`; }
     else if (r.kind !== 'factura') { to = [r.client_id]; title = r.kind === 'guion' ? '📝 Nuevo guion · La Muralla' : '🎬 Nuevo contenido · La Muralla'; body = r.title || 'Ábrelo en la app'; }
+  } else if (table === 'leads') {
+    to = await admins(); title = '🆕 Nueva solicitud de plaza'; body = `${r.business} · ${r.contact}${r.ref_code ? ' · invitado' : ''}`; url = './#solicitudes';
   } else if (table === 'tasks') {
     if (r.assignee && r.assignee !== r.created_by) { to = [r.assignee]; title = '✅ Nueva tarea'; body = `${r.title}${r.client_id ? ' · ' + await biz(r.client_id) : ''}${r.due ? ' · ' + fdate(r.due) : ''}`; }
   }

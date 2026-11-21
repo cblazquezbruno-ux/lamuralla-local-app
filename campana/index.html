@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Campaña local · La Muralla · Talavera de la Reina</title>
+<meta name="description" content="Contenido profesional e IA para negocios de Talavera de la Reina. Plazas limitadas: solicita la tuya.">
+<meta name="theme-color" content="#0a0a0b">
+<meta property="og:title" content="Tu negocio, a tope en redes · La Muralla Local">
+<meta property="og:description" content="Plazas limitadas para negocios de Talavera de la Reina. Solicita la tuya en 2 minutos.">
+<link rel="icon" href="icon.png">
+<link rel="preload" href="archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preconnect" href="https://ugwzbcrvamfpxpcfldag.supabase.co" crossorigin>
+<style>
+@font-face{font-family:Archivo;src:url(archivo-latin.woff2) format('woff2');font-weight:100 900;font-display:swap}
+:root{--bg:#0a0a0b;--card:#121214;--line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.15);--txt:#f2f2f0;--gris:#a7aab1;--gris2:#6c6f77;--or:#DA7F2C;--or2:#e8954a;--ver:#80a8a8}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:#030303;color:var(--txt);font-family:Archivo,system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+main{max-width:520px;margin:0 auto;background:var(--bg);min-height:100svh;position:relative;overflow:hidden}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.w{padding:0 22px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;position:relative;z-index:3}
+.top img{height:22px}
+.top a{font-size:13px;font-weight:700;color:var(--gris);text-decoration:none;border:1px solid var(--line2);padding:8px 12px;border-radius:99px}
+.kick{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;font-weight:700;color:var(--or2)}
+.lab{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:var(--gris2)}
+h1{font-size:44px;line-height:.98;letter-spacing:-.045em;font-weight:700;margin-top:14px}
+h1 em{font-style:normal;color:var(--or)}
+h2{font-size:30px;line-height:1.02;letter-spacing:-.04em;font-weight:700}
+h3{font-size:18px;letter-spacing:-.02em}
+.sub{color:#c9cad0;font-size:16.5px;margin-top:14px}
+.muted{color:var(--gris)}.small{font-size:14px}.xs{font-size:12.5px}
+.hero{padding:26px 22px 8px;position:relative}
+.hero:before{content:'';position:absolute;right:-120px;top:-60px;width:340px;height:340px;background:radial-gradient(circle,rgba(218,127,44,.22),transparent 65%);pointer-events:none}
+.live{margin-top:22px;border:1px solid var(--line2);border-radius:22px;padding:18px;background:linear-gradient(180deg,#151517,#0e0e10)}
+.dotlive{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#7fc8a9}
+.dotlive i{width:8px;height:8px;border-radius:50%;background:#7fc8a9;box-shadow:0 0 0 0 rgba(127,200,169,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(127,200,169,0)}100%{box-shadow:0 0 0 0 rgba(127,200,169,0)}}
+.cnt{display:flex;align-items:baseline;gap:10px;margin-top:10px}
+.cnt b{font-size:64px;letter-spacing:-.06em;line-height:.9;font-variant-numeric:tabular-nums}
+.cnt>span{font-size:15px;color:var(--gris)}
+.slots{display:grid;gap:5px;margin-top:14px}
+.slots i{height:10px;border-radius:3px;background:rgba(255,255,255,.08);transition:background .5s}
+.slots i.on{background:var(--or)}
+.slots i.new{animation:pop .9s ease}
+@keyframes pop{0%{transform:scaleY(1);background:#fff}50%{transform:scaleY(1.8)}100%{transform:scaleY(1)}}
+.left{margin-top:12px;font-weight:700;font-size:15px}
+.left em{font-style:normal;color:var(--or2)}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.cd div{text-align:center}.cd b{display:block;font-size:24px;letter-spacing:-.03em;font-variant-numeric:tabular-nums}.cd small{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gris2);font-weight:700}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;border-radius:16px;font-weight:700;font-size:17px;letter-spacing:-.01em;text-decoration:none;transition:transform .15s}
+.btn:active{transform:scale(.98)}
+.btn.o{background:var(--or);color:#0a0a0b}
+.btn.g{border:1px solid var(--line2)}
+.btn[disabled]{opacity:.55}
+.under{text-align:center;margin-top:10px;font-size:12.5px;color:var(--gris)}
+.price{margin-top:14px;font-size:14px;color:#d8d8dc;text-align:center}
+.price b{color:var(--or2)}
+.ref{margin:18px 22px 0;border:1px solid rgba(218,127,44,.5);background:rgba(218,127,44,.08);border-radius:16px;padding:12px 14px;font-size:14px}
+section{padding:46px 22px 0}
+.steps{margin-top:18px;display:grid;gap:10px}
+.step{display:flex;gap:14px;align-items:flex-start;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--card)}
+.step i{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:700;background:var(--or);color:#0a0a0b}
+.step:nth-child(2) i{background:var(--txt)}.step:nth-child(3) i{background:var(--ver)}
+.step b{display:block;font-size:16px}.step span{font-size:14px;color:var(--gris)}
+.pk{margin-top:12px;border:1px solid var(--line2);border-radius:22px;padding:20px;background:var(--card);position:relative}
+.pk.hl{border-color:rgba(218,127,44,.6)}
+.pk .tag{position:absolute;top:-11px;left:18px;background:var(--or);color:#0a0a0b;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:4px 9px;border-radius:6px}
+.pk p{font-size:14.5px;color:#c9cad0;margin-top:6px}
+.pk ul{list-style:none;margin-top:12px;display:grid;gap:7px}
+.pk li{font-size:14.5px;display:flex;gap:9px}
+.pk li:before{content:'';flex:none;width:16px;height:16px;margin-top:2px;border-radius:50%;background:rgba(218,127,44,.18) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e8954a' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/11px no-repeat}
+.pr{display:flex;align-items:baseline;gap:8px;margin-top:14px}
+.pr b{font-size:40px;letter-spacing:-.05em}.pr s{color:var(--gris2)}.pr small{color:var(--gris)}
+.sect{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.sect div{border:1px solid var(--line);border-radius:16px;padding:14px;background:var(--card)}
+.sect b{display:block;font-size:15.5px}.sect span{font-size:13px;color:var(--gris)}
+.team{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.team div{text-align:center}.team img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:18px;filter:grayscale(1) contrast(1.05)}
+.team b{display:block;font-size:14px;margin-top:8px}.team span{font-size:12px;color:var(--gris)}
+.wheelbox{position:relative;width:min(300px,78vw);margin:22px auto 0}
+.wheel{width:100%;display:block;filter:drop-shadow(0 18px 40px rgba(0,0,0,.6))}
+#wg{transform-origin:0 0;animation:idle 48s linear infinite}
+#wg.spin{animation:none;transition:transform 4.6s cubic-bezier(.12,.75,.1,1)}
+@keyframes idle{to{transform:rotate(360deg)}}
+.pin{position:absolute;left:50%;top:-6px;transform:translateX(-50%);border-left:13px solid transparent;border-right:13px solid transparent;border-top:24px solid var(--txt);z-index:2}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.chip{border:1px solid var(--line2);border-radius:99px;padding:8px 13px;font-size:13.5px;font-weight:600;color:#d8d8dc}
+button.chip.on{background:var(--txt);color:#0a0a0b;border-color:var(--txt)}
+.faq{margin-top:14px;border:1px solid var(--line);border-radius:18px;background:var(--card)}
+.faq details{padding:15px 16px}.faq details+details{border-top:1px solid var(--line)}
+.faq summary{font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:10px}
+.faq summary:after{content:'+';color:var(--or2)}.faq details[open] summary:after{content:'–'}
+.faq p{font-size:14.5px;color:#c9cad0;margin-top:8px}
+.final{margin:46px 22px 0;padding:24px 20px;border-radius:24px;background:var(--or);color:#0a0a0b}
+.final h2{color:#0a0a0b}.final .btn{background:#0a0a0b;color:var(--txt);margin-top:16px}
+footer{padding:36px 22px 120px;text-align:center;font-size:12.5px;color:var(--gris2)}
+footer a{color:var(--gris);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.bar{position:fixed;left:50%;transform:translate(-50%,120%);bottom:0;width:100%;max-width:520px;z-index:40;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(10,10,11,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line2);display:flex;align-items:center;gap:12px;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.bar.on{transform:translate(-50%,0)}
+.bar div{flex:1;font-size:13px;line-height:1.25}.bar b{font-size:15px}
+.bar .btn{width:auto;min-height:48px;padding:0 18px;font-size:15px}
+/* hojas */
+.sheet{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center}
+.sheet.on{display:flex}
+.sh{width:100%;max-width:520px;max-height:94svh;overflow:auto;background:#0f0f11;border:1px solid var(--line2);border-bottom:0;border-radius:24px 24px 0 0;padding:20px 20px calc(28px + env(safe-area-inset-bottom));animation:up .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(40px);opacity:.4}}
+.shx{float:right;width:36px;height:36px;border-radius:50%;border:1px solid var(--line2);font-size:18px;line-height:1}
+.f{margin-top:14px}.f label{display:block;font-size:13px;font-weight:700;color:var(--gris);margin-bottom:6px}
+.inp{width:100%;min-height:52px;border-radius:14px;border:1px solid var(--line2);background:#0b0b0d;color:var(--txt);font:inherit;font-size:16px;padding:0 14px}
+textarea.inp{min-height:84px;padding:12px 14px;resize:vertical}
+.inp:focus{outline:none;border-color:var(--or)}
+.chk{display:flex;gap:12px;align-items:flex-start;margin-top:16px;font-size:14px;color:#d8d8dc;text-align:left;width:100%}
+.chk .bx{flex:none;width:24px;height:24px;border-radius:7px;border:1.5px solid var(--line2);display:grid;place-items:center}
+.chk.on .bx{background:var(--or);border-color:var(--or)}
+.chk.on .bx:after{content:'';width:10px;height:6px;border:2.5px solid #0a0a0b;border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
+.err{color:#ef7f7b;font-size:14px;margin-top:10px;min-height:1px}
+.hp{position:absolute;left:-9999px;opacity:0;height:0}
+.ok{text-align:center;padding:16px 0 6px}
+.ok .ic{width:76px;height:76px;margin:0 auto;border-radius:50%;background:var(--or);display:grid;place-items:center;animation:pop2 .6s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop2{from{transform:scale(.3);opacity:0}}
+.legal h3{font-size:15px;margin-top:16px}.legal p{font-size:14px;color:#c9cad0;margin-top:6px}
+.fade{animation:fd .5s ease both}@keyframes fd{from{opacity:0;transform:translateY(10px)}}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}.rv.in{opacity:1;transform:none}
+.skel{color:transparent!important;background:rgba(255,255,255,.06);border-radius:8px}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<main id="m">
+  <header class="top"><img src="logo.png" alt="La Muralla" width="120" height="22"><a href="../?login=1">Ya soy cliente</a></header>
+  <div id="view"></div>
+</main>
+<div class="bar" id="bar"><div><b id="barLeft">—</b><br><span class="muted">al precio de campaña</span></div><button class="btn o" data-go="form">Solicitar mi plaza</button></div>
+<div class="sheet" id="sheet"><div class="sh" id="sh"></div></div>
+<script>
+const SB='https://ugwzbcrvamfpxpcfldag.supabase.co',KEY='sb_publishable_wmWK1Sf80TjARF-I5RuZYA_Qpd_cPk_';
+const Q=new URLSearchParams(location.search),TOKEN=(Q.get('k')||'').slice(0,80);
+let REF=(Q.get('ref')||'').toUpperCase().slice(0,20);try{if(REF)localStorage.setItem('lml-ref',JSON.stringify(REF));else REF=JSON.parse(localStorage.getItem('lml-ref')||'""')}catch(e){}
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const eur=n=>(Math.round(n*100)/100).toLocaleString('es-ES',{maximumFractionDigits:2})+' €';
+let C={total:10,taken:0,active:true,ends_at:null},S={},startT=Date.now();
+const api=(p,o={})=>fetch(SB+p,{...o,headers:{apikey:KEY,'Content-Type':'application/json',...(o.headers||{})}}).then(async r=>{const j=await r.json().catch(()=>null);if(!r.ok)throw new Error(j?.error||j?.message||'Error');return j});
+const rpc=(f,b)=>api('/rest/v1/rpc/'+f,{method:'POST',body:JSON.stringify(b||{})});
+
+/* ---------- contador en directo ---------- */
+function paintCounter(flash){const t=Math.max(1,C.total|0),k=Math.min(t,Math.max(0,C.taken|0)),left=t-k;
+  document.querySelectorAll('[data-taken]').forEach(e=>e.textContent=k);document.querySelectorAll('[data-total]').forEach(e=>e.textContent=t);
+  document.querySelectorAll('.slots').forEach(sl=>{sl.style.gridTemplateColumns=`repeat(${t},1fr)`;const prev=sl.querySelectorAll('i.on').length;sl.innerHTML=Array.from({length:t},(_,i)=>`<i class="${i<k?'on':''}${flash&&i>=prev&&i<k?' new':''}"></i>`).join('')});
+  const closed=!C.active||left<=0||(C.ends_at&&Date.now()>new Date(C.ends_at));
+  const txt=closed?(left<=0?'Plazas completas':'Campaña cerrada'):`Quedan ${left} plaza${left>1?'s':''}`;
+  document.querySelectorAll('[data-left]').forEach(e=>e.innerHTML=closed?`<em>${txt}</em> · te apuntamos a la lista de espera`:`<em>${txt}</em> de ${t} al precio de campaña`);
+  $('#barLeft')&&($('#barLeft').textContent=txt);
+  document.querySelectorAll('[data-go="form"]').forEach(b=>b.textContent=closed?'Apuntarme a la lista de espera':'Solicitar mi plaza')}
+function tick(){if(!C.ends_at)return;let d=Math.max(0,new Date(C.ends_at)-Date.now());const D=Math.floor(d/864e5);d-=D*864e5;const H=Math.floor(d/36e5);d-=H*36e5;const M=Math.floor(d/6e4);d-=M*6e4;const s=Math.floor(d/1e3);
+  const p=n=>String(n).padStart(2,'0');document.querySelectorAll('.cd').forEach(el=>el.innerHTML=`<div><b>${D}</b><small>días</small></div><div><b>${p(H)}</b><small>horas</small></div><div><b>${p(M)}</b><small>min</small></div><div><b>${p(s)}</b><small>seg</small></div>`)}
+async function loadCampaign(){try{const r=await api('/rest/v1/campaign_public?id=eq.1&select=*');if(r&&r[0])C=r[0]}catch(e){}paintCounter();tick()}
+function realtime(){const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';s.async=true;
+  s.onload=()=>{const sb=supabase.createClient(SB,KEY,{auth:{persistSession:false}});sb.channel('plazas').on('postgres_changes',{event:'*',schema:'public',table:'campaign_public'},p=>{const before=C.taken;C=p.new;paintCounter(C.taken>before);if(C.taken>before)toast('🔥 Se acaba de cubrir una plaza')}).subscribe()};
+  document.head.appendChild(s);
+  setInterval(()=>{if(document.visibilityState==='visible')loadCampaign()},60000)}
+function toast(t){const e=document.createElement('div');e.textContent=t;e.style.cssText='position:fixed;left:50%;top:16px;transform:translateX(-50%);z-index:80;background:#f2f2f0;color:#0a0a0b;font-weight:700;font-size:14px;padding:11px 16px;border-radius:99px;box-shadow:0 10px 30px rgba(0,0,0,.4)';document.body.appendChild(e);e.animate([{opacity:0,transform:'translate(-50%,-10px)'},{opacity:1,transform:'translate(-50%,0)'}],{duration:250});setTimeout(()=>e.remove(),3200)}
+
+/* ---------- ruleta (animada) ---------- */
+function wheelSvg(ws){const n=ws.length||5,a=360/n,R=150,cols=['#DA7F2C','#151517','#f2f2f0','#151517','#80a8a8','#151517'];let g='';
+  ws.forEach((w,i)=>{const s=(i*a-90)*Math.PI/180,e=((i+1)*a-90)*Math.PI/180;let col=cols[i%cols.length];if(n%2&&i===n-1&&col===cols[0])col='#2a2a2e';
+    g+=`<path d="M0 0 L${R*Math.cos(s)} ${R*Math.sin(s)} A${R} ${R} 0 ${a>180?1:0} 1 ${R*Math.cos(e)} ${R*Math.sin(e)} Z" fill="${col}" stroke="#0a0a0b" stroke-width="2"/>`;
+    const words=String(w.label).split(' ');let l1='',l2='';words.forEach(x=>{(l1.length<12&&!l2)?(l1+=(l1?' ':'')+x):(l2+=(l2?' ':'')+x)});
+    const tc=['#f2f2f0','#DA7F2C','#80a8a8'].includes(col)?'#0a0a0b':'#f2f2f0';
+    g+=`<g transform="rotate(${i*a+a/2-90}) translate(${R*.6} 0) rotate(90)"><text text-anchor="middle" fill="${tc}" font-size="11.5" font-weight="700" font-family="Archivo,sans-serif"><tspan x="0" dy="${l2?-2:4}">${esc(l1)}</tspan>${l2?`<tspan x="0" dy="13">${esc(l2.length>16?l2.slice(0,15)+'…':l2)}</tspan>`:''}</text></g>`});
+  return `<svg viewBox="-160 -160 320 320" class="wheel" role="img" aria-label="Ruleta de La Muralla"><g id="wg">${g}</g><circle r="26" fill="#0a0a0b" stroke="#f2f2f0" stroke-width="2"/><text text-anchor="middle" y="5" font-size="13" font-weight="700" fill="#f2f2f0" font-family="Archivo">LM</text></svg>`}
+function spinOnce(){const g=$('#wg');if(!g||g.dataset.done)return;g.dataset.done=1;const cur=getComputedStyle(g).transform;g.style.transform=cur==='none'?'':cur;g.classList.add('spin');requestAnimationFrame(()=>requestAnimationFrame(()=>{g.style.transform=`rotate(${1440+Math.random()*360}deg)`}))}
+
+/* ---------- landing ---------- */
+const SECTS=[['hosteleria','Hostelería','Bares, restaurantes, cafeterías'],['salud','Salud','Clínicas, fisios, estética'],['comercio','Comercio','Tiendas y negocios de barrio'],['turismo','Turismo','Alojamientos, experiencias']];
+function landing(){const packs=S.packs||[],wheel=S.wheel||[];
+  return `${REF?`<div class="ref fade">🎡 <b>Te invita un negocio de La Muralla.</b> Su código <b>${esc(REF)}</b> ya va en tu solicitud.</div>`:''}
+  <div class="hero">
+    <div class="kick">Campaña local · ${esc(S.city||'Talavera de la Reina')}</div>
+    <h1>Tu negocio, a tope en redes. <em>Sin que muevas un dedo.</em></h1>
+    <p class="sub">Grabamos en tu local, creamos el contenido y lo publicamos por ti. Y si quieres, una IA atiende tu teléfono y tu WhatsApp. Para hostelería, salud, comercio y turismo.</p>
+    <div class="live">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span class="dotlive"><i></i>En directo</span><span class="lab">Plazas de campaña</span></div>
+      <div class="cnt"><b><span data-taken>${C.taken}</span> de <span data-total>${C.total}</span></b></div><span class="muted small">plazas cubiertas</span>
+      <div class="slots"></div>
+      <p class="left" data-left></p>
+      ${C.ends_at?`<div class="cd"></div><p class="xs muted" style="text-align:center;margin-top:6px">para que cierre la campaña</p>`:''}
+    </div>
+    <button class="btn o" style="margin-top:16px" data-go="form">Solicitar mi plaza</button>
+    <p class="under">2 minutos · Sin compromiso · Te respondemos en 24-48 h</p>
+    <p class="price">${S.fromPrice?`Desde <b>${eur(S.fromPrice)} + IVA/mes</b> · precio de campaña bloqueado mientras sigas.`:`Precio de campaña bloqueado mientras sigas. <b>Te lo enseñamos al verificar tu negocio.</b>`}</p>
+  </div>
+  <section class="rv"><span class="lab">Así funciona</span><h2 style="margin-top:8px">Tres pasos y empezamos.</h2>
+    <div class="steps"><div class="step"><i>1</i><div><b>Solicitas tu plaza</b><span>Nos dejas los datos de tu negocio. Son 2 minutos.</span></div></div>
+    <div class="step"><i>2</i><div><b>Lo revisamos</b><span>Vemos tu negocio y en 24-48 h te mandamos tu acceso por WhatsApp o email.</span></div></div>
+    <div class="step"><i>3</i><div><b>Eliges tu pack y grabamos</b><span>Ves los paquetes con tu precio, te das de alta y agendamos la reunión de arranque.</span></div></div></div></section>
+  <section class="rv"><span class="lab">Qué te llevas</span><h2 style="margin-top:8px">Contenido. Y si quieres, IA.</h2>
+    ${packs.map((p,i)=>`<div class="pk ${i===1?'hl':''}">${i===1?'<span class="tag">Contenido + IA</span>':''}<h3>${esc(p.name)}</h3><p>${esc(p.tagline||'')}</p><ul>${(p.features||[]).map(f=>`<li>${esc(f)}</li>`).join('')}</ul></div>`).join('')}
+    <p class="xs muted" style="margin-top:10px">Los precios los ves cuando verificamos tu negocio.</p></section>
+  <section class="rv"><span class="lab">Para quién</span><h2 style="margin-top:8px">Negocios de aquí.</h2>
+    <div class="sect">${SECTS.map(s=>`<div><b>${s[1]}</b><span>${s[2]}</span></div>`).join('')}</div></section>
+  <section class="rv"><span class="lab">Quién está detrás</span><h2 style="margin-top:8px">Somos de Talavera.</h2>
+    <div class="team"><div><img src="bruno.jpg" alt="Bruno" loading="lazy"><b>Bruno</b><span>Vídeo y estrategia</span></div><div><img src="jose-pedro.jpg" alt="José Pedro" loading="lazy"><b>José Pedro</b><span>Tu cuenta</span></div><div><img src="jesus.jpg" alt="Jesús" loading="lazy"><b>Jesús</b><span>Publicación</span></div></div>
+    <p class="small muted" style="margin-top:14px">La Muralla Project: Local, Labs y Studio, en ${esc(S.invoice?.address||'Talavera de la Reina')}.</p></section>
+  ${wheel.length?`<section class="rv" id="ruleta"><span class="lab">La Ruleta de La Muralla</span><h2 style="margin-top:8px">Trae a otro negocio y gira.</h2>
+    <p class="sub" style="font-size:15px">Cuando ya seas cliente tendrás tu QR. Si otro negocio entra con él y paga su primer mes, giras la ruleta y te llevas un premio.</p>
+    <div class="wheelbox"><span class="pin"></span>${wheelSvg(wheel)}</div>
+    <div class="chips" style="justify-content:center">${wheel.map(w=>`<span class="chip">${esc(w.label)}</span>`).join('')}</div></section>`:''}
+  <section class="rv"><span class="lab">Dudas rápidas</span>
+    <div class="faq"><details><summary>¿Hay permanencia?</summary><p>Mínimo ${esc(S.minMonths||3)} meses. Después, mes a mes, y la baja se pide con ${esc(S.noticeDays||15)} días de aviso desde la app.</p></details>
+    <details><summary>¿Tengo que hacer algo yo?</summary><p>Casi nada: una reunión de arranque y tener el local listo el día de grabación. El resto lo hacemos nosotros y tú lo apruebas desde la app.</p></details>
+    <details><summary>¿Por qué hay que solicitar plaza?</summary><p>Porque solo cogemos los negocios que podemos atender bien. Revisamos cada solicitud a mano.</p></details>
+    <details><summary>¿Cómo os contacto?</summary><p>Por WhatsApp al ${esc(S.contact?.phone||'')} o en ${esc(S.contact?.email||'')}.</p></details></div></section>
+  <div class="final rv"><span class="lab" style="color:rgba(0,0,0,.6)">Plazas limitadas</span><h2 style="margin-top:8px"><span data-taken>${C.taken}</span> de <span data-total>${C.total}</span> plazas cubiertas.</h2><p style="margin-top:8px;font-size:15px">Cuando se llenen, se cierra el precio de campaña.</p><button class="btn" data-go="form">Solicitar mi plaza</button></div>
+  ${foot()}`}
+const foot=()=>`<footer><img src="logo.png" alt="" style="height:18px;opacity:.7"><p style="margin-top:12px"><a data-legal="privacidad">Privacidad</a> · <a data-legal="aviso">Aviso legal</a></p><p style="margin-top:8px">${esc(S.invoice?.name||'La Muralla Project')} · ${esc(S.invoice?.city||'Talavera de la Reina')}</p></footer>`;
+
+/* ---------- formulario ---------- */
+const NEEDS=['Más clientes en el local','Redes al día sin pensar','Contenido que se vea profesional','Que me atiendan el teléfono','Más reservas','Darme a conocer'];
+function openForm(){const sect=SECTS.map(s=>`<button class="chip" data-sect="${s[0]}">${s[1]}</button>`).join('')+`<button class="chip" data-sect="otro">Otro</button>`;
+  openSheet(`<button class="shx" data-close aria-label="Cerrar">×</button><span class="kick">Solicitar plaza</span><h2 style="margin-top:8px">Cuéntanos de tu negocio.</h2><p class="small muted" style="margin-top:6px">Lo revisamos y en 24-48 h te damos acceso.</p>
+  <form id="lf" novalidate autocomplete="on">
+    <div class="f"><label for="fb">Nombre del negocio</label><input class="inp" id="fb" name="organization" autocomplete="organization" required></div>
+    <div class="f"><label>Sector</label><div class="chips" id="fs" style="margin-top:0">${sect}</div></div>
+    <div class="f"><label for="fc">Tu nombre</label><input class="inp" id="fc" name="name" autocomplete="name" required></div>
+    <div class="f"><label for="fp">Teléfono (WhatsApp)</label><input class="inp" id="fp" name="tel" type="tel" inputmode="tel" autocomplete="tel" required></div>
+    <div class="f"><label for="fe">Email</label><input class="inp" id="fe" name="email" type="email" inputmode="email" autocomplete="email" required></div>
+    <div class="f"><label for="fz">Dirección o zona</label><input class="inp" id="fz" autocomplete="street-address" placeholder="Ej. Calle Prado, centro"></div>
+    <div class="f"><label for="fr">Tus redes o web</label><input class="inp" id="fr" autocapitalize="none" placeholder="@tunegocio, tuweb.es"></div>
+    <div class="f"><label for="fn">¿Qué necesitas?</label><div class="chips" id="fnc" style="margin-top:0;margin-bottom:8px">${NEEDS.map(n=>`<button class="chip" data-need="${esc(n)}">${esc(n)}</button>`).join('')}</div><textarea class="inp" id="fn" maxlength="400" placeholder="En una frase (opcional)"></textarea></div>
+    ${REF?`<p class="xs muted" style="margin-top:12px">🎡 Vienes invitado con el código <b>${esc(REF)}</b>.</p>`:''}
+    <input class="hp" id="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button type="button" class="chk" id="pv"><span class="bx"></span><span>He leído y acepto la <a data-legal="privacidad" style="text-decoration:underline">política de privacidad</a>. Usaremos tus datos solo para responder a tu solicitud.</span></button>
+    <div class="err" id="fer"></div>
+    <button class="btn o" style="margin-top:16px" id="fgo" type="submit">Enviar solicitud</button>
+  </form>`);
+  const ft=Date.now();
+  $('#fs').onclick=e=>{const b=e.target.closest('[data-sect]');if(!b)return;e.preventDefault();$('#fs').querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===b))};
+  $('#fnc').onclick=e=>{const b=e.target.closest('[data-need]');if(!b)return;e.preventDefault();b.classList.toggle('on')};
+  $('#pv').onclick=e=>{if(e.target.closest('[data-legal]'))return;$('#pv').classList.toggle('on')};
+  $('#lf').onsubmit=async e=>{e.preventDefault();const er=$('#fer'),v=id=>$('#'+id).value.trim(),sec=$('#fs .chip.on')?.dataset.sect;
+    const needs=[...document.querySelectorAll('#fnc .chip.on')].map(b=>b.dataset.need),need=[needs.join(', '),v('fn')].filter(Boolean).join('. ');
+    if(v('fb').length<2)return er.textContent='Escribe el nombre de tu negocio';if(!sec)return er.textContent='Elige tu sector';if(v('fc').length<2)return er.textContent='Escribe tu nombre';
+    if(v('fp').replace(/\D/g,'').length<9)return er.textContent='Revisa el teléfono';if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v('fe')))return er.textContent='Revisa el email';
+    if(!$('#pv').classList.contains('on'))return er.textContent='Acepta la política de privacidad para continuar';
+    er.textContent='';const b=$('#fgo');b.disabled=true;b.textContent='Enviando…';
+    try{await api('/functions/v1/lead',{method:'POST',body:JSON.stringify({business:v('fb'),sector:sec,contact:v('fc'),phone:v('fp'),email:v('fe'),zone:v('fz'),social:v('fr'),need,ref:REF||undefined,privacy:true,hp:$('#hp').value,t:ft,src:Q.get('utm_source')||(document.referrer?new URL(document.referrer).hostname:'')})});
+      confirmView(v('fc'))}catch(err){er.textContent=err.message||'No se ha podido enviar. Inténtalo otra vez.';b.disabled=false;b.textContent='Enviar solicitud'}}}
+function confirmView(name){openSheet(`<div class="ok"><div class="ic"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0a0a0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+  <h2 style="margin-top:20px">¡Hecho, ${esc(String(name).split(' ')[0])}!</h2><p class="sub" style="font-size:16px">Hemos recibido tus datos. Los revisamos y te damos acceso en menos de <b>24-48 h</b>, por WhatsApp o email.</p>
+  <div class="live" style="text-align:left"><span class="lab">Mientras tanto</span><p class="small" style="margin-top:6px"><span data-taken>${C.taken}</span> de <span data-total>${C.total}</span> plazas cubiertas. Tu solicitud ya está en la cola.</p></div>
+  <a class="btn g" style="margin-top:14px" href="https://wa.me/${esc(S.contact?.whatsapp||'')}?text=${encodeURIComponent('Hola, acabo de solicitar plaza en la campaña de La Muralla Local')}" target="_blank" rel="noopener">Escribirnos por WhatsApp</a>
+  <button class="btn" style="margin-top:8px;color:var(--gris)" data-close>Volver a la página</button></div>`)}
+
+/* ---------- paquetes privados (enlace del negocio aprobado) ---------- */
+async function offer(){let o=null;try{o=await rpc('lead_offer',{p_token:TOKEN})}catch(e){}
+  if(!o){$('#view').innerHTML=`<div class="hero fade"><div class="kick">Acceso privado</div><h1>Este enlace no es válido.</h1><p class="sub">Puede que haya caducado o que esté mal copiado. Escríbenos y te lo reenviamos.</p><a class="btn o" style="margin-top:20px" href="https://wa.me/${esc(S.contact?.whatsapp||'')}" target="_blank" rel="noopener">Escribir por WhatsApp</a><a class="btn g" style="margin-top:8px" href="./">Ver la campaña</a></div>${foot()}`;return}
+  if(o.status==='convertida'){$('#view').innerHTML=`<div class="hero fade"><div class="kick">Ya eres de La Muralla</div><h1>${esc(o.business)} ya está dentro.</h1><p class="sub">Entra en tu app con tu usuario y contraseña.</p><a class="btn o" style="margin-top:20px" href="../?login=1">Entrar en mi app</a></div>${foot()}`;return}
+  const iva=Number(o.iva??21),first=String(o.contact||'').split(' ')[0];
+  $('#view').innerHTML=`<div class="hero fade"><div class="kick">Acceso privado · ${esc(o.business)}</div><h1>${esc(first)}, tu negocio <em>está verificado.</em></h1>
+    <p class="sub">Estos son los paquetes con tu precio${o.promo?' de campaña. Mientras sigas con nosotros, no te lo subimos.':'.'}</p>
+    ${o.promo?`<div class="live"><div style="display:flex;justify-content:space-between;align-items:center"><span class="dotlive"><i></i>En directo</span><span class="lab">Plazas</span></div><div class="cnt"><b><span data-taken>${C.taken}</span> de <span data-total>${C.total}</span></b></div><div class="slots"></div><p class="left" data-left></p>${C.ends_at?'<div class="cd"></div>':''}</div>`:''}
+  </div>
+  <section style="padding-top:20px">${(o.packs||[]).map((p,i)=>`<div class="pk ${i===1?'hl':''}">${i===1?'<span class="tag">Contenido + IA</span>':''}<h3>${esc(p.name)}</h3><p>${esc(p.tagline||'')}</p>
+    <div class="pr"><b>${eur(p.price)}</b><small>+ IVA/mes</small>${o.promo&&p.listPrice&&p.listPrice>p.price?`<s>${eur(p.listPrice)}</s>`:''}</div>
+    <p class="xs muted" style="margin-top:2px">${eur(p.price*(1+iva/100))} con IVA${p.setup?` · alta del asistente ${eur(p.setup)} + IVA (una vez)`:''}</p>
+    <ul>${(p.features||[]).map(f=>`<li>${esc(f)}</li>`).join('')}</ul>
+    <a class="btn ${i===1?'o':'g'}" style="margin-top:16px;${i===1?'':'background:var(--txt);color:#0a0a0b'}" href="../?lead=${encodeURIComponent(TOKEN)}&pack=${esc(p.id)}">Quiero el ${esc(p.name)}</a></div>`).join('')}
+    <p class="xs muted" style="margin-top:14px">Primer mes por adelantado. Permanencia mínima de ${esc(o.minMonths||3)} meses; después, baja con ${esc(o.noticeDays||15)} días de aviso. Día extra de grabación: ${eur(o.extraDay||0)} + IVA.</p>
+    ${o.ref?`<p class="xs muted" style="margin-top:8px">🎡 Te invitó un negocio de La Muralla: cuando pagues tu primer mes, él gira la Ruleta.</p>`:''}</section>${foot()}`;
+  paintCounter();tick()}
+
+/* ---------- legal ---------- */
+function legal(k){const c=S.invoice||{},nm=esc(c.name||'La Muralla Project'),nif=esc(c.nif||'[NIF pendiente]'),ad=esc([c.address,c.city].filter(Boolean).join(', ')),em=esc(c.email||S.contact?.email||'');
+  openSheet(`<button class="shx" data-close aria-label="Cerrar">×</button><span class="kick">${k==='aviso'?'Aviso legal':'Privacidad'}</span><div class="legal">${k==='aviso'?
+  `<h3>Titular</h3><p>${nm} · NIF ${nif} · ${ad} · ${em}</p><h3>Uso</h3><p>Esta web presenta la campaña local de La Muralla y recoge solicitudes de plaza. La marca, diseño y textos pertenecen a ${nm}.</p><h3>Cookies</h3><p>No usamos cookies de publicidad ni de seguimiento. Solo guardamos en tu navegador el código de invitación si llegas con uno.</p><h3>Ley aplicable</h3><p>Ley española. Juzgados de Talavera de la Reina, salvo que la ley disponga otra cosa.</p>`:
+  `<h3>Responsable</h3><p>${nm} · NIF ${nif} · ${ad} · ${em}</p><h3>Qué datos y para qué</h3><p>Los que nos das en el formulario (negocio, sector, nombre, teléfono, email, zona, redes y lo que necesitas) para revisar tu solicitud, contactarte por WhatsApp, teléfono o email y, si nos contratas, darte de alta.</p><h3>Legitimación</h3><p>Tu consentimiento al enviar la solicitud y, si contratas, la ejecución del contrato.</p><h3>Cuánto tiempo</h3><p>Si no llegas a contratar, borramos tus datos como máximo 12 meses después de la campaña. Si contratas, mientras seas cliente y lo que exija la ley.</p><h3>Con quién</h3><p>Solo con proveedores necesarios (alojamiento y base de datos en la UE). No vendemos tus datos.</p><h3>Tus derechos</h3><p>Acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a ${em}. Puedes reclamar ante la AEPD (aepd.es).</p>`}</div>`)}
+
+/* ---------- hojas y eventos ---------- */
+function openSheet(h){$('#sh').innerHTML=h;$('#sheet').classList.add('on');document.body.style.overflow='hidden';$('#sh').scrollTop=0}
+function closeSheet(){$('#sheet').classList.remove('on');document.body.style.overflow=''}
+document.addEventListener('click',e=>{const t=e.target;
+  if(t.closest('[data-go="form"]')){e.preventDefault();openForm();return}
+  const lg=t.closest('[data-legal]');if(lg){e.preventDefault();legal(lg.dataset.legal);return}
+  if(t.closest('[data-close]')||t.id==='sheet'){e.preventDefault();closeSheet()}});
+addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+addEventListener('scroll',()=>{const b=$('#bar');if(b&&!TOKEN)b.classList.toggle('on',scrollY>520)},{passive:true});
+function reveal(){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');if(x.target.id==='ruleta')setTimeout(spinOnce,300);io.unobserve(x.target)}}),{threshold:.2});document.querySelectorAll('.rv').forEach(el=>io.observe(el))}
+
+(async()=>{
+  $('#view').innerHTML=`<div class="hero"><div class="kick skel" style="width:60%">.</div><h1 class="skel" style="height:130px"></h1></div>`;
+  const [cfg]=await Promise.all([rpc('public_settings',{p_token:TOKEN||null}).catch(()=>({})),loadCampaign()]);S=cfg||{};
+  if(TOKEN){await offer();}else{$('#view').innerHTML=landing();paintCounter();tick();reveal()}
+  setInterval(tick,1000);realtime();
+})();
+</script>
+</body>
+</html>
