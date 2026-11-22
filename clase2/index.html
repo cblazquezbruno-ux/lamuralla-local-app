@@ -124,6 +124,12 @@ input[type=range]{width:100%;accent-color:#1673C9;margin-top:8px;height:32px}
 .pc .ph p{margin:2px 0 0;font-size:14px;color:var(--soft)}
 .pc pre{margin:0;padding:14px 16px;max-height:300px;overflow:auto;white-space:pre-wrap;word-break:break-word;font:13.5px/1.5 ui-monospace,Menlo,Consolas,monospace}
 .pc .btn{width:auto;min-height:48px;margin:0;padding:0 18px;font-size:16px}
+.sp{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:12px}
+.spn{flex:none;width:44px;height:44px;border-radius:14px;background:var(--blue);font:26px/44px Anton,Impact,sans-serif;text-align:center}
+.spb{flex:1;min-width:0}.spb>b{display:block;font-size:19px;margin:6px 0 2px}
+.btn.big{min-height:62px;font-size:19px;margin-top:10px}
+.peek pre{max-height:260px;overflow:auto;font-size:13px;white-space:pre-wrap}
+.adv{margin-top:18px}
 .iabtns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
 .iabtns .btn{width:auto;flex:1 1 200px;margin:0}
 .iatoast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--dark);color:#fff;padding:10px 18px;border-radius:12px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s}
@@ -362,7 +368,21 @@ footer{padding:40px 0 60px;color:var(--soft);font-size:14px;text-align:center}
 </section>
 
 <section id="ia" class="ia">
-  <div class="step"><div class="num">4</div><div><h2>Saca tu guion con IA</h2><p class="sub">Rellena tu Value Canvas y tus 4Ps y te salen los prompts para ChatGPT o Claude. La IA te propone ideas y te escribe el guion; luego lo repasas en el paso 5.</p></div></div>
+  <div class="step"><div class="num">4</div><div><h2>Saca tu guion con IA</h2><p class="sub">3 pasos y listo. ChatGPT te da ideas y te escribe el guion.</p></div></div>
+  <div class="sp"><span class="spn">1</span><div class="spb"><b>Pega tu Canvas y tus 4Ps</b>
+    <p class="hint">Copia lo que tengas (tus notas, el ejercicio de la clase 1) y pégalo tal cual. Desordenado también vale.</p>
+    <label for="ia-negocio">Tu negocio o tu cuenta</label><input type="text" id="ia-negocio" placeholder="Ej.: clínica dental en Toledo">
+    <label for="ia-todo">Tu Canvas y tus 4Ps</label><textarea id="ia-todo" style="min-height:150px" placeholder="Pega aquí tu Value Canvas y tus 4Ps"></textarea>
+    <p class="hint">¿No los tienes a mano? <a href="#ia-adv" id="ia-openficha">Rellena la ficha por partes</a></p></div></div>
+  <div class="sp"><span class="spn">2</span><div class="spb"><b>Copia tu prompt y pégalo en ChatGPT</b>
+    <p class="hint">Un solo botón: copia tu prompt y abre ChatGPT. Allí mantén pulsado en el chat, «Pegar» y enviar.</p>
+    <button class="btn big" type="button" id="ia-go">📋 Copiar y abrir ChatGPT</button>
+    <p class="hint">Es gratis: <a href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com</a>. También vale <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a>.</p>
+    <details class="peek"><summary>Ver mi prompt</summary><pre id="ia-pu"></pre></details></div></div>
+  <div class="sp"><span class="spn">3</span><div class="spb"><b>Copia su respuesta y pégala en el paso 5</b>
+    <p class="hint">Cuando ChatGPT termine, copia su respuesta entera. En el paso 5, pégala en el recuadro azul ⚡ y el guion se rellena solo.</p>
+    <a class="btn dark" href="#guion" style="text-decoration:none">Ir al paso 5 ↓</a></div></div>
+  <details class="adv" id="ia-adv"><summary>Opciones avanzadas (opcional): ficha por partes, más ideas, pack de guiones</summary>
   <video class="vert" controls playsinline preload="metadata" poster="img/poster-tuto.jpg" src="videos/como-usar-ia-prompt.mp4"></video>
   <p class="hint" style="text-align:center">1 minuto: cómo crear tus prompts y pasarlos a ChatGPT.</p>
   <div class="card" style="margin-top:12px;font-size:16px"><b>¿No tienes ChatGPT ni Claude?</b> Los dos tienen versión gratis, en el navegador o en su app:<br>· <a href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com</a> (chatgpt.com)<br>· <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> (claude.ai): crea una cuenta gratis con tu email.<br>Con la versión gratis es suficiente para estos prompts. Si te corta por límite de mensajes, espera un rato o pásalo al otro.</div>
@@ -373,14 +393,8 @@ footer{padding:40px 0 60px;color:var(--soft);font-size:14px;text-align:center}
     <li><div><b>Prompt 3: pack de 10 o 20 guiones</b>Si quieres volumen de golpe.</div></li>
   </ol>
   <form class="card" id="ia-f" autocomplete="off" style="margin-top:12px">
-    <div class="auto">
-      <b class="h">⚡ ¿Ya tienes tu Canvas y tus 4Ps escritos?</b>
-      <p class="hint">Pégalos aquí todo junto (tus notas, el ejercicio de la clase 1, lo que tengas) y no rellenes campo por campo: la IA lo ordena sola. Si quieres, completa abajo solo lo que falte.</p>
-      <label for="ia-todo" style="margin-top:6px">Mi Canvas y mis 4Ps, tal cual</label><textarea id="ia-todo" style="min-height:140px" placeholder="Pega aquí todo tu Value Canvas y tus 4Ps"></textarea>
-    </div>
-    <fieldset><legend>Tu negocio</legend>
-      <div class="row2"><div><label for="ia-negocio">Negocio o cuenta</label><input type="text" id="ia-negocio" placeholder="Ej.: clínica dental en Toledo"></div>
-      <div><label for="ia-red">Red principal</label><select id="ia-red"><option>Instagram Reels</option><option>TikTok</option><option>Instagram Reels y TikTok</option><option>YouTube Shorts</option></select></div></div>
+    <fieldset><legend>Más datos</legend>
+      <label for="ia-red">Red principal</label><select id="ia-red"><option>Instagram Reels</option><option>TikTok</option><option>Instagram Reels y TikTok</option><option>YouTube Shorts</option></select>
       <label for="ia-objetivo">¿Qué quieres conseguir con tus vídeos? <small>seguidores, clientes, citas, ventas…</small></label><input type="text" id="ia-objetivo">
     </fieldset>
     <fieldset><legend>Value Canvas</legend>
@@ -418,6 +432,7 @@ footer{padding:40px 0 60px;color:var(--soft);font-size:14px;text-align:center}
   <p class="hint">Pega este prompt maestro en un chat nuevo: la IA te hace las preguntas del Canvas y las 4Ps una a una y sigue todo el proceso sola.</p>
   <div class="pc"><div class="ph"><div><span class="tag"><i>MAESTRO</i></span> <b>Entrevista + análisis + guiones</b></div><button type="button" class="btn" data-ia="ia-pm">Copiar</button></div><pre id="ia-pm"></pre></div>
   <p class="hint" style="margin-top:12px">Lo que te da la IA es un borrador: léelo en voz alta y cámbialo hasta que suene a ti.</p>
+  </details>
   <div class="iatoast" id="ia-toast">Copiado ✓</div>
 </section>
 
@@ -645,8 +660,26 @@ Cuando acabe, ofréceme un pack de 10 o 20 guiones más con el mismo nivel.
 ${REGLAS}
 
 Empieza ya con la pregunta 1.`;
+const pu=()=>{const t=v('tema');return `${ROL}
+
+${ficha()}
+
+TAREA (TODO EN UNO)
+1. En 5 líneas: mi ángulo diferencial y mis 3 pilares de contenido, según mi Canvas y mis 4Ps.
+2. 10 ideas de vídeo numeradas, una línea cada una, muy concretas para mi nicho.
+3. ${t?'Usa este tema: '+t:'Elige tú la idea con más potencial viral y dime por qué en una línea'}. Escríbeme el guion completo en 3 VERSIONES, cada una con un gancho de ángulo distinto (por ejemplo: dolor, polémico y escena POV).
+
+${GANCHO}
+
+${ESTR}
+
+${FORM}
+
+${REGLAS}
+
+Al final: dime cuál de las 3 grabarías tú y por qué.`};
 const KEY='c2-iaprompt';
-const render=()=>{$('p1').textContent=p1();$('p2').textContent=p2();$('p3').textContent=p3();try{const o={};K.forEach(k=>o[k]=$(k).value);localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}};
+const render=()=>{$('pu').textContent=pu();$('p1').textContent=p1();$('p2').textContent=p2();$('p3').textContent=p3();try{const o={};K.forEach(k=>o[k]=$(k).value);localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}};
 try{const o=JSON.parse(localStorage.getItem(KEY)||'{}');K.forEach(k=>{if(o[k]!=null)$(k).value=o[k]})}catch(e){}
 const EJ={negocio:'Clínica dental Sonríe (Toledo)',objetivo:'Que me pidan cita para ortodoncia invisible',aud:'Adultos de 28 a 45 años de Toledo, trabajan en oficina, ven humor y lifestyle en Instagram',dolor:'Les da vergüenza sonreír en fotos porque tienen los dientes torcidos o amarillos; se tapan la boca al reír',deseo:'Sonreír sin pensarlo, sin brackets visibles en el trabajo',obj:'«Es carísimo», «soy demasiado mayor», «llevar aparatos en el trabajo me da vergüenza»',comp:'Clínicas de la zona con fotos de antes/después y promociones de blanqueamiento; muy de anuncio, nadie da la cara',hueco:'Nadie habla de la vergüenza real ni enseña el día a día con alineadores',prop:'Ortodoncia invisible con seguimiento cercano y financiación',dif:'La doctora sale a cámara, habla claro y con humor, y enseña casos de pacientes adultos',enfoque:'Mezcla de los tres',personaje:'La doctora Ana, a cámara, en la clínica',producto:'Perder el miedo y la vergüenza a arreglarse los dientes de adulto',personalidad:'Cercana, directa, con humor, cero tecnicismos',posicion:'La dentista de confianza de los adultos de Toledo que se tapan la boca en las fotos',refs:'Médicos divulgadores que hablan a cámara con humor',no:'Prometer resultados, precios concretos, tecnicismos'};
 $('ej').addEventListener('click',()=>{Object.entries(EJ).forEach(([k,x])=>$(k).value=x);$('ejnote').hidden=false;render()});
@@ -656,6 +689,17 @@ const toast=$('toast');let tt;
 document.querySelectorAll('[data-ia]').forEach(b=>b.addEventListener('click',async()=>{const el=document.getElementById(b.dataset.ia);let ok=false;try{await navigator.clipboard.writeText(el.textContent);ok=true}catch(e){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);try{ok=document.execCommand('copy')}catch(_){}}
 toast.textContent=ok?'Copiado ✓ Pégalo en ChatGPT o Claude':'Selecciona el texto y cópialo';toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),2200)}));
 $('pm').textContent=pm;render();
+$('openficha').addEventListener('click',e=>{e.preventDefault();$('adv').open=true;$('f').scrollIntoView({behavior:'smooth'})});
+$('go').addEventListener('click',()=>{
+  const hasData=v('todo')||K.some(k=>!['todo','red','enfoque','cta','num'].includes(k)&&v(k));
+  if(!hasData){toast.textContent='Primero pega tu Canvas y tus 4Ps (paso 1)';toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),2600);$('todo').focus();return}
+  render();const text=$('pu').textContent;let ok=false;
+  const ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;top:0;left:0;opacity:0;font-size:16px';document.body.appendChild(ta);ta.focus();ta.select();ta.setSelectionRange(0,text.length);
+  try{ok=document.execCommand('copy')}catch(e){}ta.remove();
+  try{navigator.clipboard&&navigator.clipboard.writeText(text).catch(()=>{})}catch(e){}
+  toast.textContent='Copiado ✓ Ahora pégalo en ChatGPT';toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),3500);
+  window.open('https://chatgpt.com/','_blank','noopener');
+});
 }
 </script>
 <script>
