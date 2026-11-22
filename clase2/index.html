@@ -69,6 +69,14 @@ textarea,input[type=text]{width:100%;font:16px/1.45 Poppins,system-ui,sans-serif
 textarea{min-height:84px}
 textarea:focus,input:focus{outline:3px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
 .piece{margin-top:22px}
+.auto{background:#EAF5FF;border:2px dashed var(--blue);border-radius:16px;padding:16px;margin:4px 0 6px}
+.auto b.h{display:block;font-size:18px}
+.auto textarea{min-height:110px}
+.auto .two{display:flex;gap:8px;flex-wrap:wrap}.auto .two .btn{flex:1 1 200px;width:auto}
+.vers{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.vers:empty{display:none}
+.vers button{min-height:44px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font:700 15px Poppins,system-ui,sans-serif;cursor:pointer}.vers button.on{background:var(--blue);border-color:var(--blue)}
+.automsg{font-weight:700;margin-top:10px}.automsg:empty{display:none}
+.fill{animation:fl 1.2s ease}@keyframes fl{0%{background:#FFF3B0}100%{background:inherit}}
 .tag{display:inline-flex;gap:8px;align-items:center;font-weight:700;font-size:13px}
 .tag i{font-style:normal;background:var(--dark);color:#fff;border-radius:8px;padding:4px 9px}
 .tag em{font-style:normal;background:var(--chip);border-radius:8px;padding:4px 9px}
@@ -267,8 +275,16 @@ footer{padding:40px 0 60px;color:var(--soft);font-size:14px;text-align:center}
 </section>
 
 <section id="guion">
-  <div class="step"><div class="num">5</div><div><h2>Escribe tu guion</h2><p class="sub">Rellena cada pieza aquí mismo. Si has usado la IA, pega aquí su versión y ajústala a tu manera. Se guarda solo en este móvil u ordenador.</p></div></div>
+  <div class="step"><div class="num">5</div><div><h2>Escribe tu guion</h2><p class="sub">Rellena cada pieza aquí mismo, o pega la respuesta de la IA y se coloca sola. Se guarda solo en este móvil u ordenador.</p></div></div>
   <div class="card">
+    <div class="auto" id="auto">
+      <b class="h">⚡ ¿Has usado la IA? Rellénalo todo de golpe</b>
+      <p class="hint">Copia la respuesta <b>entera</b> de ChatGPT (con el Prompt 2), pégala aquí y pulsa el botón: el gancho, el reveal, los micro-reveals y la CTA se colocan solos en su sitio. Si te da 3 versiones, eliges cuál.</p>
+      <textarea id="autoTxt" placeholder="Pega aquí la respuesta de ChatGPT"></textarea>
+      <div class="two"><button class="btn" type="button" id="autoGo">Rellenar mi guion</button><button class="btn dark" type="button" id="autoPaste">📋 Pegar y rellenar</button></div>
+      <div class="vers" id="autoVers"></div>
+      <p class="automsg" id="autoMsg"></p>
+    </div>
     <div class="row2">
       <div><label for="nombre">Tu nombre</label><input type="text" id="nombre" data-k="Nombre"></div>
       <div><label for="negocio">Tu negocio de práctica</label><input type="text" id="negocio" data-k="Negocio" placeholder="Ej.: entrenador personal"></div>
@@ -353,10 +369,15 @@ footer{padding:40px 0 60px;color:var(--soft);font-size:14px;text-align:center}
   <ol class="how">
     <li><div><b>Rellena tu ficha</b>Cuanto más concreto, mejor guion. Escribe como hablas, con las palabras de tus clientes.</div></li>
     <li><div><b>Prompt 1: análisis + 20 ideas</b>Pégalo en un chat nuevo de ChatGPT o Claude.</div></li>
-    <li><div><b>Prompt 2: guion completo</b>Elige una idea, escríbela abajo y pega el Prompt 2 en el mismo chat: te da 3 versiones.</div></li>
+    <li><div><b>Prompt 2: guion completo</b>Elige una idea, escríbela abajo y pega el Prompt 2 en el mismo chat: te da 3 versiones. Copia su respuesta entera y pégala en el paso 5: el guion se rellena solo.</div></li>
     <li><div><b>Prompt 3: pack de 10 o 20 guiones</b>Si quieres volumen de golpe.</div></li>
   </ol>
   <form class="card" id="ia-f" autocomplete="off" style="margin-top:12px">
+    <div class="auto">
+      <b class="h">⚡ ¿Ya tienes tu Canvas y tus 4Ps escritos?</b>
+      <p class="hint">Pégalos aquí todo junto (tus notas, el ejercicio de la clase 1, lo que tengas) y no rellenes campo por campo: la IA lo ordena sola. Si quieres, completa abajo solo lo que falte.</p>
+      <label for="ia-todo" style="margin-top:6px">Mi Canvas y mis 4Ps, tal cual</label><textarea id="ia-todo" style="min-height:140px" placeholder="Pega aquí todo tu Value Canvas y tus 4Ps"></textarea>
+    </div>
     <fieldset><legend>Tu negocio</legend>
       <div class="row2"><div><label for="ia-negocio">Negocio o cuenta</label><input type="text" id="ia-negocio" placeholder="Ej.: clínica dental en Toledo"></div>
       <div><label for="ia-red">Red principal</label><select id="ia-red"><option>Instagram Reels</option><option>TikTok</option><option>Instagram Reels y TikTok</option><option>YouTube Shorts</option></select></div></div>
@@ -461,7 +482,7 @@ footer{padding:40px 0 60px;color:var(--soft);font-size:14px;text-align:center}
 </script>
 <script>
 {
-const K=['negocio','red','objetivo','aud','dolor','deseo','obj','comp','hueco','prop','dif','enfoque','personaje','producto','personalidad','posicion','refs','no','tema','cta','num'];
+const K=['todo','negocio','red','objetivo','aud','dolor','deseo','obj','comp','hueco','prop','dif','enfoque','personaje','producto','personalidad','posicion','refs','no','tema','cta','num'];
 const $=id=>document.getElementById('ia-'+id);
 const v=id=>($(id).value||'').trim();
 const or=(id,t='(sin rellenar: dedúcelo tú y dime qué has supuesto)')=>v(id)||t;
@@ -498,7 +519,17 @@ CTA (envíos / guardados / comentarios): …
 - Texto para la portada (máx. 5 palabras).
 - Descripción corta para el post (2–3 líneas con las palabras que buscaría mi cliente) y 3–5 hashtags relevantes.
 - Una línea de por qué puede viralizar y qué métrica busca (retención, envíos, guardados o comentarios).`;
-const ficha=()=>`MI FICHA
+const ficha=()=>v('todo')?fichaTodo():fichaCampos();
+const fichaTodo=()=>{const L=[['negocio','Negocio / cuenta'],['objetivo','Objetivo de los vídeos'],['aud','Audiencia'],['dolor','Su problema o dolor'],['deseo','Lo que desea'],['obj','Sus objeciones'],['comp','Competencia'],['hueco','Lo que nadie está contando'],['prop','Mi propuesta'],['dif','Mi factor diferenciador'],['personaje','Personaje'],['producto','Producto'],['personalidad','Personalidad'],['posicion','Posicionamiento'],['refs','Referencias que me gustan'],['no','Lo que NO quiero']].filter(([k])=>v(k)).map(([k,t])=>'- '+t+': '+v(k));
+return `MI FICHA
+Te pego mi Value Canvas y mis 4Ps tal cual los tengo. Antes de nada, ordénalos tú en: negocio, objetivo, audiencia, dolor, deseo, objeciones, competencia, lo que nadie cuenta, propuesta, diferenciador, enfoque, y las 4Ps (personaje, producto, personalidad, posicionamiento). Si falta algo, dedúcelo y dime qué has supuesto.
+Red principal: ${v('red')}
+Enfoque principal: ${v('enfoque')}
+
+«««
+${v('todo')}
+»»»${L.length?'\n\nDatos extra:\n'+L.join('\n'):''}`};
+const fichaCampos=()=>`MI FICHA
 Negocio / cuenta: ${or('negocio')}
 Red principal: ${v('red')}
 Objetivo de los vídeos: ${or('objetivo')}
@@ -625,6 +656,54 @@ const toast=$('toast');let tt;
 document.querySelectorAll('[data-ia]').forEach(b=>b.addEventListener('click',async()=>{const el=document.getElementById(b.dataset.ia);let ok=false;try{await navigator.clipboard.writeText(el.textContent);ok=true}catch(e){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);try{ok=document.execCommand('copy')}catch(_){}}
 toast.textContent=ok?'Copiado ✓ Pégalo en ChatGPT o Claude':'Selecciona el texto y cópialo';toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),2200)}));
 $('pm').textContent=pm;render();
+}
+</script>
+<script>
+{
+const $=id=>document.getElementById(id);
+const txt=$('autoTxt'),msg=$('autoMsg'),vers=$('autoVers');
+const clean=s=>s.replace(/\r/g,'').replace(/\*\*|__|`/g,'').replace(/^[ \t]*(#+|>|[-•])[ \t]*/gm,'').replace(/[ \t]+/g,' ');
+const LBL=[['g1',/qu[eé] se ve\s*:/i],['g2',/texto (en|de) pantalla\s*:/i],['g3',/(frase|lo que digo|lo primero que dices)\s*:/i],['rv',/(^|[^\w-])reveal\s*:/im],
+['m1',/micro[- ]?reveal\s*1\s*:/i],['p1',/punto\s*1\s*:/i],['m2',/micro[- ]?reveal\s*2\s*:/i],['p2',/punto\s*2\s*:/i],['m3',/micro[- ]?reveal\s*3\s*:/i],['p3',/punto\s*3\s*:/i],['cta',/\bcta\b[^:\n]{0,60}:/i]];
+const tidy=s=>s.replace(/^[\s|:→>\-–—]+/,'').replace(/[\s|→\-–—]+$/,'').replace(/^["«“]+|["»”]+$/g,'').trim();
+function parse(b){
+  const hits=[];let pos=0;
+  for(const [k,re] of LBL){const m=re.exec(b.slice(pos));if(!m)continue;const st=pos+m.index,en=st+m[0].length;hits.push({k,st,en,lab:m[0]});pos=en}
+  const o={};
+  hits.forEach((h,i)=>{let end=i+1<hits.length?hits[i+1].st:b.length;let val=b.slice(h.en,end);
+    if(h.k==='cta'){val=val.replace(/^\s*\n/,'');const cut=val.search(/\n\s*\n|\n\s*(DESPU[EÉ]S|T[IÍ]TULO|VERSI[OÓ]N|DURACI[OÓ]N|TABLA)/i);if(cut>=0)val=val.slice(0,cut);
+      const src=(h.lab.match(/env[ií]o|guardad|coment/gi)||[]).length===1?h.lab:val;
+      o.ctaType=/env[ií]o|m[aá]nd|comp[aá]rt/i.test(src)?'Envíos':/guard/i.test(src)?'Guardados':/coment/i.test(src)?'Comentarios':'';
+      val=val.replace(/^\s*\((env[ií]os|guardados|comentarios)\)\s*:?\s*/i,'')}
+    o[h.k]=tidy(val)});
+  return o;
+}
+function blocks(raw){
+  const t=clean(raw);const re=/qu[eé] se ve\s*:/gi;const idx=[];let m;while((m=re.exec(t)))idx.push(m.index);
+  const out=[];
+  idx.forEach((s,i)=>{let st=t.lastIndexOf('GANCHO',s);if(st<0||s-st>60)st=s;const b=t.slice(st,i+1<idx.length?idx[i+1]:t.length);const o=parse(b);if(o.rv||o.m1||o.cta)out.push(o)});
+  if(!out.length){const o=parse(t);if(Object.keys(o).length>=3)out.push(o)}
+  return out;
+}
+let found=[];
+function fill(n){
+  const o=found[n];let c=0;
+  ['g1','g2','g3','rv','m1','p1','m2','p2','m3','p3','cta'].forEach(k=>{if(o[k]){const f=$(k);f.value=o[k];f.classList.remove('fill');void f.offsetWidth;f.classList.add('fill');f.dispatchEvent(new Event('input',{bubbles:true}));c++}});
+  if(o.ctaType){const r=document.querySelector('input[name=cta][value="'+o.ctaType+'"]');if(r){r.checked=true;r.dispatchEvent(new Event('change',{bubbles:true}))}}
+  const neg=$('negocio'),ian=document.getElementById('ia-negocio');if(neg&&!neg.value&&ian&&ian.value){neg.value=ian.value;neg.dispatchEvent(new Event('input',{bubbles:true}))}
+  [...vers.children].forEach((b,i)=>b.classList.toggle('on',i===n));
+  msg.textContent='✓ Relleno'+(found.length>1?' con la versión '+(n+1):'')+': '+c+' de 11 partes. Revísalo abajo y cámbialo hasta que suene a ti.';
+  msg.style.color='';
+}
+function go(){
+  found=blocks(txt.value||'');vers.innerHTML='';
+  if(!found.length){msg.textContent='No encuentro las partes. Asegúrate de copiar la respuesta entera del Prompt 2 (la que pone GANCHO · Qué se ve… REVEAL… MICRO-REVEAL 1… CTA…).';msg.style.color='#c0392b';return}
+  if(found.length>1)found.forEach((o,i)=>{const b=document.createElement('button');b.type='button';b.textContent=(found.length>3?'Guion ':'Versión ')+(i+1);b.onclick=()=>fill(i);vers.appendChild(b)});
+  fill(0);
+}
+$('autoGo').addEventListener('click',go);
+$('autoPaste').addEventListener('click',async()=>{try{const t=await navigator.clipboard.readText();if(t){txt.value=t;go();return}}catch(e){}
+  txt.focus();msg.textContent='Mantén pulsado dentro del recuadro, dale a «Pegar» y luego a «Rellenar mi guion».';msg.style.color=''});
 }
 </script>
 </body>
