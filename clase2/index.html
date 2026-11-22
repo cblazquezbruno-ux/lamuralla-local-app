@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clase 2 · Potencia tus RRSS</title>
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Clase 2 · Potencia tus RRSS">
+<meta property="og:description" content="El vídeo de la clase, tu ejercicio, ideas de ganchos y prompts de IA para tu guion.">
+<meta property="og:image" content="https://cblazquezbruno-ux.github.io/lamuralla-local-app/clase2/img/poster-clase2.jpg">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: cercano y claro, para alumnos que no son técnicos
+   IDEA: la carpeta de la clase 2 — todo en un sitio, paso a paso
+   PICTURE: los vídeos de la clase como pieza principal
+   COLOUR and TYPE: crema de las slides, azul del curso, negro; Anton + Poppins
+   LAYOUT: una columna, pasos numerados grandes, botones de 44px+ */
+:root{color-scheme:light dark;--bg:light-dark(#FDFBF2,#12161D);--card:light-dark(#FFFFFF,#1B212B);--ink:light-dark(#111111,#F3F1EA);--soft:light-dark(#5C5A52,#B9B6AC);--line:light-dark(#ECE6D3,#2C3440);--blue:#74C1FC;--blue2:light-dark(#1673C9,#8ECDFD);--chip:light-dark(#DDF0FF,#22384F);--dark:#111111}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 Poppins,system-ui,sans-serif;overflow-x:clip}
+.save{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;margin-top:10px;border:1.5px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);text-decoration:none;font-weight:600;font-size:16px}
+.save+.hint{text-align:center}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}}
+.ej{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.ej h3{margin:0 0 6px;font:22px/1.1 Anton,Impact,sans-serif;font-weight:400}
+.ej h3 small{font:600 13px Poppins,system-ui,sans-serif;color:var(--soft);margin-left:6px}
+.ej p{margin:6px 0 0;font-size:17px}
+.ej p i{color:var(--soft);font-style:normal;font-size:14px;display:block}
+.blockh{font:26px/1.1 Anton,Impact,sans-serif;margin:28px 0 4px}
+.how{counter-reset:h;list-style:none;padding:0;margin:12px 0 0}
+.how li{counter-increment:h;display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
+.how li::before{content:counter(h);flex:none;width:40px;height:40px;border-radius:12px;background:var(--blue);color:#111;font:22px/40px Anton,Impact,sans-serif;text-align:center}
+.how b{display:block}
+.bad{list-style:none;padding:0;margin:12px 0 0}
+.bad li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
+.bad li::before{content:"✕";flex:none;width:32px;height:32px;border-radius:50%;background:#FFE1E1;color:#C62828;font-weight:800;display:flex;align-items:center;justify-content:center}
+.wrap{max-width:820px;margin:0 auto;padding:0 max(4vw,16px)}
+h1,h2,.anton{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.2px}
+header{padding:28px 0 8px}
+.logo{height:44px;width:auto;background:#fff;border-radius:10px;padding:6px 10px}
+.kick{margin-top:22px;font-weight:700;color:var(--blue2);font-size:14px}
+h1{font-size:clamp(44px,11vw,76px);line-height:.95;margin:6px 0 10px;text-wrap:balance}
+h1 span{color:var(--blue)}
+.lead{font-size:17px;color:var(--soft);max-width:60ch;margin:0}
+.when{display:inline-block;margin-top:14px;background:var(--dark);color:#fff;border-radius:12px;padding:10px 16px;font-weight:600;font-size:15px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-top:20px}
+nav .wrap{display:flex;gap:8px;overflow-x:auto;padding-top:10px;padding-bottom:10px}
+nav a{flex:none;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:10px 16px;font-weight:600;font-size:14px;min-height:44px;display:flex;align-items:center}
+section{padding:34px 0 8px}
+.step{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.num{flex:none;width:52px;height:52px;border-radius:14px;background:var(--blue);color:#111;display:flex;align-items:center;justify-content:center;font:30px Anton,Impact,sans-serif}
+h2{font-size:clamp(28px,6vw,38px);line-height:1.05;margin:0}
+.sub{color:var(--soft);margin:2px 0 0;font-size:15px}
+video{width:100%;display:block;border-radius:16px;background:#000}
+.vert{max-width:360px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.pieces{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0 4px}
+.pieces div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px}
+.pieces b{display:block;font:20px/1 Anton,Impact,sans-serif;font-weight:400}
+.pieces small{color:var(--soft);font-size:13px}
+@media(max-width:600px){.pieces{grid-template-columns:repeat(2,minmax(0,1fr))}}
+label{display:block;font-weight:600;font-size:14px;margin:14px 0 6px}
+label small{font-weight:400;color:var(--soft)}
+textarea,input[type=text]{width:100%;font:16px/1.45 Poppins,system-ui,sans-serif;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;min-height:48px;resize:vertical}
+textarea{min-height:84px}
+textarea:focus,input:focus{outline:3px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.piece{margin-top:22px}
+.tag{display:inline-flex;gap:8px;align-items:center;font-weight:700;font-size:13px}
+.tag i{font-style:normal;background:var(--dark);color:#fff;border-radius:8px;padding:4px 9px}
+.tag em{font-style:normal;background:var(--chip);border-radius:8px;padding:4px 9px}
+.hint{font-size:14px;color:var(--soft);margin:6px 0 0}
+.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:10px;align-items:end}
+@media(max-width:600px){.row3,.row2{grid-template-columns:1fr}}
+.radios{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.radios label{margin:0;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;min-height:44px;font-weight:600;cursor:pointer}
+.radios input{width:20px;height:20px;accent-color:#1673C9}
+details{margin-top:14px;background:var(--chip);border-radius:14px;padding:4px 16px}
+summary{cursor:pointer;font-weight:700;padding:12px 0;min-height:44px}
+.ex{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding-bottom:14px}
+@media(max-width:700px){.ex{grid-template-columns:1fr}}
+.ex div{background:var(--card);border-radius:12px;padding:12px;font-size:14px}
+.ex b.t{font:18px Anton,Impact,sans-serif;font-weight:400;display:block;margin-bottom:4px}
+ul.check{list-style:none;padding:0;margin:10px 0 0}
+ul.check label{display:flex;gap:12px;align-items:center;margin:0;padding:12px 0;border-top:1px solid var(--line);font-weight:500;font-size:16px;cursor:pointer}
+ul.check input{width:24px;height:24px;accent-color:#1673C9;flex:none}
+.tips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+@media(max-width:600px){.tips{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tips div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;font-size:14px}
+.tips b{display:block;font:18px Anton,Impact,sans-serif;font-weight:400}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border:0;border-radius:14px;background:var(--blue);color:#111;font:700 18px Poppins,system-ui,sans-serif;cursor:pointer;margin-top:14px;text-decoration:none}
+.btn.dark{background:var(--dark);color:#fff}
+.btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.ok{display:none;margin-top:10px;background:#DFF5E3;color:#114B22;border-radius:12px;padding:12px 14px;font-weight:600}
+.send{margin-top:16px;font-size:15px}
+.send ol{padding-left:20px;margin:8px 0}
+.mail{font-weight:700;color:var(--blue2);overflow-wrap:anywhere}
+#copyBox{display:none;margin-top:10px}
+.viewer{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px}
+.slide{position:relative;aspect-ratio:1282/723;border-radius:12px;overflow:hidden;background:#FDFBF2;touch-action:pan-y}
+.slide img{width:100%;height:100%;object-fit:contain;display:block;user-select:none;-webkit-user-drag:none}
+.ctrl{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.ctrl button{min-width:64px;min-height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:700 20px Poppins,system-ui,sans-serif;cursor:pointer}
+.ctrl span{font-weight:600;color:var(--soft)}
+input[type=range]{width:100%;accent-color:#1673C9;margin-top:8px;height:32px}
+.ia select{width:100%;font:16px Poppins,system-ui,sans-serif;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;min-height:48px}
+.ia select:focus{outline:3px solid var(--blue);outline-offset:1px}
+.ia legend{font:24px/1.1 Anton,Impact,sans-serif;padding:0;margin:6px 0 0}
+.ia fieldset{border:0;padding:0;margin:0 0 10px}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:18px;margin-top:14px;overflow:hidden}
+.pc .ph{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--chip)}
+.pc .ph p{margin:2px 0 0;font-size:14px;color:var(--soft)}
+.pc pre{margin:0;padding:14px 16px;max-height:300px;overflow:auto;white-space:pre-wrap;word-break:break-word;font:13.5px/1.5 ui-monospace,Menlo,Consolas,monospace}
+.pc .btn{width:auto;min-height:48px;margin:0;padding:0 18px;font-size:16px}
+.iabtns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.iabtns .btn{width:auto;flex:1 1 200px;margin:0}
+.iatoast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--dark);color:#fff;padding:10px 18px;border-radius:12px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s}
+.iatoast.on{opacity:1}
+main.wrap{display:flex;flex-direction:column}
+#explicacion,#ejemplo,#ejemplos{order:1}#ia{order:2}#guion{order:3}#grabar{order:4}#enviar{order:5}#slides{order:6}
+.hero{position:relative;margin:18px auto 0;aspect-ratio:4/5;max-width:520px;border-radius:28px;overflow:hidden;isolation:isolate;background:#0d0807}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(60% 55% at 50% 58%,#e0601f 0%,#9a3410 38%,#2a0e06 72%,#0d0807 100%)}
+.hero-bg::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px);background-size:4px 4px;mix-blend-mode:overlay}
+.hero-word{position:absolute;left:0;right:0;top:5%;z-index:1;text-align:center;font:clamp(54px,15vw,104px)/.86 Anton,Impact,sans-serif;letter-spacing:.5px;text-transform:uppercase}
+.hero-word span{display:block}
+.hero-word span:first-child{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.55)}
+.hero-word span:last-child{color:#fff}
+.hero-img{position:absolute;z-index:2;left:50%;bottom:0;width:90%;transform:translateX(-50%);filter:drop-shadow(0 20px 40px rgba(0,0,0,.45))}
+.hc{position:absolute;z-index:3;font:600 13px/1.25 Poppins,system-ui,sans-serif;color:#111;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.hc strong{display:block;font-weight:700;font-size:13px}
+.hc span{display:block;color:#555;font-weight:500;font-size:12.5px}
+.pill{top:36%;left:4%;display:flex;align-items:center;gap:6px;background:#ff2d55;color:#fff;border-radius:999px;padding:8px 14px;font-weight:800;font-size:15px}
+.dm{top:60%;right:4%;display:flex;gap:10px;align-items:center;background:#fff;border-radius:16px;padding:10px 14px 10px 10px;max-width:48%}
+.dm b{flex:none;width:28px;height:28px;border-radius:50%;background:#ff2d55;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.cm{bottom:12%;left:4%;display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.96);border-radius:16px;padding:10px 14px 10px 10px;max-width:58%}
+.cm i{flex:none;width:30px;height:30px;border-radius:50%;background:#74C1FC;color:#111;font-style:normal;font-weight:800;display:flex;align-items:center;justify-content:center}
+.tagline{left:50%;bottom:4%;transform:translateX(-50%);white-space:nowrap;background:#111;color:#fff;border-radius:999px;padding:8px 16px;font-size:12.5px;box-shadow:none;border:1px solid rgba(255,255,255,.18)}
+@media(max-width:420px){.dm{max-width:52%}.hc span{font-size:11.5px}.tagline{font-size:11px;padding:7px 12px}}
+@media(prefers-reduced-motion:no-preference){
+.hero-word span{animation:hwIn .9s cubic-bezier(.2,.8,.2,1) both}.hero-word span:last-child{animation-delay:.12s}
+.hero-img{animation:hiIn 1s cubic-bezier(.2,.8,.2,1) .15s both}
+.pill{animation:pop .5s cubic-bezier(.3,1.6,.5,1) .9s both,fl 5s ease-in-out 1.5s infinite}
+.dm{animation:pop .5s cubic-bezier(.3,1.6,.5,1) 1.15s both,fl 6s ease-in-out 1.8s infinite}
+.cm{animation:pop .5s cubic-bezier(.3,1.6,.5,1) 1.4s both,fl 5.5s ease-in-out 2s infinite}
+.tagline{animation:tg .6s ease 1.7s both}
+.hero-bg{animation:glow 5s ease-in-out infinite}}
+@keyframes hwIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes hiIn{from{opacity:0;transform:translate(-50%,40px) scale(.96)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes pop{from{opacity:0;scale:.6}to{opacity:1;scale:1}}
+@keyframes fl{0%,100%{translate:0 0}50%{translate:0 -6px}}
+@keyframes tg{from{opacity:0}to{opacity:1}}
+@keyframes glow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.15)}}
+footer{padding:40px 0 60px;color:var(--soft);font-size:14px;text-align:center}
+@media(prefers-reduced-motion:no-preference){.slide img{transition:opacity .2s}}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <img class="logo" src="img/logo.png" alt="INC London">
+  <div class="kick">Potencia tus RRSS · Clase 2</div>
+  <h1>Graba tu <span>primer vídeo</span></h1>
+  <p class="lead">Aquí tienes todo lo de esta semana: la explicación, un ejemplo, tu guion para rellenar y las slides de la clase. Ve paso a paso.</p>
+  <div class="hero" aria-label="Bruno señalando el título">
+    <div class="hero-bg"></div>
+    <div class="hero-word" aria-hidden="true"><span>TU PRIMER</span><span>VÍDEO</span></div>
+    <img class="hero-img" src="img/bruno-cut.webp" alt="Bruno">
+    <div class="hc pill"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="#fff" d="M12 21s-7.5-4.6-9.6-9.1C.9 8.6 3 5 6.4 5c2 0 3.6 1.1 4.6 2.7C12 6.1 13.6 5 15.6 5 19 5 21.1 8.6 19.6 11.9 17.5 16.4 12 21 12 21z"/></svg>12,4K</div>
+    <div class="hc dm"><b>3</b><div><strong>Nuevo mensaje</strong><span>«Quiero el guion 🙌»</span></div></div>
+    <div class="hc cm"><i>L</i><div><strong>laura.fit</strong><span>¿Cómo hiciste ese gancho? 🔥</span></div></div>
+    <div class="hc tagline">Gancho · Reveal · Micro-reveals · CTA</div>
+  </div>
+  <div class="when">Entrega: antes de la próxima clase</div>
+  <details class="card" style="margin-top:14px" open><summary style="font-weight:700">¿Primera vez aquí? Mira cómo funciona esta página (1 min)</summary><video class="vert" style="margin-top:10px" controls playsinline preload="metadata" poster="img/poster-pagina.jpg" src="videos/como-usar-la-pagina.mp4"></video></details>
+</header>
+
+<section class="wrap" id="clase" style="padding-top:22px">
+  <div class="step"><div class="num" style="font-size:22px">▶</div><div><h2>Vídeo de la clase 2</h2><p class="sub">La clase completa en 21 minutos, con subtítulos. Ponla antes de empezar los pasos.</p></div></div>
+  <video controls playsinline preload="metadata" poster="img/poster-clase2.jpg" src="videos/clase2.mp4"></video>
+  <p class="hint">Dale al play y ponla a pantalla completa. Si la quieres guardar en el móvil, te la paso por el grupo de WhatsApp.</p>
+</section>
+
+<nav><div class="wrap">
+  <a href="#clase">▶ Vídeo clase 2</a><a href="#explicacion">1 · Explicación</a><a href="#ejemplo">2 · Ejemplo</a><a href="#ejemplos">3 · Ideas y ejemplos</a><a href="#ia">4 · Guion con IA</a><a href="#guion">5 · Tu guion</a><a href="#grabar">6 · Cómo grabarte</a><a href="#enviar">7 · Enviar</a><a href="#slides">Slides</a>
+</div></nav>
+
+<main class="wrap">
+<section id="explicacion">
+  <div class="step"><div class="num">1</div><div><h2>Mira la explicación</h2><p class="sub">1 minuto y medio. Dale al play.</p></div></div>
+  <img src="img/poster-explicacion.jpg" alt="Explicación del ejercicio" style="width:100%;border-radius:16px;display:block"><p class="hint">La explicación completa está en el vídeo de la clase, arriba del todo.</p>
+  <div class="pieces">
+    <div><b>Gancho</b><small>0–3 s · para el scroll</small></div>
+    <div><b>Reveal</b><small>3–8 s · qué hay para él</small></div>
+    <div><b>Micro-reveals</b><small>que se queden</small></div>
+    <div><b>CTA</b><small>qué hacen ahora</small></div>
+  </div>
+</section>
+
+<section id="ejemplo">
+  <div class="step"><div class="num">2</div><div><h2>Mira el ejemplo de Leo</h2><p class="sub">Así tiene que quedar tu vídeo: de 30 a 60 segundos.</p></div></div>
+  <img class="vert" src="img/poster-leo.jpg" alt="Ejemplo de Leo" style="width:100%;border-radius:16px;display:block">
+</section>
+
+<section id="ejemplos">
+  <div class="step"><div class="num">3</div><div><h2>Ideas y ejemplos</h2><p class="sub">Coge el que más se parezca a tu negocio y cámbialo a tu manera.</p></div></div>
+
+  <div class="blockh">Ejemplos de gancho</div>
+  <p class="hint">Lo primero que dices. Tiene que hacer que la gente se pare.</p>
+  <div class="grid2">
+    <div class="ej"><h3>Dolor <small>un problema que le duele</small></h3><p>«Si te duele la espalda al levantarte, mira esto.»<i>Fisioterapeuta</i></p><p>«¿Te sangran las encías al cepillarte?»<i>Dentista</i></p></div>
+    <div class="ej"><h3>Mito <small>algo que todos creen y no es así</small></h3><p>«Hacer abdominales no quema la tripa.»<i>Entrenador</i></p><p>«Lavarse el pelo todos los días no lo estropea.»<i>Peluquería</i></p></div>
+    <div class="ej"><h3>Error <small>lo que hacen mal</small></h3><p>«El error que hace que tu piso no se venda.»<i>Inmobiliaria</i></p><p>«Deja de hacer esto si quieres pagar menos impuestos.»<i>Asesoría</i></p></div>
+    <div class="ej"><h3>Curiosidad <small>algo que no saben</small></h3><p>«Nadie te cuenta esto de los restaurantes.»<i>Restaurante</i></p><p>«Lo que nadie te dice antes de comprar un piso.»<i>Inmobiliaria</i></p></div>
+    <div class="ej"><h3>Resultado <small>un caso real</small></h3><p>«Así pasó Marta de no correr nada a hacer 10 km.»<i>Entrenador</i></p><p>«Así quedó la cocina de Pepe en 3 semanas.»<i>Reformas</i></p></div>
+    <div class="ej"><h3>Lista <small>números concretos</small></h3><p>«3 ejercicios que puedes hacer en casa.»<i>Entrenador</i></p><p>«3 platos que nunca debes pedir con prisa.»<i>Restaurante</i></p></div>
+    <div class="ej"><h3>Polémico <small>una opinión que choca</small></h3><p>«El cardio está sobrevalorado.»<i>Entrenador</i></p><p>«No necesitas una web para vender.»<i>Marketing</i></p></div>
+    <div class="ej"><h3>Pregunta <small>que se vean reflejados</small></h3><p>«¿Entrenas y no ves resultados?»<i>Entrenador</i></p><p>«¿Te da vergüenza sonreír en las fotos?»<i>Dentista</i></p></div>
+  </div>
+  <div class="card" style="margin-top:10px"><strong>Fórmulas para rellenar:</strong>
+    <p style="margin:8px 0 0">«Si <b>[te pasa esto]</b>, <b>[lo que pasará]</b>.»<br>«Deja de <b>[error]</b> si quieres <b>[lo que desea]</b>.»<br>«3 cosas que <b>[tu cliente]</b> no sabe sobre <b>[tema]</b>.»<br>«Lo que nadie te cuenta de <b>[tema]</b>.»</p></div>
+
+  <div class="blockh">Ejemplos de reveal</div>
+  <p class="hint">Justo después del gancho: de qué va, por qué le importa y qué se lleva si se queda.</p>
+  <div class="grid2">
+    <div class="ej"><p>«Si llevas meses en el gimnasio y te ves igual, seguramente estás cometiendo uno de estos 3 errores. Te los cuento en 30 segundos.»<i>Entrenador</i></p></div>
+    <div class="ej"><p>«Si vas a vender tu piso este año, hay 3 cosas que te hacen perder dinero. Te las enseño en un minuto.»<i>Inmobiliaria</i></p></div>
+    <div class="ej"><p>«Si te sangran las encías, no lo ignores: si no lo cuidas, va a más. Te cuento las 3 causas más comunes.»<i>Dentista</i></p></div>
+    <div class="ej"><p>«Si tienes un restaurante y los martes está vacío, te cuento 3 ideas que funcionan.»<i>Restaurante</i></p></div>
+  </div>
+
+  <div class="blockh">Frases de micro-reveal</div>
+  <p class="hint">Antes de cada punto, una frase que da ganas de seguir viendo. Puedes copiarlas tal cual:</p>
+  <div class="card"><p style="margin:0">«El primero lo hace casi todo el mundo…»<br>«Pero el segundo es el que más te frena…»<br>«Y el tercero, casi nadie lo hace…»<br>«Este es el que más me preguntan…»<br>«Y ahora viene el más importante…»<br>«Al final te digo el que más se repite…»</p></div>
+
+  <div class="blockh">Ejemplos de CTA</div>
+  <p class="hint">La última frase. Pide <b>solo una</b> cosa.</p>
+  <div class="grid2">
+    <div class="ej"><h3>Envíos <small>para llegar a gente nueva</small></h3><p>«Mándaselo a ese amigo que siempre dice que no tiene tiempo.»</p></div>
+    <div class="ej"><h3>Guardados <small>si es útil</small></h3><p>«Guárdalo para cuando vayas a vender tu piso.»</p></div>
+    <div class="ej"><h3>Comentarios <small>para hablar con clientes</small></h3><p>«Comenta RUTINA y te la mando.»</p></div>
+    <div class="ej"><h3>Comentarios</h3><p>«Escríbeme MENÚ y te paso la carta de esta semana.»</p></div>
+  </div>
+</section>
+
+<section id="grabar">
+  <div class="step"><div class="num">6</div><div><h2>Cómo grabarte</h2><p class="sub">Solo necesitas tu móvil. Sigue estos pasos:</p></div></div>
+  <ol class="how">
+    <li><div><b>Limpia la cámara</b>Pásale un pañuelo. Parece una tontería, pero se nota muchísimo.</div></li>
+    <li><div><b>Móvil en vertical</b>Como cuando haces una videollamada. Apóyalo en algo, a la altura de tus ojos.</div></li>
+    <li><div><b>Luz de frente</b>Ponte mirando a una ventana. Nunca con la ventana detrás de ti.</div></li>
+    <li><div><b>Sitio tranquilo</b>Sin ruido y sin eco. Un salón con sofá o cortinas suena mejor que un baño.</div></li>
+    <li><div><b>Mira a la cámara</b>A la lucecita de arriba, no a tu cara en la pantalla. Habla como si hablaras con un amigo.</div></li>
+    <li><div><b>Graba por partes</b>Una frase cada vez. Si te equivocas, repite solo esa frase. Luego las juntas.</div></li>
+    <li><div><b>Pon subtítulos</b>Al editar en Instagram o TikTok, busca la opción «Subtítulos»: los pone solos.</div></li>
+  </ol>
+  <div class="blockh">Lo que hay que evitar</div>
+  <ul class="bad">
+    <li>Empezar con «Hola, soy…». A nadie le importa todavía quién eres.</li>
+    <li>Empezar con tu logo. Son 2 segundos perdidos.</li>
+    <li>Tardar en arrancar: coger aire, colocarte, «bueno, pues…».</li>
+    <li>Letras pequeñas o tapadas por los botones de la app.</li>
+    <li>Prometer algo en el gancho y luego no darlo.</li>
+  </ul>
+</section>
+
+<section id="guion">
+  <div class="step"><div class="num">5</div><div><h2>Escribe tu guion</h2><p class="sub">Rellena cada pieza aquí mismo. Si has usado la IA, pega aquí su versión y ajústala a tu manera. Se guarda solo en este móvil u ordenador.</p></div></div>
+  <div class="card">
+    <div class="row2">
+      <div><label for="nombre">Tu nombre</label><input type="text" id="nombre" data-k="Nombre"></div>
+      <div><label for="negocio">Tu negocio de práctica</label><input type="text" id="negocio" data-k="Negocio" placeholder="Ej.: entrenador personal"></div>
+    </div>
+
+    <div class="piece"><span class="tag"><i>1 · GANCHO</i><em>0–3 s</em></span>
+      <p class="hint">Las 3 capas a la vez. Nunca empieces con «Hola, soy…».</p>
+      <div class="row3">
+        <div><label for="g1">Qué se ve</label><textarea id="g1" data-k="Gancho · qué se ve" placeholder="Ej.: muy cerca de cámara"></textarea></div>
+        <div><label for="g2">Texto en pantalla</label><textarea id="g2" data-k="Gancho · texto en pantalla" placeholder="Ej.: ¿Entrenas y no ves resultados?"></textarea></div>
+        <div><label for="g3">Lo primero que dices</label><textarea id="g3" data-k="Gancho · frase" placeholder="Ej.: ¿Entrenas 4 días y no ves resultados? No es falta de ganas."></textarea></div>
+      </div>
+    </div>
+
+    <div class="piece"><span class="tag"><i>2 · REVEAL</i><em>3–8 s</em></span>
+      <p class="hint">Contexto → por qué le importa → promesa.</p>
+      <label for="rv">Tu reveal</label>
+      <textarea id="rv" data-k="Reveal" placeholder="Ej.: Si llevas meses en el gimnasio y te ves igual, seguramente estás cometiendo uno de estos 3 errores. Te los cuento en 30 segundos."></textarea>
+    </div>
+
+    <div class="piece"><span class="tag"><i>3 · MICRO-REVEALS</i><em>desarrollo</em></span>
+      <p class="hint">Tres puntos de valor. Antes de cada uno, una frase que adelanta lo que viene.</p>
+      <div class="row2"><div><label for="m1">Micro-reveal 1</label><textarea id="m1" data-k="Micro-reveal 1" placeholder="Ej.: El primero lo hace casi todo el mundo…"></textarea></div><div><label for="p1">Punto 1</label><textarea id="p1" data-k="Punto 1" placeholder="Ej.: Cambiar de rutina cada semana."></textarea></div></div>
+      <div class="row2"><div><label for="m2">Micro-reveal 2</label><textarea id="m2" data-k="Micro-reveal 2" placeholder="Ej.: El segundo es el que más te frena…"></textarea></div><div><label for="p2">Punto 2</label><textarea id="p2" data-k="Punto 2" placeholder="Ej.: No subir el peso."></textarea></div></div>
+      <div class="row2"><div><label for="m3">Micro-reveal 3</label><textarea id="m3" data-k="Micro-reveal 3" placeholder="Ej.: Y el tercero, casi nadie lo hace…"></textarea></div><div><label for="p3">Punto 3</label><textarea id="p3" data-k="Punto 3" placeholder="Ej.: Dormir menos de 7 horas."></textarea></div></div>
+    </div>
+
+    <div class="piece"><span class="tag"><i>4 · CTA</i><em>final</em></span>
+      <p class="hint">Solo una. ¿Qué quieres que hagan?</p>
+      <div class="radios" role="radiogroup" aria-label="Tipo de CTA">
+        <label><input type="radio" name="cta" value="Envíos">Envíos</label>
+        <label><input type="radio" name="cta" value="Guardados">Guardados</label>
+        <label><input type="radio" name="cta" value="Comentarios">Comentarios</label>
+      </div>
+      <label for="cta">Tu frase final</label>
+      <textarea id="cta" data-k="CTA · frase" placeholder="Ej.: Mándaselo a ese amigo que entrena mucho y no ve cambios."></textarea>
+    </div>
+
+    <details>
+      <summary>¿Te atascas? Mira 3 ejemplos completos</summary>
+      <div class="ex">
+        <div><b class="t">Entrenador personal</b><b>Gancho:</b> «¿Entrenas 4 días y no ves resultados? No es falta de ganas.»<br><b>Reveal:</b> «Seguramente estás cometiendo uno de estos 3 errores.»<br><b>Puntos:</b> cambiar de rutina cada semana · no subir el peso · dormir poco.<br><b>CTA (envíos):</b> «Mándaselo a ese amigo que entrena mucho y no ve cambios.»</div>
+        <div><b class="t">Dentista</b><b>Gancho:</b> cepillo con la punta roja + «¿Te sangran las encías?»<br><b>Reveal:</b> «No lo ignores: si no lo cuidas, va a más. Te cuento las 3 causas más comunes.»<br><b>Puntos:</b> cepillarte muy fuerte · no usar hilo dental · encías inflamadas (si dura, al dentista).<br><b>CTA (guardados):</b> «Guárdalo y revísalo la próxima vez que te cepilles.»</div>
+        <div><b class="t">Asesora fiscal</b><b>Gancho:</b> ticket de restaurante + «¿Desgravas esto?»<br><b>Reveal:</b> «Si haces tú tus impuestos, puede que estés pagando de más. Te cuento 3 gastos en los que se equivoca casi todo el mundo.»<br><b>Puntos:</b> la cuota de autónomo · parte de los suministros si trabajas en casa · las comidas, solo con requisitos.<br><b>CTA (comentarios):</b> «Comenta GASTOS y te mando la lista.»</div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section id="enviar">
+  <div class="step"><div class="num">7</div><div><h2>Grábalo y envíamelo</h2><p class="sub">Hecho es mejor que perfecto.</p></div></div>
+  <div class="card" style="margin-top:12px">
+    <strong>Antes de enviarlo, comprueba:</strong>
+    <ul class="check">
+      <li><label><input type="checkbox" data-c="c1">Dura entre 30 y 60 segundos</label></li>
+      <li><label><input type="checkbox" data-c="c2">El gancho está en el primer segundo</label></li>
+      <li><label><input type="checkbox" data-c="c3">El texto en pantalla se lee bien</label></li>
+      <li><label><input type="checkbox" data-c="c4">Lleva subtítulos</label></li>
+      <li><label><input type="checkbox" data-c="c5">Una sola CTA al final</label></li>
+    </ul>
+  </div>
+  <div class="card send" style="margin-top:12px">
+    <strong>Cómo enviármelo:</strong>
+    <ol>
+      <li>Pulsa el botón azul: se copia tu guion.</li>
+      <li>Abre <b>tú</b> tu app de Gmail (o WhatsApp), escribe a Bruno, <b>pega</b> el guion y <b>adjunta tu vídeo</b>. Su email lo copias con el botón negro.</li>
+    </ol>
+    <div>Email: <span class="mail">infobrunoblazquez@gmail.com</span></div>
+    <button class="btn" id="copy" type="button">Copiar mi guion</button>
+    <div class="ok" id="copied">¡Copiado! Ahora pégalo en tu email o WhatsApp.</div>
+    <div id="copyBox"><p class="hint">No se ha podido copiar solo. Mantén pulsado el texto, selecciónalo todo y cópialo:</p><textarea id="copyText" rows="10" readonly></textarea></div>
+    <button class="btn dark" id="mailto" type="button">Copiar el email de Bruno</button>
+    <div class="ok" id="mailok">¡Email copiado! Pégalo en el «Para» de tu Gmail.</div>
+  </div>
+</section>
+
+<section id="ia" class="ia">
+  <div class="step"><div class="num">4</div><div><h2>Saca tu guion con IA</h2><p class="sub">Rellena tu Value Canvas y tus 4Ps y te salen los prompts para ChatGPT o Claude. La IA te propone ideas y te escribe el guion; luego lo repasas en el paso 5.</p></div></div>
+  <video class="vert" controls playsinline preload="metadata" poster="img/poster-tuto.jpg" src="videos/como-usar-ia-prompt.mp4"></video>
+  <p class="hint" style="text-align:center">1 minuto: cómo crear tus prompts y pasarlos a ChatGPT.</p>
+  <div class="card" style="margin-top:12px;font-size:16px"><b>¿No tienes ChatGPT ni Claude?</b> Los dos tienen versión gratis, en el navegador o en su app:<br>· <a href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com</a> (chatgpt.com)<br>· <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> (claude.ai): crea una cuenta gratis con tu email.<br>Con la versión gratis es suficiente para estos prompts. Si te corta por límite de mensajes, espera un rato o pásalo al otro.</div>
+  <ol class="how">
+    <li><div><b>Rellena tu ficha</b>Cuanto más concreto, mejor guion. Escribe como hablas, con las palabras de tus clientes.</div></li>
+    <li><div><b>Prompt 1: análisis + 20 ideas</b>Pégalo en un chat nuevo de ChatGPT o Claude.</div></li>
+    <li><div><b>Prompt 2: guion completo</b>Elige una idea, escríbela abajo y pega el Prompt 2 en el mismo chat: te da 3 versiones.</div></li>
+    <li><div><b>Prompt 3: pack de 10 o 20 guiones</b>Si quieres volumen de golpe.</div></li>
+  </ol>
+  <form class="card" id="ia-f" autocomplete="off" style="margin-top:12px">
+    <fieldset><legend>Tu negocio</legend>
+      <div class="row2"><div><label for="ia-negocio">Negocio o cuenta</label><input type="text" id="ia-negocio" placeholder="Ej.: clínica dental en Toledo"></div>
+      <div><label for="ia-red">Red principal</label><select id="ia-red"><option>Instagram Reels</option><option>TikTok</option><option>Instagram Reels y TikTok</option><option>YouTube Shorts</option></select></div></div>
+      <label for="ia-objetivo">¿Qué quieres conseguir con tus vídeos? <small>seguidores, clientes, citas, ventas…</small></label><input type="text" id="ia-objetivo">
+    </fieldset>
+    <fieldset><legend>Value Canvas</legend>
+      <label for="ia-aud">Tu audiencia: ¿quién es? <small>edad, situación, intereses, qué ve</small></label><textarea id="ia-aud"></textarea>
+      <label for="ia-dolor">Su problema o dolor</label><textarea id="ia-dolor"></textarea>
+      <label for="ia-deseo">Lo que desea conseguir</label><textarea id="ia-deseo"></textarea>
+      <label for="ia-obj">Sus excusas u objeciones <small>«es caro», «no tengo tiempo»…</small></label><textarea id="ia-obj"></textarea>
+      <label for="ia-comp">Tu competencia y cómo lo cuenta <small>qué hace bien y mal</small></label><textarea id="ia-comp"></textarea>
+      <label for="ia-hueco">Lo que nadie está contando</label><textarea id="ia-hueco"></textarea>
+      <label for="ia-prop">Tu propuesta: cómo lo resuelves tú</label><textarea id="ia-prop"></textarea>
+      <label for="ia-dif">Tu factor diferenciador</label><textarea id="ia-dif"></textarea>
+      <label for="ia-enfoque">Enfoque principal</label><select id="ia-enfoque"><option>Educar</option><option>Entretener</option><option>Inspirar</option><option>Mezcla de los tres</option></select>
+    </fieldset>
+    <fieldset><legend>Tus 4Ps</legend>
+      <label for="ia-personaje">Personaje <small>quién o qué sale</small></label><textarea id="ia-personaje"></textarea>
+      <label for="ia-producto">Producto <small>qué se lleva la gente de tus vídeos</small></label><textarea id="ia-producto"></textarea>
+      <label for="ia-personalidad">Personalidad <small>cómo hablas y cómo haces sentir</small></label><textarea id="ia-personalidad"></textarea>
+      <label for="ia-posicion">Posicionamiento <small>tu nicho y cómo quieres que te perciban</small></label><textarea id="ia-posicion"></textarea>
+      <label for="ia-refs">Referencias que te gustan <small>opcional</small></label><input type="text" id="ia-refs">
+      <label for="ia-no">Lo que NO quieres <small>opcional: temas, palabras, tono</small></label><input type="text" id="ia-no">
+    </fieldset>
+    <div class="iabtns"><button class="btn" type="submit">Crear mis prompts ↓</button><button class="btn dark" type="button" id="ia-ej">Ver un ejemplo relleno</button></div>
+    <p class="hint" id="ia-ejnote" hidden>Ejemplo inventado de una clínica dental para que veas cómo se rellena. Cámbialo por tus datos.</p>
+  </form>
+
+  <div class="pc" id="ia-out"><div class="ph"><div><span class="tag"><i>PROMPT 1</i></span> <b>Análisis + 20 ideas</b><p>Diagnóstico de tu Canvas y tus 4Ps, tus pilares y 20 ideas con gancho.</p></div><button type="button" class="btn" data-ia="ia-p1">Copiar</button></div><pre id="ia-p1"></pre></div>
+  <div class="card" style="margin-top:14px"><div class="row2">
+    <div><label for="ia-tema">Idea elegida <small>nº de la lista o tu tema</small></label><input type="text" id="ia-tema" placeholder="Ej.: la 7"></div>
+    <div><label for="ia-cta">CTA que quieres</label><select id="ia-cta"><option value="auto">Que la IA elija la mejor</option><option>Comenta una PALABRA y te envío algo por DM</option><option>Mándaselo a alguien que lo necesita</option><option>Guárdalo para luego</option><option>Toma esto: recurso gratis en la bio</option><option>Escríbeme por DM</option><option>Sígueme para la parte 2</option><option>Pide cita o reserva</option></select></div>
+  </div></div>
+  <div class="pc"><div class="ph"><div><span class="tag"><i>PROMPT 2</i></span> <b>Guion completo · 3 versiones</b><p>Gancho único con debate interno, reveal, micro-reveals y CTA, con el formato de tu ficha. De 30 a 60 s.</p></div><button type="button" class="btn" data-ia="ia-p2">Copiar</button></div><pre id="ia-p2"></pre></div>
+  <div class="card" style="margin-top:14px"><label for="ia-num" style="margin-top:0">¿Cuántos guiones en el pack?</label><select id="ia-num"><option>10</option><option>20</option></select></div>
+  <div class="pc"><div class="ph"><div><span class="tag"><i>PROMPT 3</i></span> <b>Pack de guiones</b><p>10 o 20 guiones distintos, listos para grabar.</p></div><button type="button" class="btn" data-ia="ia-p3">Copiar</button></div><pre id="ia-p3"></pre></div>
+  <div class="blockh">¿Sin formulario?</div>
+  <p class="hint">Pega este prompt maestro en un chat nuevo: la IA te hace las preguntas del Canvas y las 4Ps una a una y sigue todo el proceso sola.</p>
+  <div class="pc"><div class="ph"><div><span class="tag"><i>MAESTRO</i></span> <b>Entrevista + análisis + guiones</b></div><button type="button" class="btn" data-ia="ia-pm">Copiar</button></div><pre id="ia-pm"></pre></div>
+  <p class="hint" style="margin-top:12px">Lo que te da la IA es un borrador: léelo en voz alta y cámbialo hasta que suene a ti.</p>
+  <div class="iatoast" id="ia-toast">Copiado ✓</div>
+</section>
+
+<section id="slides">
+  <div class="step"><div class="num" style="font-size:22px">▶</div><div><h2>Slides de la clase 2</h2><p class="sub">Desliza o usa las flechas para repasarlas.</p></div></div>
+  <div class="viewer">
+    <div class="slide" id="slide"><img id="simg" src="slides/s-01.jpg" alt="Slide 1 de la clase 2"></div>
+    <div class="ctrl"><button type="button" id="prev" aria-label="Anterior">‹</button><span id="count">1 / 62</span><button type="button" id="next" aria-label="Siguiente">›</button></div>
+    <input type="range" id="range" min="1" max="62" value="1" aria-label="Ir a la slide">
+  </div>
+</section>
+</main>
+<footer class="wrap">INC London · Potencia tus RRSS · Clase 2</footer>
+
+<script>
+{
+  const KEY='c2-guion';
+  const fields=[...document.querySelectorAll('[data-k]')];
+  const checks=[...document.querySelectorAll('[data-c]')];
+  const radios=[...document.querySelectorAll('input[name=cta]')];
+  let saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  fields.forEach(f=>{if(saved[f.id])f.value=saved[f.id]});
+  checks.forEach(c=>{if(saved[c.dataset.c])c.checked=true});
+  radios.forEach(r=>{if(saved.ctaType===r.value)r.checked=true});
+  const save=()=>{const o={};fields.forEach(f=>o[f.id]=f.value);checks.forEach(c=>o[c.dataset.c]=c.checked);
+    const r=radios.find(x=>x.checked);o.ctaType=r?r.value:'';try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}};
+  document.addEventListener('input',save);document.addEventListener('change',save);
+
+  const buildText=()=>{
+    const v=id=>(document.getElementById(id).value||'').trim()||'—';
+    const r=radios.find(x=>x.checked);
+    return ['EJERCICIO CLASE 2 · MI PRIMER VÍDEO','Nombre: '+v('nombre'),'Negocio: '+v('negocio'),'',
+      '1 · GANCHO','Qué se ve: '+v('g1'),'Texto en pantalla: '+v('g2'),'Frase: '+v('g3'),'',
+      '2 · REVEAL',v('rv'),'','3 · MICRO-REVEALS',
+      '1) '+v('m1')+' → '+v('p1'),'2) '+v('m2')+' → '+v('p2'),'3) '+v('m3')+' → '+v('p3'),'',
+      '4 · CTA ('+(r?r.value:'—')+')',v('cta')].join('\n');
+  };
+  const ok=document.getElementById('copied'),box=document.getElementById('copyBox'),ta=document.getElementById('copyText');
+  document.getElementById('copy').addEventListener('click',async()=>{
+    const t=buildText();ok.style.display='none';box.style.display='none';
+    try{await navigator.clipboard.writeText(t);ok.style.display='block'}
+    catch(e){ta.value=t;box.style.display='block';ta.focus();ta.select()}
+  });
+  const mail=document.getElementById('mailto');
+  mail.addEventListener('click',async()=>{const mo=document.getElementById('mailok');try{await navigator.clipboard.writeText('infobrunoblazquez@gmail.com');mo.textContent='¡Email copiado! Pégalo en el «Para» de tu Gmail.'}catch(e){mo.textContent='Copia este email: infobrunoblazquez@gmail.com'}mo.style.display='block'});
+
+  const N=62;let i=1;
+  const img=document.getElementById('simg'),cnt=document.getElementById('count'),rng=document.getElementById('range');
+  const src=n=>'slides/s-'+String(n).padStart(2,'0')+'.jpg';
+  const go=n=>{i=Math.max(1,Math.min(N,n));img.src=src(i);img.alt='Slide '+i+' de la clase 2';cnt.textContent=i+' / '+N;rng.value=i;
+    [i+1,i+2].forEach(k=>{if(k<=N){const p=new Image();p.src=src(k)}})};
+  document.getElementById('prev').addEventListener('click',()=>go(i-1));
+  document.getElementById('next').addEventListener('click',()=>go(i+1));
+  rng.addEventListener('input',()=>go(+rng.value));
+  let x0=null;const sl=document.getElementById('slide');
+  sl.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+  sl.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40)go(i+(dx<0?1:-1));x0=null});
+  document.addEventListener('keydown',e=>{if(e.target.matches('textarea,input'))return;if(e.key==='ArrowRight')go(i+1);if(e.key==='ArrowLeft')go(i-1)});
+  go(1);
+}
+</script>
+<script>
+{
+const K=['negocio','red','objetivo','aud','dolor','deseo','obj','comp','hueco','prop','dif','enfoque','personaje','producto','personalidad','posicion','refs','no','tema','cta','num'];
+const $=id=>document.getElementById('ia-'+id);
+const v=id=>($(id).value||'').trim();
+const or=(id,t='(sin rellenar: dedúcelo tú y dime qué has supuesto)')=>v(id)||t;
+const ROL='Actúa como un estratega de contenido y guionista de vídeos cortos en España, especializado en retención y viralidad en Reels y TikTok. Eres exigente, directo y odias el contenido genérico.';
+const REGLAS=`REGLAS DE ESTILO (OBLIGATORIAS)
+- Que NO suene a IA. Prohibido: "¿Sabías que…?", "En el mundo de hoy", "Descubre", "El secreto de…", "Te sorprenderá", "¡Hola a todos!", "Hoy os voy a hablar de…", "Sumérgete", listas de tres adjetivos, frases de anuncio y emojis de relleno.
+- Lenguaje hablado de España: frases cortas, como se lo dirías a un amigo. Usa las palabras exactas de mi cliente, no las de un experto.
+- Concreto siempre: escenas, números, lugares, objetos y situaciones reales del día a día. Nada genérico.
+- Toma postura: opiniones claras, aunque incomoden un poco a la competencia.
+- Nada de promesas falsas ni datos inventados. Si usas un dato, que sea comprobable o márcalo como ejemplo.`;
+const GANCHO=`CÓMO DEBE SER EL GANCHO (0–3 s)
+- Tres capas a la vez y alineadas: VISUAL (qué se ve en el primer segundo: acción, plano, objeto), TEXTO EN PANTALLA (máx. 8 palabras) y FRASE VERBAL (máx. 12 palabras).
+- Debe ser ÚNICO: que no se pueda copiar a otro nicho sin cambiarlo, con tensión o curiosidad, que el espectador se reconozca en 1 segundo y que el vídeo pueda cumplir lo que promete (nada de clickbait).
+- Tipos a combinar: dolor, mito, error, curiosidad, resultado, lista, polémico, pregunta, escena POV, confesión, "lo que nadie te dice".
+- DEBATE INTERNO antes de entregar: escribe 10 ganchos candidatos y puntúa cada uno de 1 a 10 en (a) para el scroll, (b) especificidad, (c) originalidad (descarta lo muy visto), (d) se entiende en 1 segundo, (e) se puede cumplir. Haz de abogado del diablo con los 3 mejores: qué falla y cómo mejorarlo. Reescríbelos y elige el ganador. Enséñame un resumen corto del debate (tabla con notas y una línea de por qué gana).`;
+const ESTR=`ESTRUCTURA DEL GUION (ENTRE 30 Y 60 SEGUNDOS): GANCHO → REVEAL → MICRO-REVEALS → CTA
+1. GANCHO (0–3 s).
+2. REVEAL (3–8 s): contexto (de qué va) → por qué le importa (dolor o deseo) → promesa (qué se lleva si se queda).
+3. MICRO-REVEALS: 3 puntos de valor. Antes de cada punto, una frase corta que adelanta lo que viene y da ganas de seguir viendo ("El primero lo hace casi todo el mundo…", "Pero el segundo es el que más te frena…", "Y el tercero, casi nadie lo hace…"). Si encaja, un bucle abierto que se cierre al final.
+4. CTA: UNA sola. Indica si es de ENVÍOS, GUARDADOS o COMENTARIOS y escríbela según el objetivo: comenta una PALABRA y te envío X por DM, mándaselo a quien…, guárdalo para…, toma esto (recurso), escríbeme por DM, sígueme para la parte 2, pide cita. Que suene natural, no a anuncio.
+5. FINAL EN LOOP si se puede: la última frase conecta con la primera.
+- Duración: entre 30 y 60 segundos. Calcula unas 2,5 palabras por segundo: entre 75 y 140 palabras habladas.`;
+const FORM=`FORMATO DE ENTREGA DE CADA GUION
+- PRIMERO, el guion con el formato de la ficha de clase, para copiarlo tal cual:
+GANCHO · Qué se ve: … | Texto en pantalla: … | Frase: …
+REVEAL: …
+MICRO-REVEAL 1: … → PUNTO 1: …
+MICRO-REVEAL 2: … → PUNTO 2: …
+MICRO-REVEAL 3: … → PUNTO 3: …
+CTA (envíos / guardados / comentarios): …
+- DESPUÉS, el detalle para grabar:
+- Título interno, duración estimada en segundos, tipo (educar / entretener / inspirar) y formato (a cámara, voz en off, tutorial, lista, storytelling, antes/después…).
+- Tabla: Segundo | Lo que se ve (plano y acción) | Lo que digo | Texto en pantalla.
+- Texto para la portada (máx. 5 palabras).
+- Descripción corta para el post (2–3 líneas con las palabras que buscaría mi cliente) y 3–5 hashtags relevantes.
+- Una línea de por qué puede viralizar y qué métrica busca (retención, envíos, guardados o comentarios).`;
+const ficha=()=>`MI FICHA
+Negocio / cuenta: ${or('negocio')}
+Red principal: ${v('red')}
+Objetivo de los vídeos: ${or('objetivo')}
+
+VALUE CANVAS
+- Audiencia: ${or('aud')}
+- Su problema o dolor: ${or('dolor')}
+- Lo que desea: ${or('deseo')}
+- Sus objeciones: ${or('obj')}
+- Competencia y cómo lo cuenta: ${or('comp')}
+- Lo que nadie está contando: ${or('hueco')}
+- Mi propuesta: ${or('prop')}
+- Mi factor diferenciador: ${or('dif')}
+- Enfoque principal: ${v('enfoque')}
+
+MIS 4Ps
+- Personaje: ${or('personaje')}
+- Producto: ${or('producto')}
+- Personalidad: ${or('personalidad')}
+- Posicionamiento: ${or('posicion')}
+- Referencias que me gustan: ${or('refs','ninguna')}
+- Lo que NO quiero: ${or('no','nada en especial')}`;
+const p1=()=>`${ROL}
+
+${ficha()}
+
+TAREA (FASE 1: ANÁLISIS + IDEAS)
+1. Diagnóstico al detalle de mi Canvas y mis 4Ps: qué está fuerte, qué está flojo o contradictorio y qué me falta definir. Sé sincero.
+2. Si puedes buscar en internet, investiga qué vídeos funcionan ahora en mi nicho y en mi competencia: qué patrones se repiten y qué hueco ves libre. Si no puedes buscar, dímelo y razónalo con lo que sabes, sin inventar datos ni métricas.
+3. Mi ángulo diferencial en una frase.
+4. De 3 a 4 pilares de contenido.
+5. 20 ideas de vídeo numeradas. Para cada una: título, pilar, tipo (educar / entretener / inspirar), formato, gancho borrador (frase + texto en pantalla) y por qué puede viralizar. Variadas y muy concretas: nada que pueda hacer cualquier cuenta.
+
+${REGLAS}
+
+Termina preguntándome qué idea elijo para escribir el guion completo.`;
+const p2=()=>{const t=v('tema')||'la idea con más potencial viral de tu lista (elígela tú y dime por qué)';const c=v('cta')==='auto'?'elige tú la mejor según mi objetivo y explícalo en una línea':v('cta');
+return `${ROL}
+
+${ficha()}
+
+TAREA (FASE 2: GUION COMPLETO)
+Tema elegido: ${t}
+CTA: ${c}
+
+Escríbeme 3 VERSIONES del guion, cada una con un ángulo de gancho distinto (por ejemplo: dolor, polémico y escena POV).
+
+${GANCHO}
+
+${ESTR}
+
+${FORM}
+
+${REGLAS}
+
+Al final: dime cuál de las 3 grabarías tú y por qué, y dame 5 ganchos alternativos y 3 micro-reveals de recambio para probar.`};
+const p3=()=>`${ROL}
+
+${ficha()}
+
+TAREA: PACK DE ${v('num')} GUIONES
+Escríbeme ${v('num')} guiones completos y distintos entre sí, listos para grabar. Mezcla pilares, tipos (educar / entretener / inspirar), formatos y tipos de CTA (comenta palabra → DM, envíos, guardados, toma esto, DM, parte 2, cita). Ningún gancho puede parecerse a otro.
+
+${GANCHO.replace('escribe 10 ganchos candidatos','escribe 5 ganchos candidatos por guion')}
+
+${ESTR}
+
+${FORM}
+
+${REGLAS}
+
+Si no te cabe todo en una respuesta, entrégalos en bloques de 5 y espera a que te diga "sigue". Al final, ordénalos de más a menos potencial viral.`;
+const pm=`${ROL}
+
+Vamos a trabajar por fases. No te adelantes.
+
+FASE 0 · ENTREVISTA
+Hazme las preguntas de una en una, como un formulario, y espera mi respuesta antes de la siguiente. Si una respuesta es vaga, repregúntame hasta que sea concreta.
+1. Mi negocio o cuenta, ciudad y red principal.
+2. Qué quiero conseguir con los vídeos.
+VALUE CANVAS
+3. Quién es mi audiencia (edad, situación, intereses, qué ve).
+4. Su problema o dolor principal.
+5. Lo que desea conseguir.
+6. Sus objeciones o excusas.
+7. Mi competencia y cómo lo cuenta (qué hace bien y mal).
+8. Lo que nadie está contando o haciendo.
+9. Cómo lo resuelvo yo y mi factor diferenciador.
+10. Si quiero educar, entretener, inspirar o mezclar.
+MIS 4Ps
+11. Personaje: quién o qué sale en mis vídeos.
+12. Producto: qué se lleva la gente de mis vídeos.
+13. Personalidad: cómo hablo y cómo hago sentir.
+14. Posicionamiento: mi nicho y cómo quiero que me perciban.
+15. Referencias que me gustan y cosas que NO quiero.
+Al terminar, resume mi ficha en una tabla y pregúntame si está bien.
+
+FASE 1 · ANÁLISIS + 20 IDEAS
+Diagnóstico sincero de mi Canvas y mis 4Ps; si puedes buscar en internet, investiga qué funciona hoy en mi nicho y en mi competencia (si no puedes, dímelo y no inventes datos); mi ángulo diferencial en una frase; 3–4 pilares; y 20 ideas numeradas con título, pilar, tipo, formato, gancho borrador y por qué puede viralizar. Pregúntame cuál elijo (o si traigo mi tema) y qué CTA quiero.
+
+FASE 2 · GUION COMPLETO
+3 versiones del guion elegido, cada una con un ángulo de gancho distinto.
+
+${GANCHO}
+
+${ESTR}
+
+${FORM}
+
+FASE 3 · MÁS
+Cuando acabe, ofréceme un pack de 10 o 20 guiones más con el mismo nivel.
+
+${REGLAS}
+
+Empieza ya con la pregunta 1.`;
+const KEY='c2-iaprompt';
+const render=()=>{$('p1').textContent=p1();$('p2').textContent=p2();$('p3').textContent=p3();try{const o={};K.forEach(k=>o[k]=$(k).value);localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}};
+try{const o=JSON.parse(localStorage.getItem(KEY)||'{}');K.forEach(k=>{if(o[k]!=null)$(k).value=o[k]})}catch(e){}
+const EJ={negocio:'Clínica dental Sonríe (Toledo)',objetivo:'Que me pidan cita para ortodoncia invisible',aud:'Adultos de 28 a 45 años de Toledo, trabajan en oficina, ven humor y lifestyle en Instagram',dolor:'Les da vergüenza sonreír en fotos porque tienen los dientes torcidos o amarillos; se tapan la boca al reír',deseo:'Sonreír sin pensarlo, sin brackets visibles en el trabajo',obj:'«Es carísimo», «soy demasiado mayor», «llevar aparatos en el trabajo me da vergüenza»',comp:'Clínicas de la zona con fotos de antes/después y promociones de blanqueamiento; muy de anuncio, nadie da la cara',hueco:'Nadie habla de la vergüenza real ni enseña el día a día con alineadores',prop:'Ortodoncia invisible con seguimiento cercano y financiación',dif:'La doctora sale a cámara, habla claro y con humor, y enseña casos de pacientes adultos',enfoque:'Mezcla de los tres',personaje:'La doctora Ana, a cámara, en la clínica',producto:'Perder el miedo y la vergüenza a arreglarse los dientes de adulto',personalidad:'Cercana, directa, con humor, cero tecnicismos',posicion:'La dentista de confianza de los adultos de Toledo que se tapan la boca en las fotos',refs:'Médicos divulgadores que hablan a cámara con humor',no:'Prometer resultados, precios concretos, tecnicismos'};
+$('ej').addEventListener('click',()=>{Object.entries(EJ).forEach(([k,x])=>$(k).value=x);$('ejnote').hidden=false;render()});
+$('f').addEventListener('submit',e=>{e.preventDefault();render();$('out').scrollIntoView({behavior:'smooth'})});
+document.getElementById('ia').addEventListener('input',render);document.getElementById('ia').addEventListener('change',render);
+const toast=$('toast');let tt;
+document.querySelectorAll('[data-ia]').forEach(b=>b.addEventListener('click',async()=>{const el=document.getElementById(b.dataset.ia);let ok=false;try{await navigator.clipboard.writeText(el.textContent);ok=true}catch(e){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);try{ok=document.execCommand('copy')}catch(_){}}
+toast.textContent=ok?'Copiado ✓ Pégalo en ChatGPT o Claude':'Selecciona el texto y cópialo';toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),2200)}));
+$('pm').textContent=pm;render();
+}
+</script>
+</body>
+</html>
